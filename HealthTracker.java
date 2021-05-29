@@ -15,9 +15,11 @@ import java.io.FileWriter;
 
 /***************************************
  * HealthTracker.java
- *
+ * Tracks the food you eat everyday
+ * Tracks workouts done everyday 
+ * 
  * @author Aviv Farag
- * @version 1.0 - 05.25.21
+ * @version 3.0 - 05.29.21
  ****************************************/
 
 public class HealthTracker {
@@ -104,11 +106,12 @@ public class HealthTracker {
     // Variables Declaration
     Scanner keyboard = new Scanner(System.in);
     int max = -1;
+    int counter = 0;
     boolean inaugural_run = false;
     boolean new_user = true;
     int lines_num = -1;
     String headers = "date,type,duration,location,calorie\n";
-
+    FoodDataset foodData = new FoodDataset();
     // Define user as Male() with no attributes
     // This is only to avoid an error of no initialization
     Person user = new Male();
@@ -188,14 +191,6 @@ public class HealthTracker {
         }
 
         try{
-          fdArrayList = readFile(fdFile);
-        }catch(FileNotFoundException exc)
-        {
-          headers = "name,type,grams,calorie,protein,fat,carbs,sugars\n";
-          createNewFile(fdFile, headers);
-        }
-
-        try{
           dcArrayList = readFile(dcFile);
         }catch(FileNotFoundException exc)
         {
@@ -263,7 +258,7 @@ public class HealthTracker {
       ArrayList<Workout> w_temp = new ArrayList<Workout>();
       String[] attr;
       String[] date_att;
-      int counter = 0;
+      
       Calendar current_date = Calendar.getInstance();
       Calendar another_date = Calendar.getInstance();
       // Get workouts and daily consumption data for a specific user
@@ -424,8 +419,39 @@ public class HealthTracker {
       writeFile(uFile, user.toFile(), true);
     }
 
+    // Read foodDataset.csv file
+    try{
+      fdArrayList = readFile(fdFile);
+    }catch(FileNotFoundException exc)
+    {
+      headers = "name,type,grams,calorie,protein,fat,carbs,sugars\n";
+      createNewFile(fdFile, headers);
+    }
 
+    counter = 0;
+    String[] attr;
+    // Ensure data exists
+    if (fdArrayList.size() > 1)
+    {
+      for(String line : fdArrayList)
+      {
+        if (counter > 0)
+        {
+          attr = line.split(",");
+          foodData.addFood(new Food(attr[0], // Name
+                                    attr[1], // Type
+                                    Double.parseDouble(attr[2]), //Grams
+                                    Double.parseDouble(attr[3]), //Calories
+                                    Double.parseDouble(attr[4]), //Protein
+                                    Double.parseDouble(attr[5]), //Fat
+                                    Double.parseDouble(attr[6]), //Carbs
+                                    Double.parseDouble(attr[7])));//Sugars
 
+        }
+        counter++;
+      }
+    }
+    System.out.println(foodData.toString());
 
     // writeFile(workoutsFile, w1.toFile(), true);
     // writeFile(workoutsFile, w2.toFile(), true);
