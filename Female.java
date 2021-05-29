@@ -1,6 +1,6 @@
 /***************************************
  * Female.java
- * 
+ * Represents Female user. 
  * @author Aviv Farag
  * @version 05242021
  ****************************************/

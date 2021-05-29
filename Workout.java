@@ -1,9 +1,10 @@
 import java.util.Calendar;
 /***************************************
  * Workout.java
- * 
+ * Represents a workout of specific type,
+ * location and duration.
  * @author Aviv Farag
- * @version 05242021
+ * @version 3.0 - 05.29.21
  ****************************************/
 
 public class Workout {

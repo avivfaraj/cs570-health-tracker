@@ -1,6 +1,7 @@
 /*****************************
  * ManageFood.java
- *
+ * Interface for adding and 
+ * deleting food.
  * @author Aviv Farag
  * @version 05242021
  ***************************/

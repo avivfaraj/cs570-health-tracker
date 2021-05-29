@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 /***************************************
  * Person.java
- * 
+ * Abstract class represent a person
+ * with weight, height, name, id, gender,
+ * and desired calorie intake
  * @author Aviv Farag
- * @version 05242021
+ * @version 3.0 - 05.29.21
  ****************************************/
 
 public abstract class Person {

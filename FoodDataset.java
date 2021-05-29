@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.lang.IndexOutOfBoundsException;
 /***************************************
  * FoodDataset.java
- * 
+ * Hold Food instances as dataset 
  * @author Aviv Farag
- * @version 05242021
+ * @version 3.0 - 05.29.21
  ****************************************/
 
 public class FoodDataset implements ManageFood {

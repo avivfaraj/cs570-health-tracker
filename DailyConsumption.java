@@ -4,9 +4,10 @@ import java.lang.IndexOutOfBoundsException;
 import java.util.Calendar;
 /***************************************
  * DailyConsumption.java
- * 
+ * Represents consumption for a specific date
+ * Counts calorie, protein, carbs, sugars and fat.
  * @author Aviv Farag
- * @version 05242021
+ * @version 3.0 - 05.29.21
  ****************************************/
 
 public class DailyConsumption implements ManageFood {

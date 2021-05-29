@@ -1,8 +1,8 @@
 /***************************************
  * Male.java
- * 
+ * Represents Male user.
  * @author Aviv Farag
- * @version 05242021
+ * @version 3.0 - 05.29.21
  ****************************************/
 
 public class Male extends Person {

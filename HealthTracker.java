@@ -23,7 +23,7 @@ import java.io.FileWriter;
  ****************************************/
 
 public class HealthTracker {
-
+  
   // ******************************* Useful Methods **********************************
   // Write to file method 
   public static void writeFile(File file, String str, boolean append_line) throws IOException
@@ -329,6 +329,9 @@ public class HealthTracker {
 
         // Add all daily consumptions to user array list
         for(DailyConsumption dc : dc_temp) user.addDailyConsumption(dc);
+
+        // Free memory by clearing array list
+        dc_temp.clear();
       }
       // System.out.println(user.getDailyConsumption("05-27-2021"));
 
@@ -366,7 +369,10 @@ public class HealthTracker {
           }
           counter++;
         }
-        user.addWorkouts(w_temp);  
+        user.addWorkouts(w_temp);
+
+        // Free memory by clearing array list
+        w_temp.clear();  
       }
       System.out.println(user.getWorkouts());
 
@@ -451,7 +457,7 @@ public class HealthTracker {
         counter++;
       }
     }
-    System.out.println(foodData.toString());
+    // System.out.println(foodData.toString());
 
     // writeFile(workoutsFile, w1.toFile(), true);
     // writeFile(workoutsFile, w2.toFile(), true);
