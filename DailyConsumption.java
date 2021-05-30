@@ -187,6 +187,6 @@ public class DailyConsumption implements ManageFood {
 			toString += "\n\n";
 		}
 		return toString;
-}
+	}
 }
 

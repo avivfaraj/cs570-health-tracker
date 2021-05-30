@@ -19,7 +19,7 @@ import java.io.FileWriter;
  * Tracks workouts done everyday 
  * 
  * @author Aviv Farag
- * @version 3.0 - 05.29.21
+ * @version 4.0 - 05.30.21
  ****************************************/
 
 public class HealthTracker {
@@ -91,7 +91,7 @@ public class HealthTracker {
   	// Variables Declaration
    //  double curr_balance;
   	// String comment, date, time, trans, month_num, choice, am_pm = "";
-  	// boolean run = true;
+  	
       // Array lists
     // ArrayList<String> lines = new ArrayList<String>();
    //  int counter = 0, month;
@@ -104,14 +104,20 @@ public class HealthTracker {
 
 
     // Variables Declaration
+    Calendar current_date;
+    Calendar another_date;
+    boolean run = true;
     Scanner keyboard = new Scanner(System.in);
     int max = -1;
     int counter = 0;
     boolean inaugural_run = false;
     boolean new_user = true;
     int lines_num = -1;
+    String choice = "";
     String headers = "date,type,duration,location,calorie\n";
     FoodDataset foodData = new FoodDataset();
+    String month;
+
     // Define user as Male() with no attributes
     // This is only to avoid an error of no initialization
     Person user = new Male();
@@ -258,9 +264,9 @@ public class HealthTracker {
       ArrayList<Workout> w_temp = new ArrayList<Workout>();
       String[] attr;
       String[] date_att;
-      
-      Calendar current_date = Calendar.getInstance();
-      Calendar another_date = Calendar.getInstance();
+      current_date = Calendar.getInstance();
+      another_date = Calendar.getInstance();
+      boolean first_line = true;
       // Get workouts and daily consumption data for a specific user
       if (dcArrayList.size() > 1) // First line is headers
       {
@@ -283,7 +289,7 @@ public class HealthTracker {
                                  Integer.parseInt(date_att[0])-1,
                                  Integer.parseInt(date_att[1]));
 
-              if (counter == 1)
+              if (first_line)
               {
                 current_date.clear();
                 current_date.set(Integer.parseInt(date_att[2]),
@@ -292,6 +298,7 @@ public class HealthTracker {
 
                 dc_temp.add(new DailyConsumption(current_date, 
                                                  new ArrayList<Food>()));
+                first_line = false;
               }
               else if (another_date.after(current_date))
               {
@@ -326,6 +333,8 @@ public class HealthTracker {
           counter++;
 
         }
+        // current_date.clear();
+        // another_date.clear();
 
         // Add all daily consumptions to user array list
         for(DailyConsumption dc : dc_temp) user.addDailyConsumption(dc);
@@ -333,7 +342,7 @@ public class HealthTracker {
         // Free memory by clearing array list
         dc_temp.clear();
       }
-      // System.out.println(user.getDailyConsumption("05-27-2021"));
+      System.out.println(user.getDailyConsumption("05-28-2021"));
 
       if (workoutsArrayList.size() > 1) // First line is headers
       {
@@ -463,54 +472,82 @@ public class HealthTracker {
     // writeFile(workoutsFile, w2.toFile(), true);
 
 
-    // while(run){
+    while(run){
 
-    //   // Menu
-    //   System.out.print("\nChoose one of the following (enter a number): \n"+
-    //                    "1. Convert USD(\u0024) to NIS(\u20AA) \n"+
-    //                    "2. Make A Transaction \n"+
-    //                    "3. Print Current Balance \n"+
-    //                    "4. Print Transaction History \n"+
-    //                    "5. Exit \n\n");
+      // Menu
+      System.out.print("\nChoose one of the following (enter a number): \n"+
+                       "1. Food Data Set \n"+
+                       "2. Daily Consumption \n"+
+                       "3. Another Day Activity \n"+ // Change it
+                       "4. Workouts Done This Week \n"+
+                       "5. Add a meal \n"+
+                       "6. Add a workout \n"+
+                       "7. Exit\n");
 
-    //   System.out.print("Your Choice: ");
-    //   choice = keyboard.next();
+      System.out.print("Your Choice: ");
+      choice = keyboard.next();
 
     //   System.out.print("\n>-----------------------------------------<\n");
-    //   switch(choice){
+      switch(choice){
 
-    //       case "1":
+          case "1":
+              System.out.print(foodData.toString());
+              System.out.print("\n");
 
-    //           break;
+              break;
 
-    //       case "2":
+          case "2":
+              System.out.print("Enter date (enter -1 for today): ");
+              String date_str = keyboard.next();
+              if (date_str.equals ("-1"))
+              {
+                // Calendar new_date = Calendar.getInstance();
+                current_date = Calendar.getInstance();
+                month = String.format("%02d" ,current_date.get(Calendar.MONTH) + 1);
 
-    //           break;
+                date_str = (month + "-" +
+                            String.format("%02d",current_date.get(Calendar.DATE)) + "-" +
+                            current_date.get(Calendar.YEAR));
+              }
 
-    //       case "3":
+              System.out.print(user.getDailyConsumption(date_str));
+              System.out.print("\n");
 
-    //           break;
+              break;
 
-    //       case "4":
-                
+          case "3":
+
+              break;
+
+          case "4":
+
+              // Current date
+              current_date = Calendar.getInstance();
+
+              // Substract 7 days
+              current_date.add(Calendar.DATE, -7); 
+              
+              // Print last week workouts
+              System.out.print(user.getWorkouts(current_date));
+              System.out.print("\n");
                
-    //           break;
+              break;
 
-    //       case "7":
+          case "7":
 
-    //           // Exit
-    //           System.out.print("\nClosing program... \n");
-    //           run = false;
-    //           break;
+              // Exit
+              System.out.print("\nClosing program... \n");
+              run = false;
+              break;
 
-    //       default:
-    //           System.out.print("Wrong choice.\nPlease choose a number between 1 and 5 according to the menu below.\n\n");
-    //           break;
-    //   }
+          default:
+              System.out.print("Wrong choice.\nPlease choose a number between 1 and 7 (inclusive) according to the menu below.\n\n");
+              break;
+      }
 
     
       
-    // }
+    }
     // Close Scanner object
     keyboard.close();
 

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Calendar;
 /***************************************
  * Person.java
  * Abstract class represent a person
@@ -84,6 +85,26 @@ public abstract class Person {
 		{
 			final_string += workout.toString();
 			final_string += "\n";
+		}
+
+		return final_string;
+	}
+
+	public final String getWorkouts(Calendar date){
+
+		/**** NOTE: Consider printing workouts 
+			        for a specific date!
+		**/
+
+		String final_string = "";
+		for(Workout workout : workouts)
+		{
+			if (date.before(workout.getDate()))
+			{
+				final_string += workout.toString();
+				final_string += "\n";
+			}
+			
 		}
 
 		return final_string;
