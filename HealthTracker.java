@@ -345,7 +345,7 @@ public class HealthTracker {
         // Free memory by clearing array list
         dc_temp.clear();
       }
-      System.out.println(user.getDailyConsumption("05-28-2021"));
+      // System.out.println(user.getDailyConsumption("05-28-2021"));
 
       if (workoutsArrayList.size() > 1) // First line is headers
       {
@@ -370,7 +370,7 @@ public class HealthTracker {
                                  Integer.parseInt(date_att[0])-1,
                                  Integer.parseInt(date_att[1]));
 
-                w_temp.add(new Workout(id,Integer.parseInt(attr[3]), // Duration in seconds
+                w_temp.add(new Workout(Integer.parseInt(attr[3]), // Duration in seconds
                                        attr[4],                   // Location String
                                        attr[2],                   // Type String
                                        Double.parseDouble(attr[5]),// Calories double
@@ -386,7 +386,7 @@ public class HealthTracker {
         // Free memory by clearing array list
         w_temp.clear();  
       }
-      System.out.println(user.getWorkouts());
+      // System.out.println(user.getWorkouts());
 
     }
     else  // New user must be created.
@@ -473,10 +473,6 @@ public class HealthTracker {
 
     // writeFile(workoutsFile, w1.toFile(), true);
     // writeFile(workoutsFile, w2.toFile(), true);
-    for(String line : workoutsArrayList)
-    {
-      System.out.println(line);
-    }
 
     while(run){
 
@@ -600,7 +596,6 @@ public class HealthTracker {
                 if (!line_attr[0].equalsIgnoreCase("id"))
                 {
                   date_attr = line_attr[1].split("-");
-                  System.out.println(line_attr[1]);
                   another_date.clear();
                   another_date.set(Integer.parseInt(date_attr[2]),
                                  Integer.parseInt(date_attr[0]) - 1,
@@ -672,7 +667,7 @@ public class HealthTracker {
               System.out.print("Enter calorie: ");
               double calorie = keyboard.nextDouble();
 
-              Workout new_workout = new Workout(user.getID(),(int)durationMinutes * 60, 
+              Workout new_workout = new Workout((int)durationMinutes * 60, 
                                                 location, type, calorie, current_date);
 
               // String toFile = new_workout.toFile();
@@ -688,7 +683,6 @@ public class HealthTracker {
                 if (!line_attr[0].equalsIgnoreCase("id"))
                 {
                   date_attr = line_attr[1].split("-");
-                  System.out.println(line_attr[1]);
                   another_date.clear();
                   another_date.set(Integer.parseInt(date_attr[2]),
                                  Integer.parseInt(date_attr[0]) - 1,
@@ -706,13 +700,13 @@ public class HealthTracker {
               // Append line
               if (index == -1)
               {
-                writeFile(wFile, new_workout.toFile()+ "\n", true);
+                writeFile(wFile, user.getID() +","+new_workout.toFile()+ "\n", true);
               }
 
               // Insert in between
               else
               {
-                workoutsArrayList.add(index, new_workout.toFile());
+                workoutsArrayList.add(index, user.getID() +","+new_workout.toFile());
                 String toFile = "";
                 for (String w : workoutsArrayList)
                 {

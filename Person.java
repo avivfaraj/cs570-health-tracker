@@ -37,8 +37,7 @@ public abstract class Person {
 		for (Workout workout : w)
 		{
 			// Make a copy of each Workout instance in the array
-			workouts.add(new Workout(workout.getID(),
-									 workout.getDuration(),
+			workouts.add(new Workout(workout.getDuration(),
 									 workout.getLocation(),
 									 workout.getType(),
 									 workout.getCalorie(),
