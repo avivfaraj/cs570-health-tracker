@@ -104,6 +104,7 @@ public class HealthTracker {
 
 
     // Variables Declaration
+    int index = -1;
     Calendar current_date;
     Calendar another_date;
     boolean run = true;
@@ -117,6 +118,8 @@ public class HealthTracker {
     String headers = "date,type,duration,location,calorie\n";
     FoodDataset foodData = new FoodDataset();
     String month;
+    String date = "" ;
+    String[] date_attr;
 
     // Define user as Male() with no attributes
     // This is only to avoid an error of no initialization
@@ -536,11 +539,113 @@ public class HealthTracker {
                
               break;
 
+          case "5":
+
+              boolean added = false;
+              Food meal = null;
+              Food new_meal = null;
+              System.out.print("Enter date (Format MM-DD-YYYY): ");
+              date = keyboard.next();
+              date_attr = date.split("-");
+              current_date = Calendar.getInstance();
+              current_date.clear();
+              current_date.set(Integer.parseInt(date_attr[2]),
+                               Integer.parseInt(date_attr[0]) - 1,
+                               Integer.parseInt(date_attr[1]));
+
+              System.out.print("Enter Food: ");
+              String food_name = keyboard.next();
+              if (keyboard.hasNextLine()) {
+                food_name += keyboard.nextLine();
+              }
+
+              System.out.print("Enter Grams: ");
+              double food_grams = keyboard.nextDouble();
+
+              // Ensure food item exist in data set
+              if (foodData.search(food_name))
+              {
+                meal = foodData.getFood(food_name);
+                String food_type = meal.getType();
+                double[] nutrients = foodData.getNutrientsDouble(food_name);
+                for (int iter = 0; iter < nutrients.length; iter ++)
+                {
+                  nutrients[iter] = nutrients[iter] * food_grams / 100;
+                }
+                new_meal = new Food(food_name,
+                                         food_type,
+                                         nutrients[0], // Grams
+                                         nutrients[1], // Calorie
+                                         nutrients[2], // Protein
+                                         nutrients[3], // Fat
+                                         nutrients[4], // Carbs
+                                         nutrients[5]);// Sugars
+                added = user.addFood(date,new_meal);
+              }
+              System.out.println(added);
+
+              // Date not found
+              if (!added)
+              {
+                user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
+                user.addFood(date,new_meal);
+              }
+
+              counter = 0;
+              another_date = Calendar.getInstance();
+              index = -1;
+              for (String line : dcArrayList)
+              {
+                String[] line_attr = line.split(",");
+                if (!line_attr[0].equalsIgnoreCase("id"))
+                {
+                  date_attr = line_attr[1].split("-");
+                  System.out.println(line_attr[1]);
+                  another_date.clear();
+                  another_date.set(Integer.parseInt(date_attr[2]),
+                                 Integer.parseInt(date_attr[0]) - 1,
+                                 Integer.parseInt(date_attr[1]));
+
+                   if(another_date.after(current_date))
+                   {
+                      index = counter;
+                      break;
+                   }
+                }
+                 counter++;
+              }
+
+              if (index == -1)
+              {
+                writeFile(dcFile,
+                          user.getID() + "," +
+                          date+","+new_meal.toFile(),
+                          true);
+                System.out.println("Appended!");
+              }
+              else
+              {
+                dcArrayList.add(index, user.getID() + "," +
+                          date +","+ new_meal.toFile());
+                String toFile = "";
+                for (String line : dcArrayList)
+                {
+
+                  toFile += line + "\n";
+                }
+                writeFile(dcFile, toFile, false);
+                System.out.println("Added in "+index);
+              }
+
+              
+              break;
+
+
           case "6":
               
               System.out.print("Enter date (Format MM-DD-YYYY): ");
-              String date = keyboard.next();
-              String[] date_attr = date.split("-");
+              date = keyboard.next();
+              date_attr = date.split("-");
               current_date = Calendar.getInstance();
               current_date.clear();
               current_date.set(Integer.parseInt(date_attr[2]),
@@ -573,10 +678,10 @@ public class HealthTracker {
               // String toFile = new_workout.toFile();
               // writeFile(wFile,toFile,true);
 
-              // user.addWorkouts(new_workout);
+              user.addWorkouts(new_workout);
               counter = 0;
               another_date = Calendar.getInstance();
-              int index = -1;
+              index = -1;
               for (String line : workoutsArrayList)
               {
                 String[] line_attr = line.split(",");

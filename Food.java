@@ -61,7 +61,7 @@ public class Food {
 						 this.getProtein()+","+
 						 this.getFat()+","+
 						 this.getCarbs()+","+
-						 this.getSugars()+"\n");
+						 this.getSugars());
 		return toFile;
 	}
 

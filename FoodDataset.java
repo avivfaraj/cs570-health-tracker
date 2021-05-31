@@ -57,6 +57,19 @@ public class FoodDataset implements ManageFood {
 		return -1;
 	}
 
+	public Food getFood(String name){
+
+		// Ensure item exist in data set
+		if (search(name))
+		{
+			// Returns item's details as string.
+			return foods.get(getIndex(name));
+		}
+
+		return null;
+
+	}
+
 	public String getNutrientsString(String name){
 
 		// Ensure item exist in data set
