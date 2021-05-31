@@ -367,7 +367,7 @@ public class HealthTracker {
                                  Integer.parseInt(date_att[0])-1,
                                  Integer.parseInt(date_att[1]));
 
-                w_temp.add(new Workout(Integer.parseInt(attr[3]), // Duration in seconds
+                w_temp.add(new Workout(id,Integer.parseInt(attr[3]), // Duration in seconds
                                        attr[4],                   // Location String
                                        attr[2],                   // Type String
                                        Double.parseDouble(attr[5]),// Calories double
@@ -470,7 +470,10 @@ public class HealthTracker {
 
     // writeFile(workoutsFile, w1.toFile(), true);
     // writeFile(workoutsFile, w2.toFile(), true);
-
+    for(String line : workoutsArrayList)
+    {
+      System.out.println(line);
+    }
 
     while(run){
 
@@ -531,6 +534,91 @@ public class HealthTracker {
               System.out.print(user.getWorkouts(current_date));
               System.out.print("\n");
                
+              break;
+
+          case "6":
+              
+              System.out.print("Enter date (Format MM-DD-YYYY): ");
+              String date = keyboard.next();
+              String[] date_attr = date.split("-");
+              current_date = Calendar.getInstance();
+              current_date.clear();
+              current_date.set(Integer.parseInt(date_attr[2]),
+                               Integer.parseInt(date_attr[0]) - 1,
+                               Integer.parseInt(date_attr[1]));
+
+              System.out.print("Enter workout type: ");
+              String type = keyboard.next();
+              if (keyboard.hasNextLine()) {
+                type += keyboard.nextLine();
+              }
+
+              System.out.print("Enter duration in minutes: ");
+              double durationMinutes = keyboard.nextDouble();
+
+              System.out.print("Enter location: ");
+              String location = keyboard.next();
+              if (keyboard.hasNextLine()) 
+                {
+                   location += keyboard.nextLine();
+                }
+              
+
+              System.out.print("Enter calorie: ");
+              double calorie = keyboard.nextDouble();
+
+              Workout new_workout = new Workout(user.getID(),(int)durationMinutes * 60, 
+                                                location, type, calorie, current_date);
+
+              // String toFile = new_workout.toFile();
+              // writeFile(wFile,toFile,true);
+
+              // user.addWorkouts(new_workout);
+              counter = 0;
+              another_date = Calendar.getInstance();
+              int index = -1;
+              for (String line : workoutsArrayList)
+              {
+                String[] line_attr = line.split(",");
+                if (!line_attr[0].equalsIgnoreCase("id"))
+                {
+                  date_attr = line_attr[1].split("-");
+                  System.out.println(line_attr[1]);
+                  another_date.clear();
+                  another_date.set(Integer.parseInt(date_attr[2]),
+                                 Integer.parseInt(date_attr[0]) - 1,
+                                 Integer.parseInt(date_attr[1]));
+
+                   if(another_date.after(current_date))
+                   {
+                      index = counter;
+                      break;
+                   }
+                }
+                 counter++;
+              }
+
+              // Append line
+              if (index == -1)
+              {
+                writeFile(wFile, new_workout.toFile()+ "\n", true);
+              }
+
+              // Insert in between
+              else
+              {
+                workoutsArrayList.add(index, new_workout.toFile());
+                String toFile = "";
+                for (String w : workoutsArrayList)
+                {
+
+                  toFile += w + "\n";
+                }
+                writeFile(wFile, toFile, false);
+
+              }
+
+
               break;
 
           case "7":

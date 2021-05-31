@@ -14,10 +14,13 @@ public class Workout {
 	private double calories;
 	private int durationSec; 
 	private Calendar date;
+	private int user_id;
+
 
 	// Constructor #1
-	public Workout(int seconds,String location,String type, 
+	public Workout(int id, int seconds,String location,String type, 
 				double calories,Calendar date){
+		user_id = id;
 		durationSec = seconds;
 		this.location = location;
 		this.calories = calories;
@@ -26,8 +29,9 @@ public class Workout {
 	}
 
 	// Constructor #2
-	public Workout(int seconds,String location,String type, 
+	public Workout(int id, int seconds,String location,String type, 
 				double calories){
+		user_id = id;
 		durationSec = seconds;
 		this.location = location;
 		this.calories = calories;
@@ -36,6 +40,10 @@ public class Workout {
 	}
 
 	// getters
+	public int getID()
+	{
+		return user_id;
+	}
 	public int getDuration(){
 		return durationSec;
 	}
@@ -72,11 +80,12 @@ public class Workout {
 	// toFile method
 	public String toFile(){
 		// return fat;
-		String toFile = (this.getDateString() + "," +
+		String toFile = (this.getID() + "," +
+						 this.getDateString() + "," +
 						 this.getType() + ","+
 						 this.getDuration()+","+
 						 this.getLocation()+","+
-						 this.getCalorie()+"\n");
+						 this.getCalorie());
 		return toFile;
 	}
 
