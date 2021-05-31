@@ -1,4 +1,8 @@
 id,date,type,duration,location,calorie
-1001,05-24-2021,Running,1800,Virginia Beach,350
-1002,05-27-2021,Running,1800,Virginia Beach,350
-1001,05-28-2021,Bike,3600,Virginia Beach,300
+1001,05-21-2021,Running,2200,Virginia Beach,300.0
+1002,05-23-2021,Running,2100,Beach,350.0
+1002,05-25-2021,Running,2100,Norfolk,350.0
+1001,05-28-2021,Bike,3600,Gym,300.0
+1002,05-29-2021,Running,2100,Beach,350.0
+1001,05-30-2021,Swimming,2700,Pool,800.0
+1001,05-31-2021,Weight lifting,1800,Gym,450.0

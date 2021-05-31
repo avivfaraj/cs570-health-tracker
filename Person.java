@@ -33,12 +33,17 @@ public abstract class Person {
 		dailyc = new ArrayList<DailyConsumption>();
 	}
 
-	// protected final void addWorkouts(Workout ... w){
-	// 	for (Workout workout : w)
-	// 	{
-	// 		workouts.add(workout);
-	// 	}
-	// }
+	protected final void addWorkouts(Workout ... w){
+		for (Workout workout : w)
+		{
+			// Make a copy of each Workout instance in the array
+			workouts.add(new Workout(workout.getDuration(),
+									 workout.getLocation(),
+									 workout.getType(),
+									 workout.getCalorie(),
+									 workout.getDate()));
+		}
+	}
 
 	protected final void addWorkouts(ArrayList<Workout> work){
 
@@ -99,6 +104,7 @@ public abstract class Person {
 		String final_string = "";
 		for(Workout workout : workouts)
 		{
+			System.out.println(date.before(workout.getDate()));
 			if (date.before(workout.getDate()))
 			{
 				final_string += workout.toString();

@@ -104,6 +104,7 @@ public class HealthTracker {
 
 
     // Variables Declaration
+    int index = -1;
     Calendar current_date;
     Calendar another_date;
     boolean run = true;
@@ -117,6 +118,8 @@ public class HealthTracker {
     String headers = "date,type,duration,location,calorie\n";
     FoodDataset foodData = new FoodDataset();
     String month;
+    String date = "" ;
+    String[] date_attr;
 
     // Define user as Male() with no attributes
     // This is only to avoid an error of no initialization
@@ -342,7 +345,7 @@ public class HealthTracker {
         // Free memory by clearing array list
         dc_temp.clear();
       }
-      System.out.println(user.getDailyConsumption("05-28-2021"));
+      // System.out.println(user.getDailyConsumption("05-28-2021"));
 
       if (workoutsArrayList.size() > 1) // First line is headers
       {
@@ -383,7 +386,7 @@ public class HealthTracker {
         // Free memory by clearing array list
         w_temp.clear();  
       }
-      System.out.println(user.getWorkouts());
+      // System.out.println(user.getWorkouts());
 
     }
     else  // New user must be created.
@@ -471,7 +474,6 @@ public class HealthTracker {
     // writeFile(workoutsFile, w1.toFile(), true);
     // writeFile(workoutsFile, w2.toFile(), true);
 
-
     while(run){
 
       // Menu
@@ -531,6 +533,191 @@ public class HealthTracker {
               System.out.print(user.getWorkouts(current_date));
               System.out.print("\n");
                
+              break;
+
+          case "5":
+
+              boolean added = false;
+              Food meal = null;
+              Food new_meal = null;
+              System.out.print("Enter date (Format MM-DD-YYYY): ");
+              date = keyboard.next();
+              date_attr = date.split("-");
+              current_date = Calendar.getInstance();
+              current_date.clear();
+              current_date.set(Integer.parseInt(date_attr[2]),
+                               Integer.parseInt(date_attr[0]) - 1,
+                               Integer.parseInt(date_attr[1]));
+
+              System.out.print("Enter Food: ");
+              String food_name = keyboard.next();
+              if (keyboard.hasNextLine()) {
+                food_name += keyboard.nextLine();
+              }
+
+              System.out.print("Enter Grams: ");
+              double food_grams = keyboard.nextDouble();
+
+              // Ensure food item exist in data set
+              if (foodData.search(food_name))
+              {
+                meal = foodData.getFood(food_name);
+                String food_type = meal.getType();
+                double[] nutrients = foodData.getNutrientsDouble(food_name);
+                for (int iter = 0; iter < nutrients.length; iter ++)
+                {
+                  nutrients[iter] = nutrients[iter] * food_grams / 100;
+                }
+                new_meal = new Food(food_name,
+                                         food_type,
+                                         nutrients[0], // Grams
+                                         nutrients[1], // Calorie
+                                         nutrients[2], // Protein
+                                         nutrients[3], // Fat
+                                         nutrients[4], // Carbs
+                                         nutrients[5]);// Sugars
+                added = user.addFood(date,new_meal);
+              }
+              System.out.println(added);
+
+              // Date not found
+              if (!added)
+              {
+                user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
+                user.addFood(date,new_meal);
+              }
+
+              counter = 0;
+              another_date = Calendar.getInstance();
+              index = -1;
+              for (String line : dcArrayList)
+              {
+                String[] line_attr = line.split(",");
+                if (!line_attr[0].equalsIgnoreCase("id"))
+                {
+                  date_attr = line_attr[1].split("-");
+                  another_date.clear();
+                  another_date.set(Integer.parseInt(date_attr[2]),
+                                 Integer.parseInt(date_attr[0]) - 1,
+                                 Integer.parseInt(date_attr[1]));
+
+                   if(another_date.after(current_date))
+                   {
+                      index = counter;
+                      break;
+                   }
+                }
+                 counter++;
+              }
+
+              if (index == -1)
+              {
+                writeFile(dcFile,
+                          user.getID() + "," +
+                          date+","+new_meal.toFile(),
+                          true);
+                System.out.println("Appended!");
+              }
+              else
+              {
+                dcArrayList.add(index, user.getID() + "," +
+                          date +","+ new_meal.toFile());
+                String toFile = "";
+                for (String line : dcArrayList)
+                {
+
+                  toFile += line + "\n";
+                }
+                writeFile(dcFile, toFile, false);
+                System.out.println("Added in "+index);
+              }
+
+              
+              break;
+
+
+          case "6":
+              
+              System.out.print("Enter date (Format MM-DD-YYYY): ");
+              date = keyboard.next();
+              date_attr = date.split("-");
+              current_date = Calendar.getInstance();
+              current_date.clear();
+              current_date.set(Integer.parseInt(date_attr[2]),
+                               Integer.parseInt(date_attr[0]) - 1,
+                               Integer.parseInt(date_attr[1]));
+
+              System.out.print("Enter workout type: ");
+              String type = keyboard.next();
+              if (keyboard.hasNextLine()) {
+                type += keyboard.nextLine();
+              }
+
+              System.out.print("Enter duration in minutes: ");
+              double durationMinutes = keyboard.nextDouble();
+
+              System.out.print("Enter location: ");
+              String location = keyboard.next();
+              if (keyboard.hasNextLine()) 
+                {
+                   location += keyboard.nextLine();
+                }
+              
+
+              System.out.print("Enter calorie: ");
+              double calorie = keyboard.nextDouble();
+
+              Workout new_workout = new Workout((int)durationMinutes * 60, 
+                                                location, type, calorie, current_date);
+
+              // String toFile = new_workout.toFile();
+              // writeFile(wFile,toFile,true);
+
+              user.addWorkouts(new_workout);
+              counter = 0;
+              another_date = Calendar.getInstance();
+              index = -1;
+              for (String line : workoutsArrayList)
+              {
+                String[] line_attr = line.split(",");
+                if (!line_attr[0].equalsIgnoreCase("id"))
+                {
+                  date_attr = line_attr[1].split("-");
+                  another_date.clear();
+                  another_date.set(Integer.parseInt(date_attr[2]),
+                                 Integer.parseInt(date_attr[0]) - 1,
+                                 Integer.parseInt(date_attr[1]));
+
+                   if(another_date.after(current_date))
+                   {
+                      index = counter;
+                      break;
+                   }
+                }
+                 counter++;
+              }
+
+              // Append line
+              if (index == -1)
+              {
+                writeFile(wFile, user.getID() +","+new_workout.toFile()+ "\n", true);
+              }
+
+              // Insert in between
+              else
+              {
+                workoutsArrayList.add(index, user.getID() +","+new_workout.toFile());
+                String toFile = "";
+                for (String w : workoutsArrayList)
+                {
+
+                  toFile += w + "\n";
+                }
+                writeFile(wFile, toFile, false);
+
+              }
+
+
               break;
 
           case "7":

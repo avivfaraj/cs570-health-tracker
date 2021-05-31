@@ -15,6 +15,7 @@ public class Workout {
 	private int durationSec; 
 	private Calendar date;
 
+
 	// Constructor #1
 	public Workout(int seconds,String location,String type, 
 				double calories,Calendar date){
@@ -76,7 +77,7 @@ public class Workout {
 						 this.getType() + ","+
 						 this.getDuration()+","+
 						 this.getLocation()+","+
-						 this.getCalorie()+"\n");
+						 this.getCalorie());
 		return toFile;
 	}
 
