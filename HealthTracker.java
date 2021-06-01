@@ -102,16 +102,18 @@ public class HealthTracker {
       if (!line_attr[0].equalsIgnoreCase("id"))
       {
 
-        // Get date attributes - spltting by dash
-        date_attr = line_attr[1].split("-");
+        another_date = stringToDate(line_attr[1]);
 
-        // Clear all field of another_date
-        another_date.clear();
+        // // Get date attributes - spltting by dash
+        // date_attr = line_attr[1].split("-");
 
-        // Set another date to date in the string.
-        another_date.set(Integer.parseInt(date_attr[2]),
-                       Integer.parseInt(date_attr[0]) - 1,
-                       Integer.parseInt(date_attr[1]));
+        // // Clear all field of another_date
+        // another_date.clear();
+
+        // // Set another date to date in the string.
+        // another_date.set(Integer.parseInt(date_attr[2]),
+        //                Integer.parseInt(date_attr[0]) - 1,
+        //                Integer.parseInt(date_attr[1]));
 
         // Ensure another_date is greater than current_date
         if(another_date.after(current_date))
@@ -146,23 +148,15 @@ public class HealthTracker {
       arr.add(index, line_to_insert);
 
       // Initialize variables
-      counter = 0;
+      // counter = 0;
       toFile = "";
 
       // Iterate over array list
       for (String w : arr)
       {
-        // Ensure headers
-        if (counter == 0)
-        {
-          // Add line and avoid \n twice
-          toFile += w;
-        }
-        else
-        {
-          // Add line
-          toFile += w + "\n";
-        }
+
+        // Add line
+        toFile += w + "\n";
 
         //increment counter
         counter++;
@@ -173,6 +167,18 @@ public class HealthTracker {
       writeFile(file, toFile, false);
 
     }
+  }
+
+  public static Calendar stringToDate(String date)
+  {
+    String[] date_attr = date.split("-");  // Month-Day-Year
+    Calendar another_date = Calendar.getInstance();
+    another_date.clear();
+    another_date.set(Integer.parseInt(date_attr[2]),
+                       Integer.parseInt(date_attr[0])-1,
+                       Integer.parseInt(date_attr[1]));
+
+    return (Calendar) another_date.clone();
   }
   // *********************************************************************************
 
@@ -377,19 +383,12 @@ public class HealthTracker {
 
             if (id == user.getID())
             {
-              date_attr = line_attr[1].split("-");  // Month-Day-Year
-              another_date.clear();
-              another_date.set(Integer.parseInt(date_attr[2]),
-                                 Integer.parseInt(date_attr[0])-1,
-                                 Integer.parseInt(date_attr[1]));
+              another_date = stringToDate(line_attr[1]);
 
               if (first_line)
               {
-                current_date.clear();
-                current_date.set(Integer.parseInt(date_attr[2]),
-                                 Integer.parseInt(date_attr[0])-1,
-                                 Integer.parseInt(date_attr[1]));
-
+                current_date = stringToDate(line_attr[1]);
+      
                 dc_temp.add(new DailyConsumption(current_date, 
                                                  new ArrayList<Food>()));
                 first_line = false;
@@ -434,7 +433,7 @@ public class HealthTracker {
         // Free memory by clearing array list
         dc_temp.clear();
       }
-      // System.out.println(user.getDailyConsumption("05-28-2021"));
+      // System.out.println(user.getDailyConsumption("05-31-2021"));
 
       if (workoutsArrayList.size() > 1) // First line is headers
       {
@@ -453,11 +452,8 @@ public class HealthTracker {
 
               if (id == user.getID())
               {
-                date_attr = line_attr[1].split("-");
-                current_date.clear();
-                current_date.set(Integer.parseInt(date_attr[2]),
-                                 Integer.parseInt(date_attr[0])-1,
-                                 Integer.parseInt(date_attr[1]));
+    
+                current_date = stringToDate(line_attr[1]);
 
                 w_temp.add(new Workout(Integer.parseInt(line_attr[3]), // Duration in seconds
                                        line_attr[4],                   // Location String
@@ -631,12 +627,8 @@ public class HealthTracker {
               // Get date from user
               System.out.print("Enter date (Format MM-DD-YYYY): ");
               date = keyboard.next();
-              date_attr = date.split("-");
-              current_date = Calendar.getInstance();
-              current_date.clear();
-              current_date.set(Integer.parseInt(date_attr[2]),
-                               Integer.parseInt(date_attr[0]) - 1,
-                               Integer.parseInt(date_attr[1]));
+
+              current_date = stringToDate(date);
 
               // Get food from user
               System.out.print("Enter Food: ");
@@ -704,12 +696,7 @@ public class HealthTracker {
               // Get date from user 
               System.out.print("Enter date (Format MM-DD-YYYY): ");
               date = keyboard.next();
-              date_attr = date.split("-");
-              current_date = Calendar.getInstance();
-              current_date.clear();
-              current_date.set(Integer.parseInt(date_attr[2]),
-                               Integer.parseInt(date_attr[0]) - 1,
-                               Integer.parseInt(date_attr[1]));
+              current_date = stringToDate(date);
 
               // Get workout type from user
               System.out.print("Enter workout type: ");
