@@ -104,7 +104,6 @@ public abstract class Person {
 		String final_string = "";
 		for(Workout workout : workouts)
 		{
-			System.out.println(date.before(workout.getDate()));
 			if (date.before(workout.getDate()))
 			{
 				final_string += workout.toString();
