@@ -80,6 +80,100 @@ public class HealthTracker {
 
     return false;
   }
+
+
+  public static void insertToFile(Calendar current_date, File file, String line_to_insert, ArrayList<String> arr) throws IOException{
+
+    // Initialize variables
+    int counter = 0;
+    Calendar another_date = Calendar.getInstance();
+    int index = -1;
+    String[] line_attr, date_attr;
+    String toFile = "";
+
+    // Iterate over lines in arr
+    for (String line : arr)
+    {
+
+      // Line attributes splitting by comma
+      line_attr = line.split(",");
+
+      // Ensure not headers
+      if (!line_attr[0].equalsIgnoreCase("id"))
+      {
+
+        // Get date attributes - spltting by dash
+        date_attr = line_attr[1].split("-");
+
+        // Clear all field of another_date
+        another_date.clear();
+
+        // Set another date to date in the string.
+        another_date.set(Integer.parseInt(date_attr[2]),
+                       Integer.parseInt(date_attr[0]) - 1,
+                       Integer.parseInt(date_attr[1]));
+
+        // Ensure another_date is greater than current_date
+        if(another_date.after(current_date))
+        {
+          // Save index
+          index = counter;
+
+          // Exit loop!
+          break;
+        }
+      }
+
+      // Increment counter
+      counter++;
+    }
+
+    // Append line
+    if (index == -1)
+    {
+      // writeFile(file, user.getID() +","+new_workout.toFile()+ "\n", true);
+      writeFile(file, line_to_insert+"\n", true);
+
+      // Append line to array list
+      arr.add(line_to_insert);
+
+    }
+
+    // Insert in between
+    else
+    {
+      // Insert line to array list in index 
+      arr.add(index, line_to_insert);
+
+      // Initialize variables
+      counter = 0;
+      toFile = "";
+
+      // Iterate over array list
+      for (String w : arr)
+      {
+        // Ensure headers
+        if (counter == 0)
+        {
+          // Add line and avoid \n twice
+          toFile += w;
+        }
+        else
+        {
+          // Add line
+          toFile += w + "\n";
+        }
+
+        //increment counter
+        counter++;
+        
+      }
+
+      // Write String to file
+      writeFile(file, toFile, false);
+
+    }
+  }
   // *********************************************************************************
 
   
@@ -158,15 +252,19 @@ public class HealthTracker {
         // Creating required files
         headers = "id,name,gender,height,weight\n";
         createNewFile(uFile, headers);
+        usersArrayList.add(headers);
 
         headers = "name,type,grams,calorie,protein,fat,carbs,sugars\n";
         createNewFile(fdFile, headers);
+        fdArrayList.add(headers);
 
         headers = "id,date,type,duration,location,calorie\n";
         createNewFile(wFile, headers);
+        workoutsArrayList.add(headers);
 
         headers = "id,date,name,type,grams,calorie,protein,fat,carbs,sugars\n";
         createNewFile(dcFile, headers);
+        dcArrayList.add(headers);
 
         // Max id is to make unique id
         max = 1000;
@@ -189,6 +287,7 @@ public class HealthTracker {
         {
           headers = "id,date,type,duration,location,calorie\n";
           createNewFile(wFile, headers);
+          workoutsArrayList.add(headers);
         }
 
         try{
@@ -197,6 +296,8 @@ public class HealthTracker {
         {
           headers = "id,date,name,type,grams,calorie,protein,fat,carbs,sugars\n";
           createNewFile(dcFile, headers);
+          dcArrayList.add(headers);
+
         }
 
         // Ask for ID
@@ -432,6 +533,7 @@ public class HealthTracker {
     {
       headers = "name,type,grams,calorie,protein,fat,carbs,sugars\n";
       createNewFile(fdFile, headers);
+      fdArrayList.add(headers);
     }
 
     counter = 0;
@@ -591,83 +693,8 @@ public class HealthTracker {
                 user.addFood(date,new_meal);
               }
 
-              // Write the new meal to the file according to the date
-              // Initialize variables
-              counter = 0;
-              another_date = Calendar.getInstance();
-              index = -1;
-
-              // iterate over lines in Daily Consumption Array List
-              for (String line : dcArrayList)
-              {
-
-                // Save lines attributes splitting by ","
-                line_attr = line.split(",");
-
-                // Ensure not headers
-                if (!line_attr[0].equalsIgnoreCase("id"))
-                {
-
-                  // Get date attributes splitting by "-"
-                  date_attr = line_attr[1].split("-");
-
-                  // Clear all fields in another_date
-                  another_date.clear();
-
-                  // Set another_date to the date in this line
-                  another_date.set(Integer.parseInt(date_attr[2]),
-                                 Integer.parseInt(date_attr[0]) - 1,
-                                 Integer.parseInt(date_attr[1]));
-
-                  // Ensure another_date comes after current_date
-                   if(another_date.after(current_date))
-                   {
-                      // Save counter 
-                      index = counter;
-
-                      // Exit loop!
-                      break;
-                   }
-                }
-
-                  // Increment counter
-                 counter++;
-              }
-
-              // Append to file
-              if (index == -1)
-              {
-                // Append "id,date,new_meal" to dcFile
-                writeFile(dcFile,
-                          user.getID() + "," +
-                          date+","+new_meal.toFile(),
-                          true);
-                System.out.println("Appended!");
-              }
-
-              // Insert the new meal to the list
-              // Write a new file
-              else
-              {
-                // Insert the new meal to the array list
-                // in index found earlier in the loop
-                dcArrayList.add(index, user.getID() + "," +
-                          date +","+ new_meal.toFile());
-
-                // Initialize toFile 
-                toFile = "";
-
-                // Iterate over lines in dcArrayList
-                for (String line : dcArrayList)
-                {
-                  // Append line to toFile variable
-                  toFile += line + "\n";
-                }
-
-                // Write toFile to dcFile (not append!)
-                writeFile(dcFile, toFile, false);
-                System.out.println("Added in "+index);
-              }
+              // Write new line to file and add to Array List
+              insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
 
               break;
 
@@ -714,54 +741,8 @@ public class HealthTracker {
               // Add the new instance to user.
               user.addWorkouts(new_workout);
 
-              // Write the new workout to the file according to the date
-              // Initialize variables
-              counter = 0;
-              another_date = Calendar.getInstance();
-              index = -1;
-
-              
-              for (String line : workoutsArrayList)
-              {
-
-                line_attr = line.split(",");
-                if (!line_attr[0].equalsIgnoreCase("id"))
-                {
-                  date_attr = line_attr[1].split("-");
-                  another_date.clear();
-                  another_date.set(Integer.parseInt(date_attr[2]),
-                                 Integer.parseInt(date_attr[0]) - 1,
-                                 Integer.parseInt(date_attr[1]));
-
-                   if(another_date.after(current_date))
-                   {
-                      index = counter;
-                      break;
-                   }
-                }
-                 counter++;
-              }
-
-              // Append line
-              if (index == -1)
-              {
-                writeFile(wFile, user.getID() +","+new_workout.toFile()+ "\n", true);
-              }
-
-              // Insert in between
-              else
-              {
-                workoutsArrayList.add(index, user.getID() +","+new_workout.toFile());
-                toFile = "";
-                for (String w : workoutsArrayList)
-                {
-
-                  toFile += w + "\n";
-                }
-                writeFile(wFile, toFile, false);
-
-              }
-
+              // Write new line to file and add to Array List
+              insertToFile(current_date,wFile,user.getID() +","+new_workout.toFile(), workoutsArrayList);
 
               break;
 
