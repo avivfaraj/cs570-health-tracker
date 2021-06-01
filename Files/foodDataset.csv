@@ -1,12 +1,3 @@
-Name,type,grams,calorie,protein,fat,carbs,sugars
-Butter,Dairy,100,714.0,0.0,78.6,0.0,7.14
-FONTINA CHEESE,Dairy,100,393.0,21.4,32.1,3.57,0.0
-BURRATA CHEESE,Dairy,100,214.0,17.9,17.9,0.0,0.0
-YOGURT,Dairy,100,73.0,2.67,2.67,8.67,5.33
-Chicken neck or ribs,Meat,100,245.0,19.4,18.0,0.0,0.0
-CHICKEN BREAST,Meat,100,107.0,21.4,1.79,0.0,0.0
-BURGER,Meat,100,230.0,13.3,15.9,8.85,1.77
-Cinnamon buns,Bread,100,452.0,4.45,26.6,48.6,25.7
-CHALLAH,Bread,100,246.0,7.02,2.63,45.6,5.26
-DARK CHOCOLATE,Dairy,100,581.0,6.98,37.2,51.2,30.2
-AVOCADO,Fruit,100,192.0,0.0,15.4,0.0,0.0
+name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars
+AVOCADO,Salad Dressing & Mayonnaise,AVEYO,100.0,192.0,0.0,15.4,0.0,0.0
+CHEESE,Cheese,CITRUS GINGER BELLAVITANO,100.0,393.0,25.0,32.1,0.0,0.0

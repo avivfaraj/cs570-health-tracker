@@ -6,15 +6,23 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.ArrayList;
 
-public class Wow {
+public class FoodSearchTester {
 
 
 public static void main(String args[]) {
 
 	FoodSearch food = new FoodSearch();
-	food.setQuery("Butter");
+	// food.setQuery("cheese","CITRUS GINGER BELLAVITANO");
 	try{
-		System.out.print(food.getRequest());
+		System.out.print(food.searchFood("cheese","CITRUS GINGER BELLAVITANO").toString());
+	}catch(IOException ioe)
+	{
+		System.out.print("IOException\n");
+	}
+
+
+	try{
+		System.out.print(food.searchFood("Avocado","AVEYO").toString());
 	}catch(IOException ioe)
 	{
 		System.out.print("IOException\n");

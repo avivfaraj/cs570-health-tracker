@@ -8,14 +8,15 @@
 public class Food {
 
 	// Variables Declaration
-	private String name, type; 
+	private String name, category, brandOwner;
 	private double calorie, protein, fat, carbohydrate, sugars, grams; 
 
-	public Food(String n,String t,double grams,double c, 
+	public Food(String n,String category,String brandOwner ,double grams,double c, 
 				double p,double f, double carbs,
 				double s){
 		name = n;
-		type = t;
+		this.category = category;
+		this.brandOwner = brandOwner;
 		calorie = c;
 		protein = p;
 		fat = f;
@@ -29,11 +30,15 @@ public class Food {
 	public String getName(){
 		return name;
 	}
+
+	public String getBrand(){
+		return brandOwner;
+	}
 	public double getCalorie(){
 		return calorie;
 	}
-	public String getType(){
-		return type;
+	public String getCategory(){
+		return category;
 	}
 	public double getProtein(){
 		return protein;
@@ -55,12 +60,13 @@ public class Food {
 	public String toFile(){
 		// return fat;
 		String toFile = (this.getName() + "," +
-						 this.getType() + ","+
-						 this.getGrams() + ","+
-						 this.getCalorie()+","+
-						 this.getProtein()+","+
-						 this.getFat()+","+
-						 this.getCarbs()+","+
+						 this.getCategory() + ","+
+						 this.getBrand() + "," +
+						 this.getGrams() + "," +
+						 this.getCalorie() + "," +
+						 this.getProtein() + "," +
+						 this.getFat() + "," +
+						 this.getCarbs() + "," +
 						 this.getSugars());
 		return toFile;
 	}
@@ -68,12 +74,13 @@ public class Food {
 	// toString method
 	public String toString(){
 		return ("Food item: " + this.getName() +
-			    "\nType: "+ this.getType() +
-			    "\nGrams: "+this.getGrams()+ 
-			    "\nCalorie: "+ this.getCalorie()+
-			    "\nProtein: "+this.getProtein()+
-			    "\nFat: "+this.getFat()+
-			    "\nCarbohydrate: "+this.getCarbs()+
+			    "\nCategory: "+ this.getCategory() +
+			    "\nBrand: " + this.getBrand() +
+			    "\nGrams: "+this.getGrams() + 
+			    "\nCalorie: "+ this.getCalorie() +
+			    "\nProtein: "+this.getProtein() +
+			    "\nFat: "+this.getFat() +
+			    "\nCarbohydrate: "+this.getCarbs() +
 			    "\nSugars: "+this.getSugars());
 	}
 }
