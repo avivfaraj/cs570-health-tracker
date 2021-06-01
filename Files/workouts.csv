@@ -6,3 +6,4 @@ id,date,type,duration,location,calorie
 1002,05-29-2021,Running,2100,Beach,350.0
 1001,05-30-2021,Swimming,2700,Pool,800.0
 1001,05-31-2021,Weight lifting,1800,Gym,450.0
+1002,06-01-2021,Running,2100,Beach,350.0
