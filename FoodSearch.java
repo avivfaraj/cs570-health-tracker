@@ -155,6 +155,9 @@ public class FoodSearch {
 				// Got response, but it is not the item I was looking for
 				if (!description.toLowerCase().contains(query.toLowerCase())) return null;
 
+				// Remove comma if string contains it.
+				if (description.contains(",")) description = description.replace(",","");
+
 				// Get Brand Owner
 				// Get indexes
 				des_index = response.indexOf("publishedDate");
@@ -163,11 +166,9 @@ public class FoodSearch {
 
 				// Brand Owner
 				String brandOwner = response.substring(des_index+13, last_index-1);
-				if (brandOwner.contains(","))
-				{
-					brandOwner = brandOwner.replace(",","");
-					System.out.println(brandOwner);
-				}
+
+				// Remove comma if string contains it.
+				if (brandOwner.contains(",")) brandOwner = brandOwner.replace(",","");
 
 				// Get Brand Owner
 				// Get indexes
@@ -176,6 +177,9 @@ public class FoodSearch {
 
 				// Brand Owner
 				String foodCategory = response.substring(des_index+15, last_index-1);
+
+				// Remove comma if string contains it.
+				if (foodCategory.contains(",")) foodCategory = foodCategory.replace(",","");
 
 				// Food nutrients
 				// Get indexes
@@ -200,11 +204,6 @@ public class FoodSearch {
 		      		{
 		      			value = 0.0;
 		      		}
-
-
-		         
-		         // System.out.println(nutrient[1].substring(nutrient[1].indexOf(":")+1).replace("\"", ""));
-		         // System.out.println(nutrient[nutrient.length-1].split(":")[1]);
 
 		         nutrient_value[counter+1] = value;
 		       	}
