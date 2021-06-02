@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 
 // Exceptions packages
 import java.io.IOException;
+
+import java.lang.StringIndexOutOfBoundsException;
 /***************************************
  * FoodSearch.java
  * Represents a Food item with nutrients
@@ -149,6 +151,9 @@ public class FoodSearch {
 				// Actual Description
 				String description = response.substring(des_index+14, last_index-1);
 
+				// Got response, but it is not the item I was looking for
+				if (!description.toLowerCase().contains(query.toLowerCase())) return null;
+
 				// Get Brand Owner
 				// Get indexes
 				des_index = response.indexOf("brandOwner");
@@ -173,18 +178,28 @@ public class FoodSearch {
 				// Food nutrients in a String
 				String nutrients_str = response.substring(des_index, last_index);
 
+				double value = 0.0;
 				// Iterate over nutrient_id in order to get the nutrients from string
 				for (int counter = 0; counter < nutrient_id.length; counter++)
 		      	{
 
-		         int id_index = nutrients_str.indexOf("nutrientId\":"+nutrient_id[counter]);
-		         int last_id_index = nutrients_str.indexOf("}",id_index);
+		      		try{
+		      			int id_index = nutrients_str.indexOf("nutrientId\":"+nutrient_id[counter]);
+			         	int last_id_index = nutrients_str.indexOf("}",id_index);
+			         	String[] nutrient = (nutrients_str.substring(id_index,last_id_index)).split(",");
+			         	value = Double.parseDouble(nutrient[nutrient.length-1].split(":")[1]);
+		      		}
+		      		catch(StringIndexOutOfBoundsException exe)
+		      		{
+		      			value = 0.0;
+		      		}
 
-		         String[] nutrient = (nutrients_str.substring(id_index,last_id_index)).split(",");
+
+		         
 		         // System.out.println(nutrient[1].substring(nutrient[1].indexOf(":")+1).replace("\"", ""));
 		         // System.out.println(nutrient[nutrient.length-1].split(":")[1]);
 
-		         nutrient_value[counter+1] = Double.parseDouble(nutrient[nutrient.length-1].split(":")[1]);
+		         nutrient_value[counter+1] = value;
 		       	}
 
 
