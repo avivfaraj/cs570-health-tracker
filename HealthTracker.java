@@ -172,6 +172,17 @@ public class HealthTracker {
 
     return (Calendar) another_date.clone();
   }
+
+  public static void closeProgram(Scanner scn)
+  {
+     // Close Scanner object
+      scn.close();
+      System.out.print("Closing program!");
+
+      // Inform user 
+      System.out.print("\n>------------------- Closed ---------------------<\n");
+
+  }
   // *********************************************************************************
 
   
@@ -293,19 +304,17 @@ public class HealthTracker {
 
         int user_id = -1;
         // Ask for ID
-        // InputMismatchException
-
-        // System.out.print("Enter your ID: ");
-        // keyboard.nextLine();
         for (int count = 0; count < 4; count++)
         {
           System.out.print("Enter your ID: ");
-            try{
-            user_id = keyboard.nextInt();
-            break;
+
+          try{
+              user_id = keyboard.nextInt();
+              break;
+
           }catch(InputMismatchException exe)
           {
-            System.out.println("Only integer numbers are allowed! Try again!"); 
+            System.out.println("Error: Only integer numbers are allowed! Try again!\n"); 
           }
           finally
           {
@@ -315,12 +324,7 @@ public class HealthTracker {
           if (count == 2)
           {
              // Close Scanner object
-            keyboard.close();
-            System.out.print("Closing program!");
-
-            // Inform user 
-            System.out.print("\n>------------------- Closed ---------------------<\n");
-            
+            closeProgram(keyboard);
             return;
           }
         }
@@ -449,14 +453,11 @@ public class HealthTracker {
                 // Add food to the current DailyConsumption instance
                 dc_temp.get(dc_temp.size() - 1).addFood(food_from_file);
               }
-              
             }
-
           }
 
           // Increment counter
           counter++;
-
         }
 
         // Add all daily consumptions to user array list
@@ -484,10 +485,6 @@ public class HealthTracker {
             // Split line by comma
             line_attr = line.split(",");
 
-            // // Skip headers
-            // if (counter >= 1)
-            // {
-
             // Convert id from String to int
             id = Integer.parseInt(line_attr[0]);
 
@@ -503,7 +500,6 @@ public class HealthTracker {
                                      line_attr[2],                    // Type String
                                      Double.parseDouble(line_attr[5]),// Calories double
                                     current_date));                   // Date Calendar
-              // }
             }
           }
 
@@ -525,47 +521,134 @@ public class HealthTracker {
       int unique_id = max + 1;
 
       // Ask for details
-      System.out.print("Enter your name: ");
+      System.out.print("Enter your first name: ");
       String user_name = keyboard.nextLine();
-      if (keyboard.hasNextLine()) user_name += keyboard.nextLine();
+      // if (keyboard.hasNextLine()) user_name += keyboard.nextLine();
 
-      System.out.print("Enter your gender: ");
-      String user_gender = keyboard.next();
+      // System.out.print("Enter your gender: ");
+      // String user_gender = keyboard.next();
 
-      // Ensure gender is either Male or Female
-      if (!user_gender.equalsIgnoreCase("Male") || !user_gender.equalsIgnoreCase("Female"))
+      // // Ensure gender is either Male or Female
+      // if (!user_gender.equalsIgnoreCase("Male") || !user_gender.equalsIgnoreCase("Female"))
+      // {
+      String user_gender = "";
+      // 3 more attempts 
+      for (int count = 0; count < 3; count++)
       {
-        // 3 more attempts 
-        for (int count = 0; count < 3; count++)
-        {
-          System.out.print("Enter your gender: ");
-          user_gender = keyboard.next();
-          if (user_gender.equalsIgnoreCase("Male") || user_gender.equalsIgnoreCase("Female")) break;
+        System.out.print("Enter your gender: ");
+        user_gender = keyboard.next();
+        if (user_gender.equalsIgnoreCase("Male") || user_gender.equalsIgnoreCase("Female")) break;
 
-          // Exit program if all attempts failed
+        // Exit program if all attempts failed
+        if (count == 2)
+        {
+          // Close Scanner object
+          closeProgram(keyboard);
+          return;
+        }
+      }
+
+      // }
+
+      // System.out.print("Enter your desired calorie intake (If you are not sure enter -1): ");
+      double user_dci = 0.0;
+
+      for (int count = 0; count < 4; count++)
+        {
+          System.out.print("Enter your desired calorie intake (If you are not sure enter -1: ");
+          
+          try{
+              user_dci = keyboard.nextDouble();
+              break;
+
+          }catch(InputMismatchException exe)
+          {
+            System.out.println("Error: Only double numbers are allowed! Try again!\n"); 
+          }
+          finally
+          {
+            if (user_dci > 1000 || user_dci == -1){
+                break;
+            }
+            else{
+              System.out.println("Error: Please enter a number either greater than 1000 or -1\n");
+            }
+
+            // Avoid skipping by scanner
+            keyboard.nextLine();
+          }
           if (count == 2)
           {
              // Close Scanner object
-            keyboard.close();
-            System.out.print("Closing program!");
-
-            // Inform user 
-            System.out.print("\n>------------------- Closed ---------------------<\n");
-            
+            closeProgram(keyboard);
             return;
           }
         }
 
-      }
+      // System.out.print("Enter your weight (kg): ");
+      double user_weight = 0.0;
+      for (int count = 0; count < 4; count++)
+        {
+          System.out.print("Enter your weight (kg): ");
+          
+          try{
+              user_weight = keyboard.nextDouble();              
 
-      System.out.print("Enter your desired calorie intake (If you are not sure enter -1): ");
-      double user_dci = keyboard.nextDouble();
+          }catch(InputMismatchException exe)
+          {
+            System.out.println("Error: Only double numbers are allowed! Try again!\n"); 
+          }
+          finally
+          {
+            if (user_weight > 20){
+                break;
+            }
+            else{
+              System.out.println("Error: please enter a number greater than 20 (kg)!\n");
+            }
+            // Avoid skipping by scanner
+            keyboard.nextLine();
+          }
+          if (count == 2)
+          {
+             // Close Scanner object
+            closeProgram(keyboard);
+            return;
+          }
+        }
 
-      System.out.print("Enter your weight (kg): ");
-      double user_weight = keyboard.nextDouble();
 
-      System.out.print("Enter your height (cm): ");
-      double user_height = keyboard.nextDouble();
+      // System.out.print("Enter your height (cm): ");
+      double user_height = 0.0;
+      for (int count = 0; count < 4; count++)
+        {
+          System.out.print("Enter your Height (cm): ");
+          
+          try{
+              user_height = keyboard.nextDouble();              
+
+          }catch(InputMismatchException exe)
+          {
+            System.out.println("Error: Only double numbers are allowed! Try again!\n"); 
+          }
+          finally
+          {
+            if (user_height > 20){
+                break;
+            }
+            else{
+              System.out.println("Error: please enter a number greater than 20 (cm)!\n");
+            }
+            // Avoid skipping by scanner
+            keyboard.nextLine();
+          }
+          if (count == 2)
+          {
+             // Close Scanner object
+            closeProgram(keyboard);
+            return;
+          }
+        }
 
       // Create user's instance
       if (user_gender.equalsIgnoreCase("male"))
