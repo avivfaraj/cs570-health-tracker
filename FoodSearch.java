@@ -86,7 +86,7 @@ public class FoodSearch {
 
 			// Response Code 
 			int status = con.getResponseCode();
-			System.out.print(status+"\n");
+			// System.out.print(status+"\n");
 
 			// Ensure got a repsonse.
 			// To learn more about error codes go to API docs:
@@ -137,87 +137,71 @@ public class FoodSearch {
 		setQuery(query, brand_owner);
 		String response = getRequest();
 
-		// Get description
-		// Get indexes 
-		int des_index = response.indexOf("description");
-		int last_index = response.indexOf(",",des_index);
+		if (!response.isEmpty() && !response.contains("Error"))
+		{
+			// Get description
+			// Get indexes 
+			int des_index = response.indexOf("description");
+			if (des_index != -1)
+			{
+				int last_index = response.indexOf(",",des_index);
 
-		// Actual Description
-		String description = response.substring(des_index+14, last_index-1);
+				// Actual Description
+				String description = response.substring(des_index+14, last_index-1);
 
-		// Get Brand Owner
-		// Get indexes
-		des_index = response.indexOf("brandOwner");
-		last_index = response.indexOf(",",des_index);
+				// Get Brand Owner
+				// Get indexes
+				des_index = response.indexOf("brandOwner");
+				last_index = response.indexOf(",",des_index);
 
-		// Brand Owner
-		String brandOwner = response.substring(des_index+13, last_index-1);
+				// Brand Owner
+				String brandOwner = response.substring(des_index+13, last_index-1);
 
-		// Get Brand Owner
-		// Get indexes
-		des_index = response.indexOf("foodCategory");
-		last_index = response.indexOf(",",des_index);
+				// Get Brand Owner
+				// Get indexes
+				des_index = response.indexOf("foodCategory");
+				last_index = response.indexOf(",",des_index);
 
-		// Brand Owner
-		String foodCategory = response.substring(des_index+15, last_index-1);
+				// Brand Owner
+				String foodCategory = response.substring(des_index+15, last_index-1);
 
-		// Food nutrients
-		// Get indexes
-		des_index = response.indexOf("foodNutrients");
-		last_index = response.indexOf("]",des_index);
+				// Food nutrients
+				// Get indexes
+				des_index = response.indexOf("foodNutrients");
+				last_index = response.indexOf("]",des_index);
 
-		// Food nutrients in a String
-		String nutrients_str = response.substring(des_index, last_index);
+				// Food nutrients in a String
+				String nutrients_str = response.substring(des_index, last_index);
 
-		// Iterate over nutrient_id in order to get the nutrients from string
-		for (int counter = 0; counter < nutrient_id.length; counter++)
-      	{
+				// Iterate over nutrient_id in order to get the nutrients from string
+				for (int counter = 0; counter < nutrient_id.length; counter++)
+		      	{
 
-         int id_index = nutrients_str.indexOf("nutrientId\":"+nutrient_id[counter]);
-         int last_id_index = nutrients_str.indexOf("}",id_index);
+		         int id_index = nutrients_str.indexOf("nutrientId\":"+nutrient_id[counter]);
+		         int last_id_index = nutrients_str.indexOf("}",id_index);
 
-         String[] nutrient = (nutrients_str.substring(id_index,last_id_index)).split(",");
-         // System.out.println(nutrient[1].substring(nutrient[1].indexOf(":")+1).replace("\"", ""));
-         // System.out.println(nutrient[nutrient.length-1].split(":")[1]);
+		         String[] nutrient = (nutrients_str.substring(id_index,last_id_index)).split(",");
+		         // System.out.println(nutrient[1].substring(nutrient[1].indexOf(":")+1).replace("\"", ""));
+		         // System.out.println(nutrient[nutrient.length-1].split(":")[1]);
 
-         nutrient_value[counter+1] = Double.parseDouble(nutrient[nutrient.length-1].split(":")[1]);
-       	}
+		         nutrient_value[counter+1] = Double.parseDouble(nutrient[nutrient.length-1].split(":")[1]);
+		       	}
 
 
-		return new Food(description,
-						foodCategory,
-						brandOwner,
-						nutrient_value[0],
-						nutrient_value[1],
-						nutrient_value[2],
-						nutrient_value[3],
-						nutrient_value[4],
-						nutrient_value[5]);
+				return new Food(description,
+								foodCategory,
+								brandOwner,
+								nutrient_value[0],
+								nutrient_value[1],
+								nutrient_value[2],
+								nutrient_value[3],
+								nutrient_value[4],
+								nutrient_value[5]);
+			}
+		}
+
+		return null;
+		
 	}
 
-	// // toFile method
-	// public String toFile(){
-	// 	// return fat;
-	// 	String toFile = (this.getName() + "," +
-	// 					 this.getType() + ","+
-	// 					 this.getGrams() + ","+
-	// 					 this.getCalorie()+","+
-	// 					 this.getProtein()+","+
-	// 					 this.getFat()+","+
-	// 					 this.getCarbs()+","+
-	// 					 this.getSugars()+"\n");
-	// 	return toFile;
-	// }
-
-	// // toString method
-	// public String toString(){
-	// 	return ("Food item: " + this.getName() +
-	// 		    "\nType: "+ this.getType() +
-	// 		    "\nGrams: "+this.getGrams()+ 
-	// 		    "\nCalorie: "+ this.getCalorie()+
-	// 		    "\nProtein: "+this.getProtein()+
-	// 		    "\nFat: "+this.getFat()+
-	// 		    "\nCarbohydrate: "+this.getCarbs()+
-	// 		    "\nSugars: "+this.getSugars());
-	// }
 }
