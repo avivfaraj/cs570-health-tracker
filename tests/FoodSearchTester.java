@@ -13,21 +13,43 @@ public static void main(String args[]) {
 
 	FoodSearch food = new FoodSearch();
 	// food.setQuery("cheese","CITRUS GINGER BELLAVITANO");
+	// try{
+	// 	System.out.print(food.searchFood("cheese","CITRUS GINGER BELLAVITANO").toString());
+	// }catch(IOException ioe)
+	// {
+	// 	System.out.print("IOException\n");
+	// }
+
+	Food new_food = null;
+
+
 	try{
-		System.out.print(food.searchFood("cheese","CITRUS GINGER BELLAVITANO").toString());
+		new_food = food.searchFood("Greek Yogurt","Fage");
+	}catch(IOException ioe)
+	{
+		System.out.print("IOException\n");
+	}
+	if(new_food != null)  System.out.println(new_food.toString());
+	if (new_food == null) System.out.println("Nothing Found");
+
+	try{
+		new_food = food.searchFood("Olive Oil","Pompeian");
 	}catch(IOException ioe)
 	{
 		System.out.print("IOException\n");
 	}
 
+	if(new_food != null)  System.out.println(new_food.toString());
+	if (new_food == null) System.out.println("Nothing Found");
+
 
 	try{
-		System.out.print(food.searchFood("Avocado","AVEYO").toString());
+		new_food = food.searchFood("Avocado","AVEYO");
 	}catch(IOException ioe)
 	{
 		System.out.print("IOException\n");
 	}
-	
 
+	if(new_food != null)  System.out.println(new_food.toString());
 }
 }

@@ -625,6 +625,13 @@ public class HealthTracker {
                 writeFile(fdFile,new_food.toFile()+"\n", true);
                 fdArrayList.add(new_food.toFile()+"\n");
                 foodData.addFood(new_food);
+                System.out.println("Item Successfully added: ");
+                System.out.println(new_food.toString());
+
+              }
+              else
+              {
+                System.out.println("Couldn't find this item");
               }
 
               break;
