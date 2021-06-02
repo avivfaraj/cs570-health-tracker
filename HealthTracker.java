@@ -175,34 +175,36 @@ public class HealthTracker {
 
   // ************************************** Main Method ******************************
   public static void main (String args[]) throws IOException{
-    
-
-    //    Calendar date_1 = Calendar.getInstance();
-    // Workout w1 = new Workout(3600, "Virginia Beach", "Running", 600.0, date_1);
-    // Workout w2 = new Workout(1800, "Virginia Beach", "Bike", 150.0, date_1);
-    // writeFile(workoutsFile, w1.toFile(), true);
-    // writeFile(workoutsFile, w2.toFile(), true);
-
 
     // Variables Declaration
-    int index = -1;
-    Calendar current_date;
-    Calendar another_date;
-    boolean run = true;
-    Scanner keyboard = new Scanner(System.in);
-    int max = -1;
-    int counter = 0;
-    boolean inaugural_run = false;
-    boolean new_user = true;
-    int lines_num = -1;
-    String choice = "";
-    String headers = "date,type,duration,location,calorie\n";
-    FoodDataset foodData = new FoodDataset();
-    String month;
-    String date = "", toFile = "", food_name = "", brand_owner = "";
-    String[] date_attr, line_attr;
-    FoodSearch fs = new FoodSearch();
+    // Primitive data types
+    double food_grams = 0.0; 
+    int index = -1, max = -1, counter = 0, lines_num = -1;
+    boolean run = true, added = false, inaugural_run = false, new_user = true;
+    String choice = "", headers = "", month = "",date = "", toFile = "", food_name = "", brand_owner = "",food_type = "",workoutsStr = "";
 
+    // Custom data types + Calendar + Scanner
+    Calendar current_date,another_date;
+    FoodDataset foodData = new FoodDataset();
+    Scanner keyboard = new Scanner(System.in);
+    FoodSearch fs = new FoodSearch();
+    Food meal = null, new_meal = null;
+
+    // Arrays
+    double[] nutrients;
+    String[] date_attr, line_attr;
+
+    // Define External Files required for the program
+    File wFile = new File("Files" +File.separator+ "workouts.csv");
+    File uFile = new File("Files" +File.separator+ "users.csv");
+    File dcFile = new File("Files" +File.separator+ "dailyConsumption.csv");
+    File fdFile = new File("Files" +File.separator+ "foodDataset.csv");
+    
+    // Array Lists for reading files
+    ArrayList<String> workoutsArrayList = new ArrayList<String>();
+    ArrayList<String> usersArrayList = new ArrayList<String>();
+    ArrayList<String> fdArrayList = new ArrayList<String>();
+    ArrayList<String> dcArrayList = new ArrayList<String>();
 
     // Define user as Male() with no attributes
     // This is only to avoid an error of no initialization
@@ -221,51 +223,40 @@ public class HealthTracker {
       inaugural_run = true;
     }
 
-    // Define other files required for that program
-    File wFile = new File("Files" +File.separator+ "workouts.csv");
-    File uFile = new File("Files" +File.separator+ "users.csv");
-    File dcFile = new File("Files" +File.separator+ "dailyConsumption.csv");
-    File fdFile = new File("Files" +File.separator+ "foodDataset.csv");
     
-    // Array Lists for reading files.
-    ArrayList<String> workoutsArrayList = new ArrayList<String>();
-    ArrayList<String> usersArrayList = new ArrayList<String>();
-    ArrayList<String> fdArrayList = new ArrayList<String>();
-    ArrayList<String> dcArrayList = new ArrayList<String>();
+    // Try reading users file
+    try{
+         usersArrayList = readFile(uFile);
 
-      // Try reading users file
-      try{
-           usersArrayList = readFile(uFile);
+         // Get number of lines in file
+         lines_num = usersArrayList.size();
 
-           // Get number of lines in file
-           lines_num = usersArrayList.size();
+    }catch(FileNotFoundException exc)
+    {
+      // No users in memory - inaugural_run
+      System.out.println("Created new file called \"users.csv\"");
+      inaugural_run  = true;
 
-      }catch(FileNotFoundException exc)
-      {
-        // No users in memory - inaugural_run
-        System.out.println("Created new users file");
-        inaugural_run  = true;
+      // Creating required files
+      headers = "id,name,gender,height,weight\n";
+      createNewFile(uFile, headers);
+      usersArrayList.add(headers);
 
-        // Creating required files
-        headers = "id,name,gender,height,weight\n";
-        createNewFile(uFile, headers);
-        usersArrayList.add(headers);
+      headers = "name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars\n";
+      createNewFile(fdFile, headers);
+      fdArrayList.add(headers);
 
-        headers = "name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars\n";
-        createNewFile(fdFile, headers);
-        fdArrayList.add(headers);
+      headers = "id,date,type,duration,location,calorie\n";
+      createNewFile(wFile, headers);
+      workoutsArrayList.add(headers);
 
-        headers = "id,date,type,duration,location,calorie\n";
-        createNewFile(wFile, headers);
-        workoutsArrayList.add(headers);
+       headers = "id,date,name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars\n";
+      createNewFile(dcFile, headers);
+      dcArrayList.add(headers);
 
-         headers = "id,date,name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars\n";
-        createNewFile(dcFile, headers);
-        dcArrayList.add(headers);
-
-        // Max id is to make unique id
-        max = 1000;
-      }
+      // Max id is to make unique id
+      max = 1000;
+    }
 
     if (lines_num == 1)
     {
@@ -301,7 +292,6 @@ public class HealthTracker {
         // InputMismatchException
         System.out.print("Enter your ID: ");
         int user_id = keyboard.nextInt();
-        // String[] attr;
 
         // Iterate over users save in file
         for (String line : usersArrayList)
@@ -358,34 +348,49 @@ public class HealthTracker {
       current_date = Calendar.getInstance();
       another_date = Calendar.getInstance();
       boolean first_line = true;
+      Food food_from_file;
+      int id;
       // Get workouts and daily consumption data for a specific user
       if (dcArrayList.size() > 1) // First line is headers
       {
-        
+
+        // Iterate over lines in dcArrayList
         for (String line : dcArrayList)
         {
+          // Split line by comma
           line_attr = line.split(",");
 
           // Ensure not headers
           if (counter >= 1)
           {
-            //  headers = "id,date,name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars\n";
-            int id = Integer.parseInt(line_attr[0]);
 
+            // Convert id from String to int
+            id = Integer.parseInt(line_attr[0]);
+
+            // Ensure id match
             if (id == user.getID())
             {
+              // Convert date from string (in file) to Calendar
               another_date = stringToDate(line_attr[1]);
 
+              // Ensure first line
               if (first_line)
               {
+                // Convert date from string (in file) to Calendar
                 current_date = stringToDate(line_attr[1]);
-      
+
+                // Create a new DailyConsumption instance
                 dc_temp.add(new DailyConsumption(current_date, 
                                                  new ArrayList<Food>()));
+
+                // Change first_line to false
                 first_line = false;
               }
+
+              // Ensure current date comes before another_date
               else if (another_date.after(current_date))
               {
+                // Clear all fields in current_date
                 current_date.clear();
 
                 // Update current_date with a copy of another_date
@@ -396,26 +401,28 @@ public class HealthTracker {
                                                  new ArrayList<Food>()));
               }
 
+              // Ensure there are DailyConsumptions in dcArrayList
               if (dc_temp.size() > 0)
               {
                 // headers = "id,date,name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars\n";
-                Food food_from_file = new Food(line_attr[2],
-                                               line_attr[3],
-                                               line_attr[4],
-                                               Double.parseDouble(line_attr[5]),
-                                               Double.parseDouble(line_attr[6]),
-                                               Double.parseDouble(line_attr[7]),
-                                               Double.parseDouble(line_attr[8]),
-                                               Double.parseDouble(line_attr[9]),
-                                               Double.parseDouble(line_attr[10])); 
+                food_from_file = new Food(line_attr[2],                           // Name
+                                               line_attr[3],                      // Category
+                                               line_attr[4],                      // BrandOwner
+                                               Double.parseDouble(line_attr[5]),  // Grams
+                                               Double.parseDouble(line_attr[6]),  // Calorie
+                                               Double.parseDouble(line_attr[7]),  // Protein
+                                               Double.parseDouble(line_attr[8]),  // Fat
+                                               Double.parseDouble(line_attr[9]),  // Carbs
+                                               Double.parseDouble(line_attr[10]));// Sugars
+                // Add food to the current DailyConsumption instance
                 dc_temp.get(dc_temp.size() - 1).addFood(food_from_file);
               }
-
               
             }
 
-
           }
+
+          // Increment counter
           counter++;
 
         }
@@ -423,53 +430,66 @@ public class HealthTracker {
         // Add all daily consumptions to user array list
         for(DailyConsumption dc : dc_temp) user.addDailyConsumption(dc);
 
-        // Free memory by clearing array list
+        // Free memory by clearing array list and Food variable
         dc_temp.clear();
+        food_from_file = null;
       }
-      // System.out.println(user.getDailyConsumption("05-31-2021"));
 
-      if (workoutsArrayList.size() > 1) // First line is headers
+      // Ensure ther are workouts in ArrayList
+      // Avoid headers (> 1)
+      if (workoutsArrayList.size() > 1) 
       {
+        // Initialize variables
         current_date = Calendar.getInstance();
-        
         counter = 0;
+
+        // Iterate over lines in ArrayList
         for (String line : workoutsArrayList)
         {
-          if (counter > 0) // Skip headers
+          // Skip headers
+          if (counter > 0) 
           {
+            // Split line by comma
             line_attr = line.split(",");
-            if (counter >= 1)
+
+            // // Skip headers
+            // if (counter >= 1)
+            // {
+
+            // Convert id from String to int
+            id = Integer.parseInt(line_attr[0]);
+
+            // Ensure id in file matches user's id
+            if (id == user.getID())
             {
+              // Convert date from string to Calendar
+              current_date = stringToDate(line_attr[1]);
 
-              int id = Integer.parseInt(line_attr[0]);
-
-              if (id == user.getID())
-              {
-    
-                current_date = stringToDate(line_attr[1]);
-
-                w_temp.add(new Workout(Integer.parseInt(line_attr[3]), // Duration in seconds
-                                       line_attr[4],                   // Location String
-                                       line_attr[2],                   // Type String
-                                       Double.parseDouble(line_attr[5]),// Calories double
-                                      current_date));              // Date Calendar
-              }
+              // Add new workout to w_temp
+              w_temp.add(new Workout(Integer.parseInt(line_attr[3]),  // Duration in seconds
+                                     line_attr[4],                    // Location String
+                                     line_attr[2],                    // Type String
+                                     Double.parseDouble(line_attr[5]),// Calories double
+                                    current_date));                   // Date Calendar
+              // }
             }
-
           }
+
+          // Increment Counter
           counter++;
         }
+
+        // Add workouts arraylist to user
         user.addWorkouts(w_temp);
 
         // Free memory by clearing array list
         w_temp.clear();  
       }
-      // System.out.println(user.getWorkouts());
-
     }
-    else  // New user must be created.
+    // New user must be created.
+    else  
     {
-      // unique id = max + 1;
+
       int unique_id = max + 1;
 
       // Ask for details
@@ -488,12 +508,10 @@ public class HealthTracker {
       System.out.print("Enter your height: ");
       double user_height = keyboard.nextDouble();
 
-      // System.out.print(user_name +" " + user_gender +" "+
-      //                  user_dci +" "+ user_weight +" "+ user_height);
-
       // Create user's instance
       if (user_gender.equalsIgnoreCase("male"))
       {
+        // Ensure dci received
         if (user_dci < 0)
           user = new Male(unique_id, user_name, user_weight, user_height);
         else
@@ -501,6 +519,7 @@ public class HealthTracker {
       }
       else
       {
+        // Ensure dci received
         if (user_dci < 0)
           user = new Female(unique_id, user_name, user_weight, user_height);
         else
@@ -515,43 +534,56 @@ public class HealthTracker {
       writeFile(uFile, user.toFile(), true);
     }
 
-    // Read foodDataset.csv file
+    
     try{
+
+      // Read foodDataset.csv file
       fdArrayList = readFile(fdFile);
+
     }catch(FileNotFoundException exc)
     {
+      // Create new file
       headers = "name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars\n";
       createNewFile(fdFile, headers);
+
+      // Append header to fdArrayList
       fdArrayList.add(headers);
     }
 
+    // Initialize counter
     counter = 0;
 
     // Ensure data exists
     if (fdArrayList.size() > 1)
     {
+      // Iterate over lines 
       for(String line : fdArrayList)
       {
+        // Skip headers
         if (counter > 0)
         {
+          // Split line by comma
           line_attr = line.split(",");
-          foodData.addFood(new Food(line_attr[0], // Name
-                                    line_attr[1], // Category
-                                    line_attr[2], // Brand owner
-                                    Double.parseDouble(line_attr[3]), //Grams
-                                    Double.parseDouble(line_attr[4]), //Calories
-                                    Double.parseDouble(line_attr[5]), //Protein
-                                    Double.parseDouble(line_attr[6]), //Fat
-                                    Double.parseDouble(line_attr[7]), //Carbs
-                                    Double.parseDouble(line_attr[8])));//Sugars
+
+          // Add new food to foodData
+          foodData.addFood(new Food(line_attr[0],                      // Name
+                                    line_attr[1],                      // Category
+                                    line_attr[2],                      // Brand owner
+                                    Double.parseDouble(line_attr[3]),  // Grams
+                                    Double.parseDouble(line_attr[4]),  // Calories
+                                    Double.parseDouble(line_attr[5]),  // Protein
+                                    Double.parseDouble(line_attr[6]),  // Fat
+                                    Double.parseDouble(line_attr[7]),  // Carbs
+                                    Double.parseDouble(line_attr[8])));// Sugars
 
         }
+
+        // Increment counter
         counter++;
       }
     }
-    // System.out.println(foodData.toString());
 
-
+    // Run Menu
     while(run){
 
       // Menu
@@ -565,33 +597,36 @@ public class HealthTracker {
                        "6. Add Food to Data Set \n"+
                        "7. Exit\n");
 
+      // Get choice from user
       System.out.print("Your Choice: ");
       choice = keyboard.next();
 
-    //   System.out.print("\n>-----------------------------------------<\n");
+      // Switch case 
       switch(choice){
 
+            // Add New Meal
             case "1":
 
-              boolean added = false;
-              Food meal = null, new_meal = null;
-
+              // Initialize vars
+              added = false;
+              meal = null;
+              new_meal = null;
+              
               // Get date from user
               System.out.print("Enter date (Format MM-DD-YYYY): ");
               date = keyboard.next();
 
+              // Convert date from string to Calendar
               current_date = stringToDate(date);
 
               // Get food from user
               System.out.print("Enter Food: ");
-              food_name = keyboard.next(); // NextLine has a bug
-              if (keyboard.hasNextLine()) {
-                food_name += keyboard.nextLine();
-              }
+              food_name = keyboard.next(); 
+              if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
 
               // Get amount in grams from user
               System.out.print("Enter Grams: ");
-              double food_grams = keyboard.nextDouble();
+              food_grams = keyboard.nextDouble();
 
               // Ensure food item exist in data set
               if (foodData.search(food_name))
@@ -601,12 +636,13 @@ public class HealthTracker {
                 meal = foodData.getFood(food_name);
 
                 // Get its type
-                String food_type = meal.getCategory();
+                food_type = meal.getCategory();
 
+                // Get brand 
                 brand_owner = meal.getBrand();
 
                 // Get food's nutrients in double
-                double[] nutrients = foodData.getNutrientsDouble(food_name);
+                nutrients = foodData.getNutrientsDouble(food_name);
 
                 // Iterate over nutrients and change them according to 
                 // the grams entered by user
@@ -650,14 +686,14 @@ public class HealthTracker {
               // Get date from user 
               System.out.print("Enter date (Format MM-DD-YYYY): ");
               date = keyboard.next();
+
+              // Convert date from string to Calendar
               current_date = stringToDate(date);
 
               // Get workout type from user
               System.out.print("Enter workout type: ");
               String type = keyboard.next();
-              if (keyboard.hasNextLine()) {
-                type += keyboard.nextLine();
-              }
+              if (keyboard.hasNextLine()) type += keyboard.nextLine();
 
               // Get duration in minutes from user
               System.out.print("Enter duration in minutes: ");
@@ -666,10 +702,7 @@ public class HealthTracker {
               // Get location from user
               System.out.print("Enter location: ");
               String location = keyboard.next();
-              if (keyboard.hasNextLine()) 
-                {
-                   location += keyboard.nextLine();
-                }
+              if (keyboard.hasNextLine()) location += keyboard.nextLine();
               
               // Get calories burned from user.
               System.out.print("Enter calories burned: ");
@@ -689,27 +722,40 @@ public class HealthTracker {
 
           case "3":
 
+              // Get date from user
               System.out.print("Enter date (enter -1 for today): ");
-              String date_str = keyboard.next();
-              if (date_str.equals ("-1"))
+              date = keyboard.next();
+
+              // Ensure -1 entered
+              if (date.equals ("-1"))
               {
-                // Calendar new_date = Calendar.getInstance();
+                // Make it easier to enter today's date
+
+                // Calendar instance
                 current_date = Calendar.getInstance();
+
+                // Convert month to string 
+                // (0 - january, 11- december) - that's the reason for +1
                 month = String.format("%02d" ,current_date.get(Calendar.MONTH) + 1);
 
-                date_str = (month + "-" +
+                // date as string
+                date = (month + "-" +
                             String.format("%02d",current_date.get(Calendar.DATE)) + "-" +
                             current_date.get(Calendar.YEAR));
               }
 
-              
-              String dcString = user.getDailyConsumption(date_str);
+              // Daily consumption string for that user
+              String dcString = user.getDailyConsumption(date);
+
+              // Ensure there is data
               if (!dcString.equalsIgnoreCase("Not found"))
               {
+                // Print data to user
                 System.out.print("\n*********** Daily Consumption ***********\n\n");
                 System.out.print(dcString);
 
               }
+              // No records 
               else System.out.print("No records for that date!\n");
 
               break;
@@ -723,19 +769,24 @@ public class HealthTracker {
               current_date.add(Calendar.DATE, -7); 
               
               // Print last week workouts
-              String workoutsStr = user.getWorkouts(current_date);
+              workoutsStr = user.getWorkouts(current_date);
 
+              // Ensure there is data
               if (!workoutsStr.isEmpty())
               {
+                // Print data to user
                 System.out.print("\n*********** Workouts Done This Week ***********\n");
                 System.out.print(workoutsStr);
                 
               }
-              
-               
+              // No records 
+              else System.out.print("No records for that date!\n");
+
               break;
 
           case "5":
+
+              // Print Food Data Set to user
               System.out.print(foodData.toString());
               System.out.print("\n");
 
@@ -744,39 +795,49 @@ public class HealthTracker {
           case "6":
               // Get food from user
               System.out.print("Enter Food: ");
-              food_name = keyboard.next(); // NextLine has a bug
-              if (keyboard.hasNextLine()) {
-                food_name += keyboard.nextLine();
-              }
+              food_name = keyboard.next(); 
+              if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
 
               // Get food from user
               System.out.print("Enter Brand: ");
               brand_owner = keyboard.next(); // NextLine has a bug
-              if (keyboard.hasNextLine()) {
-                brand_owner += keyboard.nextLine();
-              }
+              if (keyboard.hasNextLine()) brand_owner += keyboard.nextLine();
 
-              // System.out.println(food_name);
-              // System.out.println(brand_owner);
-              Food new_food = null;
+              // Initialize new_meal to null to avoid compiling error
+              new_meal = null;
+
+              // Try search for food
               try{
-                 new_food = fs.searchFood(food_name,brand_owner);
+
+                 new_meal = fs.searchFood(food_name,brand_owner);
+
               }catch(IOException ioe)
               {
+                // Exception occured
                 System.out.print("IOException\n");
               }
 
-              if (new_food != null)
+              // Ensure there is data
+              if (new_meal != null)
               {
-                writeFile(fdFile,new_food.toFile()+"\n", true);
-                fdArrayList.add(new_food.toFile()+"\n");
-                foodData.addFood(new_food);
+
+                // Write data to file
+                writeFile(fdFile,new_meal.toFile()+"\n", true);
+
+                // Add data to ArrayList
+                fdArrayList.add(new_meal.toFile()+"\n");
+
+                // Add data to foodData
+                foodData.addFood(new_meal);
+
+                // Print Message
                 System.out.println("Item Successfully added: ");
-                System.out.println(new_food.toString());
+                System.out.println(new_meal.toString());
 
               }
               else
               {
+                // Print error message
                 System.out.println("Couldn't find this item");
               }
 
@@ -801,7 +862,6 @@ public class HealthTracker {
     keyboard.close();
 
     // Inform user 
-    // System.out.printf("\nClosed! \n");
     System.out.print("\n>------------------- Closed ---------------------<\n");
 
   }
