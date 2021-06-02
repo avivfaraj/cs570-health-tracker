@@ -84,11 +84,10 @@ public class Workout {
 
 	// toString method
 	public String toString(){
-		return ("Workout: " +
-				"\nDate: " + this.getDateString()+
+		return ("\nDate: " + this.getDateString()+
 			    "\nType: "+ this.getType() +
 			    "\nLocation: "+this.getLocation()+
 			    "\nDuration: "+this.getDurationMinutes() +" minutes"+
-			    "\nCalories: "+ this.getCalorie());
+			    "\nCalories: "+ this.getCalorie()+"\n");
 	}
 }

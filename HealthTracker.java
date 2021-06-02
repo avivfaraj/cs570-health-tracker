@@ -555,13 +555,14 @@ public class HealthTracker {
     while(run){
 
       // Menu
+      System.out.print("\n>-------------------- Menu ----------------------<\n");
       System.out.print("\nChoose one of the following (enter a number): \n"+
-                       "1. Food Data Set \n"+
-                       "2. Daily Consumption \n"+
-                       "3. Add food item to data set \n"+ // Change it
+                       "1. Add New Meal \n"+
+                       "2. Add New Workout \n"+
+                       "3. Daily Consumption \n"+ // Change it
                        "4. Workouts Done This Week \n"+
-                       "5. Add a meal \n"+
-                       "6. Add a workout \n"+
+                       "5. Food Data Set \n"+
+                       "6. Add Food to Data Set \n"+
                        "7. Exit\n");
 
       System.out.print("Your Choice: ");
@@ -570,87 +571,7 @@ public class HealthTracker {
     //   System.out.print("\n>-----------------------------------------<\n");
       switch(choice){
 
-          case "1":
-              System.out.print(foodData.toString());
-              System.out.print("\n");
-
-              break;
-
-          case "2":
-              System.out.print("Enter date (enter -1 for today): ");
-              String date_str = keyboard.next();
-              if (date_str.equals ("-1"))
-              {
-                // Calendar new_date = Calendar.getInstance();
-                current_date = Calendar.getInstance();
-                month = String.format("%02d" ,current_date.get(Calendar.MONTH) + 1);
-
-                date_str = (month + "-" +
-                            String.format("%02d",current_date.get(Calendar.DATE)) + "-" +
-                            current_date.get(Calendar.YEAR));
-              }
-
-              System.out.print(user.getDailyConsumption(date_str));
-              System.out.print("\n");
-
-              break;
-
-          case "3":
-              // Get food from user
-              System.out.print("Enter Food: ");
-              food_name = keyboard.next(); // NextLine has a bug
-              if (keyboard.hasNextLine()) {
-                food_name += keyboard.nextLine();
-              }
-
-              // Get food from user
-              System.out.print("Enter Brand: ");
-              brand_owner = keyboard.next(); // NextLine has a bug
-              if (keyboard.hasNextLine()) {
-                brand_owner += keyboard.nextLine();
-              }
-
-              // System.out.println(food_name);
-              // System.out.println(brand_owner);
-              Food new_food = null;
-              try{
-                 new_food = fs.searchFood(food_name,brand_owner);
-              }catch(IOException ioe)
-              {
-                System.out.print("IOException\n");
-              }
-
-              if (new_food != null)
-              {
-                writeFile(fdFile,new_food.toFile()+"\n", true);
-                fdArrayList.add(new_food.toFile()+"\n");
-                foodData.addFood(new_food);
-                System.out.println("Item Successfully added: ");
-                System.out.println(new_food.toString());
-
-              }
-              else
-              {
-                System.out.println("Couldn't find this item");
-              }
-
-              break;
-
-          case "4":
-
-              // Current date
-              current_date = Calendar.getInstance();
-
-              // Substract 7 days
-              current_date.add(Calendar.DATE, -7); 
-              
-              // Print last week workouts
-              System.out.print(user.getWorkouts(current_date));
-              System.out.print("\n");
-               
-              break;
-
-          case "5":
+            case "1":
 
               boolean added = false;
               Food meal = null, new_meal = null;
@@ -724,8 +645,7 @@ public class HealthTracker {
 
               break;
 
-
-          case "6":
+          case "2":
 
               // Get date from user 
               System.out.print("Enter date (Format MM-DD-YYYY): ");
@@ -764,6 +684,101 @@ public class HealthTracker {
 
               // Write new line to file and add to Array List
               insertToFile(current_date,wFile,user.getID() +","+new_workout.toFile(), workoutsArrayList);
+
+              break;
+
+          case "3":
+
+              System.out.print("Enter date (enter -1 for today): ");
+              String date_str = keyboard.next();
+              if (date_str.equals ("-1"))
+              {
+                // Calendar new_date = Calendar.getInstance();
+                current_date = Calendar.getInstance();
+                month = String.format("%02d" ,current_date.get(Calendar.MONTH) + 1);
+
+                date_str = (month + "-" +
+                            String.format("%02d",current_date.get(Calendar.DATE)) + "-" +
+                            current_date.get(Calendar.YEAR));
+              }
+
+              
+              String dcString = user.getDailyConsumption(date_str);
+              if (!dcString.equalsIgnoreCase("Not found"))
+              {
+                System.out.print("\n*********** Daily Consumption ***********\n\n");
+                System.out.print(dcString);
+
+              }
+              else System.out.print("No records for that date!\n");
+
+              break;
+              
+          case "4":
+
+              // Current date
+              current_date = Calendar.getInstance();
+
+              // Substract 7 days
+              current_date.add(Calendar.DATE, -7); 
+              
+              // Print last week workouts
+              String workoutsStr = user.getWorkouts(current_date);
+
+              if (!workoutsStr.isEmpty())
+              {
+                System.out.print("\n*********** Workouts Done This Week ***********\n");
+                System.out.print(workoutsStr);
+                
+              }
+              
+               
+              break;
+
+          case "5":
+              System.out.print(foodData.toString());
+              System.out.print("\n");
+
+              break;
+
+          case "6":
+              // Get food from user
+              System.out.print("Enter Food: ");
+              food_name = keyboard.next(); // NextLine has a bug
+              if (keyboard.hasNextLine()) {
+                food_name += keyboard.nextLine();
+              }
+
+              // Get food from user
+              System.out.print("Enter Brand: ");
+              brand_owner = keyboard.next(); // NextLine has a bug
+              if (keyboard.hasNextLine()) {
+                brand_owner += keyboard.nextLine();
+              }
+
+              // System.out.println(food_name);
+              // System.out.println(brand_owner);
+              Food new_food = null;
+              try{
+                 new_food = fs.searchFood(food_name,brand_owner);
+              }catch(IOException ioe)
+              {
+                System.out.print("IOException\n");
+              }
+
+              if (new_food != null)
+              {
+                writeFile(fdFile,new_food.toFile()+"\n", true);
+                fdArrayList.add(new_food.toFile()+"\n");
+                foodData.addFood(new_food);
+                System.out.println("Item Successfully added: ");
+                System.out.println(new_food.toString());
+
+              }
+              else
+              {
+                System.out.println("Couldn't find this item");
+              }
 
               break;
 
