@@ -9,9 +9,12 @@ import java.io.File;
 // Exceptions packages
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.InputMismatchException;
 
 // File writer package
 import java.io.FileWriter;
+
+
 
 /***************************************
  * HealthTracker.java
@@ -288,11 +291,40 @@ public class HealthTracker {
 
         }
 
+        int user_id = -1;
         // Ask for ID
         // InputMismatchException
-        System.out.print("Enter your ID: ");
-        int user_id = keyboard.nextInt();
 
+        // System.out.print("Enter your ID: ");
+        // keyboard.nextLine();
+        for (int count = 0; count < 4; count++)
+        {
+          System.out.print("Enter your ID: ");
+            try{
+            user_id = keyboard.nextInt();
+            break;
+          }catch(InputMismatchException exe)
+          {
+            System.out.println("Only integer numbers are allowed! Try again!"); 
+          }
+          finally
+          {
+            // Avoid skipping by scanner
+            keyboard.nextLine();
+          }
+          if (count == 2)
+          {
+             // Close Scanner object
+            keyboard.close();
+            System.out.print("Closing program!");
+
+            // Inform user 
+            System.out.print("\n>------------------- Closed ---------------------<\n");
+            
+            return;
+          }
+        }
+        
         // Iterate over users save in file
         for (String line : usersArrayList)
         {
@@ -494,10 +526,37 @@ public class HealthTracker {
 
       // Ask for details
       System.out.print("Enter your name: ");
-      String user_name = keyboard.next();
+      String user_name = keyboard.nextLine();
+      if (keyboard.hasNextLine()) user_name += keyboard.nextLine();
 
       System.out.print("Enter your gender: ");
       String user_gender = keyboard.next();
+
+      // Ensure gender is either Male or Female
+      if (!user_gender.equalsIgnoreCase("Male") || !user_gender.equalsIgnoreCase("Female"))
+      {
+        // 3 more attempts 
+        for (int count = 0; count < 3; count++)
+        {
+          System.out.print("Enter your gender: ");
+          user_gender = keyboard.next();
+          if (user_gender.equalsIgnoreCase("Male") || user_gender.equalsIgnoreCase("Female")) break;
+
+          // Exit program if all attempts failed
+          if (count == 2)
+          {
+             // Close Scanner object
+            keyboard.close();
+            System.out.print("Closing program!");
+
+            // Inform user 
+            System.out.print("\n>------------------- Closed ---------------------<\n");
+            
+            return;
+          }
+        }
+
+      }
 
       System.out.print("Enter your desired calorie intake (If you are not sure enter -1): ");
       double user_dci = keyboard.nextDouble();
@@ -505,7 +564,7 @@ public class HealthTracker {
       System.out.print("Enter your weight (kg): ");
       double user_weight = keyboard.nextDouble();
 
-      System.out.print("Enter your height: ");
+      System.out.print("Enter your height (cm): ");
       double user_height = keyboard.nextDouble();
 
       // Create user's instance
