@@ -21,6 +21,17 @@ public static void main(String args[]) {
 	// }
 
 	Food new_food = null;
+
+
+	try{
+		new_food = food.searchFood("Greek Yogurt","Fage");
+	}catch(IOException ioe)
+	{
+		System.out.print("IOException\n");
+	}
+	if(new_food != null)  System.out.println(new_food.toString());
+	if (new_food == null) System.out.println("Nothing Found");
+
 	try{
 		new_food = food.searchFood("Olive Oil","Pompeian");
 	}catch(IOException ioe)

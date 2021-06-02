@@ -139,6 +139,7 @@ public class FoodSearch {
 		setQuery(query, brand_owner);
 		String response = getRequest();
 
+		// System.out.println(response);
 		if (!response.isEmpty() && !response.contains("Error"))
 		{
 			// Get description
@@ -156,11 +157,17 @@ public class FoodSearch {
 
 				// Get Brand Owner
 				// Get indexes
-				des_index = response.indexOf("brandOwner");
-				last_index = response.indexOf(",",des_index);
+				des_index = response.indexOf("publishedDate");
+				des_index = response.indexOf("brandOwner",des_index);
+				last_index = response.indexOf(",\"",des_index);
 
 				// Brand Owner
 				String brandOwner = response.substring(des_index+13, last_index-1);
+				if (brandOwner.contains(","))
+				{
+					brandOwner = brandOwner.replace(",","");
+					System.out.println(brandOwner);
+				}
 
 				// Get Brand Owner
 				// Get indexes
