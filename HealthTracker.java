@@ -183,6 +183,28 @@ public class HealthTracker {
       System.out.print("\n>------------------- Closed ---------------------<\n");
 
   }
+
+  public static String getDateInput(String msg, Scanner scn)
+  {
+    String date = "";
+    for (int count = 0; count < 3; count++)
+    {
+      System.out.print(msg);
+      date = scn.next();
+      if (date.matches("\\d{2}-\\d{2}-\\d{4}"))
+      {
+        return date;
+      }
+      else if(count < 2)
+      {
+        System.out.println("Error: Date format is MM-DD-YYYY. Please try again!\n");
+      }
+    }
+
+    return "Error: Date is not in the right format";
+    
+
+  }
   // *********************************************************************************
 
   
@@ -733,7 +755,7 @@ public class HealthTracker {
       System.out.print("\nChoose one of the following (enter a number): \n"+
                        "1. Add New Meal \n"+
                        "2. Add New Workout \n"+
-                       "3. Daily Consumption \n"+ // Change it
+                       "3. Daily Consumption \n"+ 
                        "4. Workouts Done This Week \n"+
                        "5. Food Data Set \n"+
                        "6. Add Food to Data Set \n"+
@@ -754,111 +776,119 @@ public class HealthTracker {
               meal = null;
               new_meal = null;
               
-              // Get date from user
-              System.out.print("Enter date (Format MM-DD-YYYY): ");
-              date = keyboard.next();
+              // // Get date from user
+              date = getDateInput("Enter date (Format MM-DD-YYYY):", keyboard);
 
-              // Convert date from string to Calendar
-              current_date = stringToDate(date);
-
-              // Get food from user
-              System.out.print("Enter Food: ");
-              food_name = keyboard.next(); 
-              if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
-
-              // Get amount in grams from user
-              System.out.print("Enter Grams: ");
-              food_grams = keyboard.nextDouble();
-
-              // Ensure food item exist in data set
-              if (foodData.search(food_name))
+              // Ensure date is in the right format
+              if (!date.contains("Error"))
               {
+                // Convert date from string to Calendar
+                current_date = stringToDate(date);
 
-                // Find the food in data set
-                meal = foodData.getFood(food_name);
+                // Get food from user
+                System.out.print("Enter Food: ");
+                food_name = keyboard.next(); 
+                if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
 
-                // Get its type
-                food_type = meal.getCategory();
+                // Get amount in grams from user
+                System.out.print("Enter Grams: ");
+                food_grams = keyboard.nextDouble();
 
-                // Get brand 
-                brand_owner = meal.getBrand();
-
-                // Get food's nutrients in double
-                nutrients = foodData.getNutrientsDouble(food_name);
-
-                // Iterate over nutrients and change them according to 
-                // the grams entered by user
-                for (int iter = 0; iter < nutrients.length; iter ++)
+                // Ensure food item exist in data set
+                if (foodData.search(food_name))
                 {
-                  nutrients[iter] = nutrients[iter] * food_grams / 100;
+
+                  // Find the food in data set
+                  meal = foodData.getFood(food_name);
+
+                  // Get its type
+                  food_type = meal.getCategory();
+
+                  // Get brand 
+                  brand_owner = meal.getBrand();
+
+                  // Get food's nutrients in double
+                  nutrients = foodData.getNutrientsDouble(food_name);
+
+                  // Iterate over nutrients and change them according to 
+                  // the grams entered by user
+                  for (int iter = 0; iter < nutrients.length; iter ++)
+                  {
+                    nutrients[iter] = nutrients[iter] * food_grams / 100;
+                  }
+
+                  // Create a new Food instance.
+                  new_meal = new Food(food_name,
+                                      food_type,
+                                      brand_owner,
+                                      nutrients[0], // Grams
+                                      nutrients[1], // Calorie
+                                      nutrients[2], // Protein
+                                      nutrients[3], // Fat
+                                      nutrients[4], // Carbs
+                                      nutrients[5]);// Sugars
+
+                  // Add the new meal to the user
+                  added = user.addFood(date,new_meal);
                 }
 
-                // Create a new Food instance.
-                new_meal = new Food(food_name,
-                                    food_type,
-                                    brand_owner,
-                                    nutrients[0], // Grams
-                                    nutrients[1], // Calorie
-                                    nutrients[2], // Protein
-                                    nutrients[3], // Fat
-                                    nutrients[4], // Carbs
-                                    nutrients[5]);// Sugars
+                // Date not found
+                if (!added)
+                {
+                  // Create a new Daily Consumption instance for user.
+                  user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
 
-                // Add the new meal to the user
-                added = user.addFood(date,new_meal);
+                  // Add new meal
+                  user.addFood(date,new_meal);
+                }
+
+                // Write new line to file and add to Array List
+                insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
               }
-
-              // Date not found
-              if (!added)
-              {
-                // Create a new Daily Consumption instance for user.
-                user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
-
-                // Add new meal
-                user.addFood(date,new_meal);
-              }
-
-              // Write new line to file and add to Array List
-              insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
-
+              else System.out.println(date);
+              
               break;
 
           case "2":
 
               // Get date from user 
-              System.out.print("Enter date (Format MM-DD-YYYY): ");
-              date = keyboard.next();
+              date = getDateInput("Enter date (Format MM-DD-YYYY):", keyboard);
 
-              // Convert date from string to Calendar
-              current_date = stringToDate(date);
+              // Ensure date is in the right format
+              if (!date.contains("Error"))
+              {
+                // Convert date from string to Calendar
+                current_date = stringToDate(date);
 
-              // Get workout type from user
-              System.out.print("Enter workout type: ");
-              String type = keyboard.next();
-              if (keyboard.hasNextLine()) type += keyboard.nextLine();
+                // Get workout type from user
+                System.out.print("Enter workout type: ");
+                String type = keyboard.next();
+                if (keyboard.hasNextLine()) type += keyboard.nextLine();
 
-              // Get duration in minutes from user
-              System.out.print("Enter duration in minutes: ");
-              double durationMinutes = keyboard.nextDouble();
+                // Get duration in minutes from user
+                System.out.print("Enter duration in minutes: ");
+                double durationMinutes = keyboard.nextDouble();
 
-              // Get location from user
-              System.out.print("Enter location: ");
-              String location = keyboard.next();
-              if (keyboard.hasNextLine()) location += keyboard.nextLine();
-              
-              // Get calories burned from user.
-              System.out.print("Enter calories burned: ");
-              double calorie = keyboard.nextDouble();
+                // Get location from user
+                System.out.print("Enter location: ");
+                String location = keyboard.next();
+                if (keyboard.hasNextLine()) location += keyboard.nextLine();
+                
+                // Get calories burned from user.
+                System.out.print("Enter calories burned: ");
+                double calorie = keyboard.nextDouble();
 
-              // Create a new workout instance
-              Workout new_workout = new Workout((int)durationMinutes * 60, 
-                                                location, type, calorie, current_date);
+                // Create a new workout instance
+                Workout new_workout = new Workout((int)durationMinutes * 60, 
+                                                  location, type, calorie, current_date);
 
-              // Add the new instance to user.
-              user.addWorkouts(new_workout);
+                // Add the new instance to user.
+                user.addWorkouts(new_workout);
 
-              // Write new line to file and add to Array List
-              insertToFile(current_date,wFile,user.getID() +","+new_workout.toFile(), workoutsArrayList);
+                // Write new line to file and add to Array List
+                insertToFile(current_date,wFile,user.getID() +","+new_workout.toFile(), workoutsArrayList);
+              }
+              else System.out.println(date);
 
               break;
 
