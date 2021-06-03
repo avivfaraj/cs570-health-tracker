@@ -184,14 +184,14 @@ public class HealthTracker {
 
   }
 
-  public static String getDateInput(String msg, Scanner scn)
+  public static String getDateInput(String msg, Scanner scn,String pattern)
   {
     String date = "";
     for (int count = 0; count < 3; count++)
     {
       System.out.print(msg);
       date = scn.next();
-      if (date.matches("\\d{1,2}-\\d{1,2}-\\d{4}"))
+      if (date.matches(pattern))
       {
         return date;
       }
@@ -784,7 +784,7 @@ public class HealthTracker {
               new_meal = null;
               
               // // Get date from user
-              date = getDateInput("Enter date (Format MM-DD-YYYY):", keyboard);
+              date = getDateInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}");
 
               // Ensure date is in the right format
               if (!date.contains("Error"))
@@ -872,7 +872,7 @@ public class HealthTracker {
           case "2":
 
               // Get date from user 
-              date = getDateInput("Enter date (Format MM-DD-YYYY):", keyboard);
+              date = getDateInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}");
 
               // Ensure date is in the right format
               if (!date.contains("Error"))
@@ -948,26 +948,41 @@ public class HealthTracker {
           case "3":
 
               // Get date from user
-              System.out.print("Enter date (enter -1 for today): ");
-              date = keyboard.next();
+              // System.out.print("Enter date (enter -1 for today): ");
+              // date = keyboard.next();
+              // Get date from user 
+              date = getDateInput("Enter date (Format MM-DD-YYYY or -1 for today):", 
+                                  keyboard,
+                                  "\\d{1,2}-\\d{1,2}-\\d{4}|-1");
 
+              if (date.contains("Error"))
+              {
+                // Print error
+                System.out.println(date);
+
+                // Back to menu
+                break;
+              }
               // Ensure -1 entered
               if (date.equals ("-1"))
               {
                 // Make it easier to enter today's date
-
                 // Calendar instance
                 current_date = Calendar.getInstance();
-
-                // Convert month to string 
-                // (0 - january, 11- december) - that's the reason for +1
-                month = String.format("%02d" ,current_date.get(Calendar.MONTH) + 1);
-
-                // date as string
-                date = (month + "-" +
-                            String.format("%02d",current_date.get(Calendar.DATE)) + "-" +
-                            current_date.get(Calendar.YEAR));
               }
+              else
+              {
+                current_date = stringToDate(date);
+              }
+
+             // Convert month to string 
+              // (0 - january, 11- december) - that's the reason for +1
+              month = String.format("%02d" ,current_date.get(Calendar.MONTH) + 1);
+
+              // date as string
+              date = (month + "-" +
+                          String.format("%02d",current_date.get(Calendar.DATE)) + "-" +
+                          current_date.get(Calendar.YEAR));
 
               // Daily consumption string for that user
               String dcString = user.getDailyConsumption(date);
