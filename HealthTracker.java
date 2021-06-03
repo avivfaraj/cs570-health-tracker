@@ -191,7 +191,7 @@ public class HealthTracker {
     {
       System.out.print(msg);
       date = scn.next();
-      if (date.matches("\\d{2}-\\d{2}-\\d{4}"))
+      if (date.matches("\\d{1,2}-\\d{1,2}-\\d{4}"))
       {
         return date;
       }
