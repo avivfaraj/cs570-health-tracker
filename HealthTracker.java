@@ -819,6 +819,9 @@ public class HealthTracker {
                 if (foodData.search(food_name))
                 {
 
+                  // food_name = food_name.toLowerCase();
+                  // food_name = food_name.substring(0,1).toUpperCase() + food_name.substring(1);
+
                   // Find the food in data set
                   meal = foodData.getFood(food_name);
 

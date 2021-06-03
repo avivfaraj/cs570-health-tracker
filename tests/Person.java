@@ -1,9 +1,12 @@
 import java.util.ArrayList;
+import java.util.Calendar;
 /***************************************
  * Person.java
- * 
+ * Abstract class represent a person
+ * with weight, height, name, id, gender,
+ * and desired calorie intake
  * @author Aviv Farag
- * @version 05242021
+ * @version 3.0 - 05.29.21
  ****************************************/
 
 public abstract class Person {
@@ -21,7 +24,7 @@ public abstract class Person {
 							 double desiredCI, double weightKG, 
 							 double heightCm){
 		id_num = id;
-		this.name = name;
+		this.name = name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();;
 		this.gender = gender;
 		desiredCalorieIntake = desiredCI;
 		this.weightKG = weightKG;
@@ -30,12 +33,17 @@ public abstract class Person {
 		dailyc = new ArrayList<DailyConsumption>();
 	}
 
-	// protected final void addWorkouts(Workout ... w){
-	// 	for (Workout workout : w)
-	// 	{
-	// 		workouts.add(workout);
-	// 	}
-	// }
+	protected final void addWorkouts(Workout ... w){
+		for (Workout workout : w)
+		{
+			// Make a copy of each Workout instance in the array
+			workouts.add(new Workout(workout.getDuration(),
+									 workout.getLocation(),
+									 workout.getType(),
+									 workout.getCalorie(),
+									 workout.getDate()));
+		}
+	}
 
 	protected final void addWorkouts(ArrayList<Workout> work){
 
@@ -87,6 +95,26 @@ public abstract class Person {
 		return final_string;
 	}
 
+	public final String getWorkouts(Calendar date){
+
+		/**** NOTE: Consider printing workouts 
+			        for a specific date!
+		**/
+
+		String final_string = "";
+		for(Workout workout : workouts)
+		{
+			if (date.before(workout.getDate()))
+			{
+				final_string += workout.toString();
+				final_string += "\n";
+			}
+			
+		}
+
+		return final_string;
+	}
+
 
 	public final String getDailyConsumption(String date){
 
@@ -94,6 +122,8 @@ public abstract class Person {
 		**/
 		for(DailyConsumption dc : dailyc)
 		{
+			// System.out.println(dc.getDate()+"  "+ date);
+
 
 			if (date.equals(dc.getDate()))
 			{

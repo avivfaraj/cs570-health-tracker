@@ -20,9 +20,9 @@ public class Workout {
 	public Workout(int seconds,String location,String type, 
 				double calories,Calendar date){
 		durationSec = seconds;
-		this.location = location;
+		setLocation(location);
 		this.calories = calories;
-		this.type = type;
+		setType(type);
 		this.date = (Calendar) date.clone();
 	}
 
@@ -30,13 +30,24 @@ public class Workout {
 	public Workout(int seconds,String location,String type, 
 				double calories){
 		durationSec = seconds;
-		this.location = location;
+		setLocation(location);
 		this.calories = calories;
-		this.type = type;
+		setType(type);
 		date = Calendar.getInstance();
 	}
 
 	// getters
+	private void setLocation(String location)
+	{
+		this.location = (location.substring(0,1).toUpperCase() +
+						 location.substring(1).toLowerCase());
+	}
+
+	private void setType(String type)
+	{
+		this.type = (type.substring(0,1).toUpperCase() +
+						 type.substring(1).toLowerCase());
+	}
 	public int getDuration(){
 		return durationSec;
 	}

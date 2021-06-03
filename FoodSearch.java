@@ -151,6 +151,8 @@ public class FoodSearch {
 
 				// Actual Description
 				String description = response.substring(des_index+14, last_index-1);
+				// description = description.toLowerCase();
+    //             description = description.substring(0,1).toUpperCase() + description.substring(1);
 
 				// Got response, but it is not the item I was looking for
 				if (!description.toLowerCase().contains(query.toLowerCase())) return null;

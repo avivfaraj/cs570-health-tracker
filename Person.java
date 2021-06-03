@@ -24,7 +24,7 @@ public abstract class Person {
 							 double desiredCI, double weightKG, 
 							 double heightCm){
 		id_num = id;
-		this.name = name;
+		this.name = name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();;
 		this.gender = gender;
 		desiredCalorieIntake = desiredCI;
 		this.weightKG = weightKG;

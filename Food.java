@@ -14,7 +14,7 @@ public class Food {
 	public Food(String n,String category,String brandOwner ,double grams,double c, 
 				double p,double f, double carbs,
 				double s){
-		name = n;
+		name = n.substring(0,1).toUpperCase() +  n.substring(1).toLowerCase();
 		this.category = category;
 		this.brandOwner = brandOwner;
 		calorie = c;

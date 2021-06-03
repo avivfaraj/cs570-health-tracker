@@ -36,16 +36,16 @@ class MaleTester {
 
 
    ArrayList<Food> arrList =new ArrayList<Food>();
-   arrList.add(new Food("YOGURT","Dairy",100,73.0,2.67,2.67,8.67,5.33));
-   arrList.add(new Food("DARK CHOCOLATE","Dairy",100,581.0,6.98,37.2,51.2,30.2));
+   arrList.add(new Food("YOGURT","Dairy","The best Cheese",100,73.0,2.67,2.67,8.67,5.33));
+   arrList.add(new Food("DARK CHOCOLATE","Dairy","The best Cheese",100,581.0,6.98,37.2,51.2,30.2));
    
    DailyConsumption dc_1 = new DailyConsumption(date_1, arrList);
 
 
    arrList.clear();
-   arrList.add(new Food("Butter","Dairy",100,714.0,0.0,78.6,0.0,7.14));
-   arrList.add(new Food("FONTINA CHEESE","Dairy",100,393.0,21.4,32.1,3.57,0.0));
-   arrList.add(new Food("BURRATA CHEESE","Dairy",100,214.0,17.9,17.9,0.0,0.0));
+   arrList.add(new Food("Butter","Dairy","The best Cheese",100,714.0,0.0,78.6,0.0,7.14));
+   arrList.add(new Food("FONTINA CHEESE","Dairy","Cheese Factory",100,393.0,21.4,32.1,3.57,0.0));
+   arrList.add(new Food("BURRATA CHEESE","Dairy","Cheese Factory",100,214.0,17.9,17.9,0.0,0.0));
    // Calendar date_2 = Calendar.getInstance();
    date_1.set(2021, 4, 26);
    DailyConsumption dc_2 = new DailyConsumption(date_1, arrList);
@@ -56,7 +56,7 @@ class MaleTester {
    System.out.println(michael.getDailyConsumption("05-26-2021"));
 
 
-  System.out.println(michael.addFood("05-26-2021",new Food("Meat","Meat",100,214.0,17.9,17.9,0.0,0.0)));
+  System.out.println(michael.addFood("05-26-2021",new Food("Meat","Meat","Meat Factory",100,214.0,17.9,17.9,0.0,0.0)));
   System.out.println(michael.getDailyConsumption("05-26-2021"));
 
   System.out.println(michael.deleteFood("05-26-2021","BURRATA CHEESE"));
