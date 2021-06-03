@@ -205,6 +205,29 @@ public class HealthTracker {
     
 
   }
+
+
+  public static String getInput(String msg,Scanner scn, String pattern, String errorMSG)
+  {
+    String input = "";
+    for (int count = 0; count < 3; count++)
+    {
+      System.out.print(msg);
+      input = scn.next();
+      if (input.matches(pattern))
+      {
+        return input;
+      }
+      else if(count < 2)
+      {
+        System.out.println(errorMSG);
+      }
+    }
+
+    return "Error: Input is not in the right format";
+    
+
+  }
   // *********************************************************************************
 
   
@@ -326,30 +349,39 @@ public class HealthTracker {
 
         int user_id = -1;
         // Ask for ID
-        for (int count = 0; count < 4; count++)
+        String msg = "Please enter your ID: ";
+        String pattern = "\\d+";
+        // String pattern = "[2-9][0-9]+||-1";
+        String errorMSG = "Error: Input must be an integer number greater than 0";
+        String input = getInput(msg,keyboard,pattern,errorMSG);
+        if (!input.contains("Error"))
         {
-          System.out.print("Enter your ID: ");
-
-          try{
-              user_id = keyboard.nextInt();
-              break;
-
-          }catch(InputMismatchException exe)
-          {
-            System.out.println("Error: Only integer numbers are allowed! Try again!\n"); 
-          }
-          finally
-          {
-            // Avoid skipping by scanner
-            keyboard.nextLine();
-          }
-          if (count == 2)
-          {
-             // Close Scanner object
-            closeProgram(keyboard);
-            return;
-          }
+          user_id = Integer.parseInt(input);
         }
+        // for (int count = 0; count < 4; count++)
+        // {
+        //   System.out.print("Enter your ID: ");
+
+        //   try{
+        //       user_id = keyboard.nextInt();
+        //       break;
+
+        //   }catch(InputMismatchException exe)
+        //   {
+        //     System.out.println("Error: Only integer numbers are allowed! Try again!\n"); 
+        //   }
+        //   finally
+        //   {
+        //     // Avoid skipping by scanner
+        //     keyboard.nextLine();
+        //   }
+        //   if (count == 2)
+        //   {
+        //      // Close Scanner object
+        //     closeProgram(keyboard);
+        //     return;
+        //   }
+        // }
         
         // Iterate over users save in file
         for (String line : usersArrayList)
@@ -544,7 +576,7 @@ public class HealthTracker {
 
       // Ask for details
       System.out.print("Enter your first name: ");
-      String user_name = keyboard.nextLine();
+      String user_name = keyboard.next();
       // if (keyboard.hasNextLine()) user_name += keyboard.nextLine();
 
       // System.out.print("Enter your gender: ");
