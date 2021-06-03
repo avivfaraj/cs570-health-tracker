@@ -886,18 +886,51 @@ public class HealthTracker {
                 if (keyboard.hasNextLine()) type += keyboard.nextLine();
 
                 // Get duration in minutes from user
-                System.out.print("Enter duration in minutes: ");
-                double durationMinutes = keyboard.nextDouble();
+                // System.out.print("Enter duration in minutes: ");
+                double durationMinutes = 0.0;
+                // Initialize msg, pattern and error message
+                msg = "Enter duration in minutes: ";
+
+                pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?";
+                errorMSG = "Error: Must be a positive number in range 10-1000 (exclusive)!";
+
+                // Get input
+                input = getInput(msg,keyboard,pattern,errorMSG);
+
+                // Ensure not error
+                if (!input.contains("Error"))
+                {
+                  // Convert input to double
+                  durationMinutes = Double.parseDouble(input);
+                }
+                else break;
 
                 // Get location from user
                 System.out.print("Enter location: ");
                 String location = keyboard.next();
                 if (keyboard.hasNextLine()) location += keyboard.nextLine();
                 
-                // Get calories burned from user.
-                System.out.print("Enter calories burned: ");
-                double calorie = keyboard.nextDouble();
+                // // Get calories burned from user.
+                // System.out.print("Enter calories burned: ");
+                double calorie = 0.0;
 
+                // Initialize msg, pattern and error message
+                msg = "Enter calories burned: ";
+                pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?||[1-3][0-9][0-9][0-9]?(\\.[0-9]+)?";
+                errorMSG = "Error: Must be a positive number in range 10-4000 (exclusive)!";
+
+                // Get input
+                input = getInput(msg,keyboard,pattern,errorMSG);
+
+                // Ensure not error
+                if (!input.contains("Error"))
+                {
+                  // Convert input to double
+                  calorie = Double.parseDouble(input);
+                }
+                else break;
+
+                // System.out.println(date + " " + type +" "+ location + " " + durationMinutes + " " + calorie);
                 // Create a new workout instance
                 Workout new_workout = new Workout((int)durationMinutes * 60, 
                                                   location, type, calorie, current_date);

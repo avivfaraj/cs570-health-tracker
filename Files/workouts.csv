@@ -3,3 +3,4 @@ id,date,type,duration,location,calorie
 1002,05-30-2021,Running,3600,Beach,600.0
 1001,06-01-2021,Running,2100,Beach,350.0
 1002,06-01-2021,Bike,3600,Gym,300.0
+1001,06-03-2021,Running,3600,Beach,620.0
