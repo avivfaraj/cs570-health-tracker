@@ -7,3 +7,4 @@ id,date,name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars
 1002,06-02-2021,Avocado,Salad Dressing & Mayonnaise,AVEYO,50.0,96.0,0.0,7.7,0.0,0.0
 1001,6-2-2021,BEEF RIBEYE STEAK,Other Meats,STONY FORK FARMS,100.0,125.0,18.8,4.46,1.79,0.89
 1001,6-3-2021,Tomato Ketchup,Ketchup,Heinz,54.0,63.72,0.0,0.0,15.876,12.69
+1001,6-3-2021,avocado,Salad Dressing & Mayonnaise,AVEYO,10.0,19.2,0.0,1.54,0.0,0.0

@@ -807,62 +807,66 @@ public class HealthTracker {
                 input = getInput(msg,keyboard,pattern,errorMSG);
 
                 // Ensure not error
-                if (!input.contains("Error"))
+                if (input.contains("Error"))
                 {
-                  // Convert input to double
-                  food_grams = Double.parseDouble(input);
-
-                  // Ensure food item exist in data set
-                  if (foodData.search(food_name))
-                  {
-
-                    // Find the food in data set
-                    meal = foodData.getFood(food_name);
-
-                    // Get its type
-                    food_type = meal.getCategory();
-
-                    // Get brand 
-                    brand_owner = meal.getBrand();
-
-                    // Get food's nutrients in double
-                    nutrients = foodData.getNutrientsDouble(food_name);
-
-                    // Iterate over nutrients and change them according to 
-                    // the grams entered by user
-                    for (int iter = 0; iter < nutrients.length; iter ++)
-                    {
-                      nutrients[iter] = nutrients[iter] * food_grams / 100;
-                    }
-
-                    // Create a new Food instance.
-                    new_meal = new Food(food_name,
-                                        food_type,
-                                        brand_owner,
-                                        nutrients[0], // Grams
-                                        nutrients[1], // Calorie
-                                        nutrients[2], // Protein
-                                        nutrients[3], // Fat
-                                        nutrients[4], // Carbs
-                                        nutrients[5]);// Sugars
-
-                    // Add the new meal to the user
-                    added = user.addFood(date,new_meal);
-                  }
-
-                  // Date not found
-                  if (!added)
-                  {
-                    // Create a new Daily Consumption instance for user.
-                    user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
-
-                    // Add new meal
-                    user.addFood(date,new_meal);
-                  }
-
-                  // Write new line to file and add to Array List
-                  insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
+                  System.out.println(input);
+                  break;
                 }
+                // Convert input to double
+                food_grams = Double.parseDouble(input);
+
+                // Ensure food item exist in data set
+                if (foodData.search(food_name))
+                {
+
+                  // Find the food in data set
+                  meal = foodData.getFood(food_name);
+
+                  // Get its type
+                  food_type = meal.getCategory();
+
+                  // Get brand 
+                  brand_owner = meal.getBrand();
+
+                  // Get food's nutrients in double
+                  nutrients = foodData.getNutrientsDouble(food_name);
+
+                  // Iterate over nutrients and change them according to 
+                  // the grams entered by user
+                  for (int iter = 0; iter < nutrients.length; iter ++)
+                  {
+                    nutrients[iter] = nutrients[iter] * food_grams / 100;
+                  }
+
+                  // Create a new Food instance.
+                  new_meal = new Food(food_name,
+                                      food_type,
+                                      brand_owner,
+                                      nutrients[0], // Grams
+                                      nutrients[1], // Calorie
+                                      nutrients[2], // Protein
+                                      nutrients[3], // Fat
+                                      nutrients[4], // Carbs
+                                      nutrients[5]);// Sugars
+
+                  // Add the new meal to the user
+                  added = user.addFood(date,new_meal);
+                }
+
+                // Date not found
+                if (!added)
+                {
+                  // Create a new Daily Consumption instance for user.
+                  user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
+
+                  // Add new meal
+                  user.addFood(date,new_meal);
+                }
+
+                // Write new line to file and add to Array List
+                insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
+                System.out.println("\nSuccessfully Saved!\n");
+                // }
                 
               }
               else System.out.println(date);
@@ -940,6 +944,7 @@ public class HealthTracker {
 
                 // Write new line to file and add to Array List
                 insertToFile(current_date,wFile,user.getID() +","+new_workout.toFile(), workoutsArrayList);
+                System.out.println("\nSuccessfully Saved!\n");
               }
               else System.out.println(date);
 
@@ -1027,6 +1032,7 @@ public class HealthTracker {
           case "5":
 
               // Print Food Data Set to user
+              System.out.print("\n*********** Food Data Set ***********\n\n");
               System.out.print(foodData.toString());
               System.out.print("\n");
 
@@ -1071,7 +1077,7 @@ public class HealthTracker {
                 foodData.addFood(new_meal);
 
                 // Print Message
-                System.out.println("Item Successfully added: ");
+                System.out.println("Item Successfully saved: ");
                 System.out.println(new_meal.toString());
 
               }
