@@ -213,7 +213,7 @@ public class HealthTracker {
     for (int count = 0; count < 3; count++)
     {
       System.out.print(msg);
-      input = scn.next();
+      input = scn.nextLine();
       if (input.matches(pattern))
       {
         return input;
@@ -235,6 +235,7 @@ public class HealthTracker {
   // ************************************** Main Method ******************************
   public static void main (String args[]) throws IOException{
 
+    String msg = "",pattern = "",errorMSG = "", input = "" ;
     // Variables Declaration
     // Primitive data types
     double food_grams = 0.0; 
@@ -349,39 +350,15 @@ public class HealthTracker {
 
         int user_id = -1;
         // Ask for ID
-        String msg = "Please enter your ID: ";
-        String pattern = "\\d+";
+        msg = "Please enter your ID: ";
+        pattern = "\\d+";
         // String pattern = "[2-9][0-9]+||-1";
-        String errorMSG = "Error: Input must be an integer number greater than 0";
-        String input = getInput(msg,keyboard,pattern,errorMSG);
+        errorMSG = "Error: Input must be an integer number greater than 0";
+        input = getInput(msg,keyboard,pattern,errorMSG);
         if (!input.contains("Error"))
         {
           user_id = Integer.parseInt(input);
         }
-        // for (int count = 0; count < 4; count++)
-        // {
-        //   System.out.print("Enter your ID: ");
-
-        //   try{
-        //       user_id = keyboard.nextInt();
-        //       break;
-
-        //   }catch(InputMismatchException exe)
-        //   {
-        //     System.out.println("Error: Only integer numbers are allowed! Try again!\n"); 
-        //   }
-        //   finally
-        //   {
-        //     // Avoid skipping by scanner
-        //     keyboard.nextLine();
-        //   }
-        //   if (count == 2)
-        //   {
-        //      // Close Scanner object
-        //     closeProgram(keyboard);
-        //     return;
-        //   }
-        // }
         
         // Iterate over users save in file
         for (String line : usersArrayList)
@@ -575,134 +552,132 @@ public class HealthTracker {
       int unique_id = max + 1;
 
       // Ask for details
-      System.out.print("Enter your first name: ");
-      String user_name = keyboard.next();
-      // if (keyboard.hasNextLine()) user_name += keyboard.nextLine();
+      String user_name = "";
 
-      // System.out.print("Enter your gender: ");
-      // String user_gender = keyboard.next();
+      // Initialize msg, pattern and error message
+      msg = "Please enter you name: ";
+      pattern = "[a-zA-Z]+( [a-zA-Z]*)?";
+      errorMSG = "Error: Name must only contain letters!";
 
-      // // Ensure gender is either Male or Female
-      // if (!user_gender.equalsIgnoreCase("Male") || !user_gender.equalsIgnoreCase("Female"))
-      // {
-      String user_gender = "";
-      // 3 more attempts 
-      for (int count = 0; count < 3; count++)
+      // Get input
+      input = getInput(msg,keyboard,pattern,errorMSG);
+
+      // Ensure not error
+      if (!input.contains("Error"))
       {
-        System.out.print("Enter your gender: ");
-        user_gender = keyboard.next();
-        if (user_gender.equalsIgnoreCase("Male") || user_gender.equalsIgnoreCase("Female")) break;
+        // Save input
+        user_name = input;
+      }
+      else
+      {
+        // Close program
+        closeProgram(keyboard);
 
-        // Exit program if all attempts failed
-        if (count == 2)
-        {
-          // Close Scanner object
-          closeProgram(keyboard);
-          return;
-        }
+        // Terminate Program
+        return;
       }
 
-      // }
+      // 
+      String user_gender = "";
 
-      // System.out.print("Enter your desired calorie intake (If you are not sure enter -1): ");
+      // Initialize msg, pattern and error message
+      msg = "Please enter you Gender: ";
+      pattern = "[M|m]ale|[F|f]emale";
+      errorMSG = "Error: Either Male or Female!";
+
+      // Get input
+      input = getInput(msg,keyboard,pattern,errorMSG);
+
+      // Ensure not error
+      if (!input.contains("Error"))
+      {
+        // Save input
+        user_gender = input;
+      }
+      else
+      {
+        // Close program
+        closeProgram(keyboard);
+
+        // Terminate program
+        return;
+      }
+
       double user_dci = 0.0;
 
-      for (int count = 0; count < 4; count++)
-        {
-          System.out.print("Enter your desired calorie intake (If you are not sure enter -1: ");
-          
-          try{
-              user_dci = keyboard.nextDouble();
-              break;
+      // Initialize msg, pattern and error message
+      msg = "Please enter your desired Calorie intake (Enter -1 for default): ";
+      pattern = "[1-3]([0-9]{3})||[1-3]([0-9]{3}).[0-9]+||-1";
+      errorMSG = "Error: Must be either a positive number in the range 1000-4000 (exclusive) or -1 for default!";
 
-          }catch(InputMismatchException exe)
-          {
-            System.out.println("Error: Only double numbers are allowed! Try again!\n"); 
-          }
-          finally
-          {
-            if (user_dci > 1000 || user_dci == -1){
-                break;
-            }
-            else{
-              System.out.println("Error: Please enter a number either greater than 1000 or -1\n");
-            }
+      // Get input
+      input = getInput(msg,keyboard,pattern,errorMSG);
 
-            // Avoid skipping by scanner
-            keyboard.nextLine();
-          }
-          if (count == 2)
-          {
-             // Close Scanner object
-            closeProgram(keyboard);
-            return;
-          }
-        }
+      // Ensure not error
+      if (!input.contains("Error"))
+      {
+        // Convert input to double
+        user_dci = Double.parseDouble(input);
+      }
+      else
+      {
+        // Close program
+        closeProgram(keyboard);
 
-      // System.out.print("Enter your weight (kg): ");
+        // Terminate program
+        return;
+      }
+    
       double user_weight = 0.0;
-      for (int count = 0; count < 4; count++)
-        {
-          System.out.print("Enter your weight (kg): ");
-          
-          try{
-              user_weight = keyboard.nextDouble();              
 
-          }catch(InputMismatchException exe)
-          {
-            System.out.println("Error: Only double numbers are allowed! Try again!\n"); 
-          }
-          finally
-          {
-            if (user_weight > 20){
-                break;
-            }
-            else{
-              System.out.println("Error: please enter a number greater than 20 (kg)!\n");
-            }
-            // Avoid skipping by scanner
-            keyboard.nextLine();
-          }
-          if (count == 2)
-          {
-             // Close Scanner object
-            closeProgram(keyboard);
-            return;
-          }
-        }
+      // Initialize msg, pattern and error message
+      msg = "Please enter your weight (kg): ";
+      pattern = "[1-4]([0-9]{1,2})||[1-4]([0-9]{1,2}).[0-9]+";
+      errorMSG = "Error: Must be a positive number in the range 10-500 (exclusive)!";
 
+      // Get input
+      input = getInput(msg,keyboard,pattern,errorMSG);
 
-      // System.out.print("Enter your height (cm): ");
+      // Ensure not error
+      if (!input.contains("Error"))
+      {
+        // Conver input to double
+        user_weight = Double.parseDouble(input);
+      }
+      else
+      {
+
+        // Close program
+        closeProgram(keyboard);
+
+        // Terminate program
+        return;
+      }
+
       double user_height = 0.0;
-      for (int count = 0; count < 4; count++)
-        {
-          System.out.print("Enter your Height (cm): ");
-          
-          try{
-              user_height = keyboard.nextDouble();              
+      // Initialize msg, pattern and error message
+      msg = "Please enter your Height (cm): ";
+      pattern = "[1-2]([0-9]{2})||[1-2]([0-9]{2}).[0-9]+";
+      errorMSG = "Error: Must be a positive number in range 100-300 (exclusive)!";
 
-          }catch(InputMismatchException exe)
-          {
-            System.out.println("Error: Only double numbers are allowed! Try again!\n"); 
-          }
-          finally
-          {
-            if (user_height > 20){
-                break;
-            }
-            else{
-              System.out.println("Error: please enter a number greater than 20 (cm)!\n");
-            }
-            // Avoid skipping by scanner
-            keyboard.nextLine();
-          }
-          if (count == 2)
-          {
-             // Close Scanner object
-            closeProgram(keyboard);
-            return;
-          }
-        }
+      // Get input
+      input = getInput(msg,keyboard,pattern,errorMSG);
+
+      // Ensure not error
+      if (!input.contains("Error"))
+      {
+        // Convert input to double
+        user_height = Double.parseDouble(input);
+      }
+      else
+      {
+
+        // Close program
+        closeProgram(keyboard);
+
+        // Terminate program
+        return;
+      }
 
       // Create user's instance
       if (user_gender.equalsIgnoreCase("male"))
