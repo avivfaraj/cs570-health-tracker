@@ -607,7 +607,7 @@ public class HealthTracker {
 
       // Initialize msg, pattern and error message
       msg = "Please enter your desired Calorie intake (Enter -1 for default): ";
-      pattern = "[1-3]([0-9]{3})||[1-3]([0-9]{3}).[0-9]+||-1";
+      pattern = "[1-3]([0-9]{3})||[1-3]([0-9]{3})\\.[0-9]+||-1";
       errorMSG = "Error: Must be either a positive number in the range 1000-4000 (exclusive) or -1 for default!";
 
       // Get input
@@ -632,7 +632,7 @@ public class HealthTracker {
 
       // Initialize msg, pattern and error message
       msg = "Please enter your weight (kg): ";
-      pattern = "[1-4]([0-9]{1,2})||[1-4]([0-9]{1,2}).[0-9]+";
+      pattern = "[1-4]([0-9]{1,2})||[1-4]([0-9]{1,2})\\.[0-9]+";
       errorMSG = "Error: Must be a positive number in the range 10-500 (exclusive)!";
 
       // Get input
@@ -657,7 +657,7 @@ public class HealthTracker {
       double user_height = 0.0;
       // Initialize msg, pattern and error message
       msg = "Please enter your Height (cm): ";
-      pattern = "[1-2]([0-9]{2})||[1-2]([0-9]{2}).[0-9]+";
+      pattern = "[1-2]([0-9]{2})||[1-2]([0-9]{2})\\.[0-9]+";
       errorMSG = "Error: Must be a positive number in range 100-300 (exclusive)!";
 
       // Get input
@@ -797,60 +797,73 @@ public class HealthTracker {
                 food_name = keyboard.next(); 
                 if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
 
-                // Get amount in grams from user
-                System.out.print("Enter Grams: ");
-                food_grams = keyboard.nextDouble();
+                // Initialize msg, pattern and error message
+                msg = "Enter Grams: ";
+                pattern = "[1-9][0-9][0-9]?||[1-9][0-9][0-9]?\\.[0-9]+";
+                errorMSG = "Error: Must be a positive number in range 10-1000 (exclusive)!";
+                food_grams = 0.0;
 
-                // Ensure food item exist in data set
-                if (foodData.search(food_name))
+                // Get input
+                input = getInput(msg,keyboard,pattern,errorMSG);
+
+                // Ensure not error
+                if (!input.contains("Error"))
                 {
+                  // Convert input to double
+                  food_grams = Double.parseDouble(input);
 
-                  // Find the food in data set
-                  meal = foodData.getFood(food_name);
-
-                  // Get its type
-                  food_type = meal.getCategory();
-
-                  // Get brand 
-                  brand_owner = meal.getBrand();
-
-                  // Get food's nutrients in double
-                  nutrients = foodData.getNutrientsDouble(food_name);
-
-                  // Iterate over nutrients and change them according to 
-                  // the grams entered by user
-                  for (int iter = 0; iter < nutrients.length; iter ++)
+                  // Ensure food item exist in data set
+                  if (foodData.search(food_name))
                   {
-                    nutrients[iter] = nutrients[iter] * food_grams / 100;
+
+                    // Find the food in data set
+                    meal = foodData.getFood(food_name);
+
+                    // Get its type
+                    food_type = meal.getCategory();
+
+                    // Get brand 
+                    brand_owner = meal.getBrand();
+
+                    // Get food's nutrients in double
+                    nutrients = foodData.getNutrientsDouble(food_name);
+
+                    // Iterate over nutrients and change them according to 
+                    // the grams entered by user
+                    for (int iter = 0; iter < nutrients.length; iter ++)
+                    {
+                      nutrients[iter] = nutrients[iter] * food_grams / 100;
+                    }
+
+                    // Create a new Food instance.
+                    new_meal = new Food(food_name,
+                                        food_type,
+                                        brand_owner,
+                                        nutrients[0], // Grams
+                                        nutrients[1], // Calorie
+                                        nutrients[2], // Protein
+                                        nutrients[3], // Fat
+                                        nutrients[4], // Carbs
+                                        nutrients[5]);// Sugars
+
+                    // Add the new meal to the user
+                    added = user.addFood(date,new_meal);
                   }
 
-                  // Create a new Food instance.
-                  new_meal = new Food(food_name,
-                                      food_type,
-                                      brand_owner,
-                                      nutrients[0], // Grams
-                                      nutrients[1], // Calorie
-                                      nutrients[2], // Protein
-                                      nutrients[3], // Fat
-                                      nutrients[4], // Carbs
-                                      nutrients[5]);// Sugars
+                  // Date not found
+                  if (!added)
+                  {
+                    // Create a new Daily Consumption instance for user.
+                    user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
 
-                  // Add the new meal to the user
-                  added = user.addFood(date,new_meal);
+                    // Add new meal
+                    user.addFood(date,new_meal);
+                  }
+
+                  // Write new line to file and add to Array List
+                  insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
                 }
-
-                // Date not found
-                if (!added)
-                {
-                  // Create a new Daily Consumption instance for user.
-                  user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
-
-                  // Add new meal
-                  user.addFood(date,new_meal);
-                }
-
-                // Write new line to file and add to Array List
-                insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
+                
               }
               else System.out.println(date);
               

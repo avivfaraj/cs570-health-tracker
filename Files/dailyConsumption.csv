@@ -5,3 +5,5 @@ id,date,name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars
 1001,06-02-2021,CHOCOLATE CREAM CHEESE SPREAD,Cheese,PHILADELPHIA,50.0,143.0,2.855,7.15,15.7,12.85
 1001,06-02-2021,PART SKIM RICOTTA CHEESE,Cheese,Calabro Cheese Corp.,50.0,72.0,6.45,4.03,1.615,1.615
 1002,06-02-2021,Avocado,Salad Dressing & Mayonnaise,AVEYO,50.0,96.0,0.0,7.7,0.0,0.0
+1001,6-2-2021,BEEF RIBEYE STEAK,Other Meats,STONY FORK FARMS,100.0,125.0,18.8,4.46,1.79,0.89
+1001,6-3-2021,Tomato Ketchup,Ketchup,Heinz,54.0,63.72,0.0,0.0,15.876,12.69
