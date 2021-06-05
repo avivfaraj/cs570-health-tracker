@@ -84,48 +84,73 @@ public class HealthTracker {
     return false;
   }
 
-
   public static void insertToFile(Calendar current_date, File file, String line_to_insert, ArrayList<String> arr) throws IOException{
 
     // Initialize variables
     int counter = 0;
     Calendar another_date = Calendar.getInstance();
-    int index = -1;
+    int next = -1;
     String[] line_attr, date_attr;
     String toFile = "";
-
-    // Iterate over lines in arr
-    for (String line : arr)
+    System.out.println(arr.size());
+    if (arr.size() == 1)
+      next = -1;
+    else
     {
 
-      // Line attributes splitting by comma
-      line_attr = line.split(",");
+      // Next index
+        next = -1;
 
-      // Ensure not headers
-      if (!line_attr[0].equalsIgnoreCase("id"))
-      {
+        // Maximum and minimum range
+        int max = arr.size(), min = 1; // Ignore headers
 
-        another_date = stringToDate(line_attr[1]);
+        // Element found or not
+        boolean found = false;
 
-        // Ensure another_date is greater than current_date
-        if(another_date.after(current_date))
+        // Iterate if not found
+        // Binary Search
+        while (!found)
         {
-          // Save index
-          index = counter;
+            // Next index 
+            next = Math.round((max + min )/2);
 
-          // Exit loop!
-          break;
+             // Line attributes splitting by comma
+            line_attr = arr.get(next).split(",");
+
+            // If item does not exist
+            if (next == max || next == min) 
+            {
+                // Stop loop
+                break;
+            }
+            // Item exists
+            else
+            {
+              another_date = stringToDate(line_attr[1]);
+              // Ensure element is greater than look_for
+              if (another_date.after(current_date))
+                  // define new maximum index
+                  max = next;
+
+              // Ensure element is smaller than look_for 
+              else if (another_date.before(current_date))
+                  // Define new minimum index
+                  min = next;
+
+              // Ensure element is equal to look_for
+              else
+                  // Stop iteration
+                  found = true;
+            }
         }
-      }
-
-      // Increment counter
-      counter++;
     }
 
+    if (next > 1) next += 1;
+
     // Append line
-    if (index == -1)
+    if (next == -1 || next >= arr.size())
     {
-      // writeFile(file, user.getID() +","+new_workout.toFile()+ "\n", true);
+      // Append to flie
       writeFile(file, line_to_insert+"\n", true);
 
       // Append line to array list
@@ -135,9 +160,9 @@ public class HealthTracker {
 
     // Insert in between
     else
-    {
+    { 
       // Insert line to array list in index 
-      arr.add(index, line_to_insert);
+      arr.add(next,line_to_insert);
 
       // Initialize variables
       // counter = 0;
@@ -146,10 +171,11 @@ public class HealthTracker {
       // Iterate over array list
       for (String w : arr)
       {
-
-        // Add line
-        toFile += w + "\n";
-
+        if (w.split(",")[0].equalsIgnoreCase("id"))
+          toFile += w;
+        else
+          toFile += w + "\n";
+        
         //increment counter
         counter++;
         
@@ -214,7 +240,7 @@ public class HealthTracker {
     {
       System.out.print(msg);
       input = scn.nextLine();
-      if (input.matches(pattern))
+      if (!input.isEmpty() && input.matches(pattern))
       {
         return input;
       }
@@ -228,6 +254,13 @@ public class HealthTracker {
     
 
   }
+
+  // public static int getIndex(ArrayList<Object> arrList, Calendar date)
+  // {
+
+  // }
+
+
   // *********************************************************************************
 
   
