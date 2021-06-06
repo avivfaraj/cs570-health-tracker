@@ -85,7 +85,8 @@ public class HealthTracker {
   }
 
   public static void insertToFile(Calendar current_date, File file, String line_to_insert, ArrayList<String> arr) throws IOException{
-
+    // Maximum and minimum range
+        int max = arr.size(), min = 1; // Ignore headers
     // Initialize variables
     int counter = 0;
     Calendar another_date = Calendar.getInstance();
@@ -101,8 +102,7 @@ public class HealthTracker {
       // Next index
         next = -1;
 
-        // Maximum and minimum range
-        int max = arr.size(), min = 1; // Ignore headers
+        
 
         // Element found or not
         boolean found = false;
@@ -145,8 +145,13 @@ public class HealthTracker {
         }
     }
 
-    if (next > 1) next += 1;
-
+    // if (next > 1 || next == min) next += 1;
+     // Line attributes splitting by comma
+    if (next != -1)
+    {
+      line_attr = arr.get(next).split(",");
+      if(!line_attr[1].equals("date") && stringToDate(line_attr[1]).before(current_date)) next += 1;
+    }
     // Append line
     if (next == -1 || next >= arr.size())
     {
@@ -154,7 +159,7 @@ public class HealthTracker {
       writeFile(file, line_to_insert+"\n", true);
 
       // Append line to array list
-      arr.add(line_to_insert);
+      arr.add(line_to_insert+"\n");
 
     }
 
@@ -162,24 +167,22 @@ public class HealthTracker {
     else
     { 
       // Insert line to array list in index 
-      arr.add(next,line_to_insert);
+      arr.add(next,line_to_insert+"\n");
 
       // Initialize variables
-      // counter = 0;
       toFile = "";
 
       // Iterate over array list
       for (String w : arr)
       {
-        if (w.split(",")[0].equalsIgnoreCase("id"))
-          toFile += w;
-        else
-          toFile += w + "\n";
+        toFile += w.replace("\n","");
+        toFile += "\n";
         
         //increment counter
         counter++;
         
       }
+      // System.out.println(toFile);
 
       // Write String to file
       writeFile(file, toFile, false);
@@ -210,48 +213,29 @@ public class HealthTracker {
 
   }
 
-  public static String getDateInput(String msg, Scanner scn,String pattern)
-  {
-    String date = "";
-
-    for (int count = 0; count < 3; count++)
-    {
-      System.out.print(msg);
-      date = scn.next();
-      if (date.matches(pattern))
-      {
-        if (!date.equals("-1"))
-        {
-          String[] date_attr = date.split("-");
-          date = String.format("%02d-%02d-%4d", 
-                             Integer.parseInt(date_attr[0]),
-                             Integer.parseInt(date_attr[1]),
-                             Integer.parseInt(date_attr[2]));
-        }
-        
-        return date;
-      }
-      else if(count < 2)
-      {
-        System.out.println("Error: Date format is MM-DD-YYYY. Please try again!\n");
-      }
-    }
-
-    return "Error: Date is not in the right format";
-    
-
-  }
-
-
   public static String getInput(String msg,Scanner scn, String pattern, String errorMSG)
   {
     String input = "";
+    boolean date = pattern.contains("\\d{1,2}-\\d{1,2}-\\d{4}");
+
     for (int count = 0; count < 3; count++)
     {
       System.out.print(msg);
-      input = scn.nextLine();
+      if (date)
+        input = scn.next();
+      else
+        input = scn.nextLine();
       if (!input.isEmpty() && input.matches(pattern))
       {
+        if (date && !input.equals("-1"))
+        {
+          String[] date_attr = input.split("-");
+          input = String.format("%02d-%02d-%4d", 
+                             Integer.parseInt(date_attr[0]),
+                             Integer.parseInt(date_attr[1]),
+                             Integer.parseInt(date_attr[2]));
+        
+        }
         return input;
       }
       else if(count < 2)
@@ -827,7 +811,7 @@ public class HealthTracker {
               new_meal = null;
               
               // // Get date from user
-              date = getDateInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}");
+              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","Input is not in the right format");
 
               // Ensure date is in the right format
               if (!date.contains("Error"))
@@ -924,7 +908,7 @@ public class HealthTracker {
           case "2":
 
               // Get date from user 
-              date = getDateInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}");
+              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","Input is not in the right format");
 
               // Ensure date is in the right format
               if (!date.contains("Error"))
@@ -1004,9 +988,10 @@ public class HealthTracker {
               // System.out.print("Enter date (enter -1 for today): ");
               // date = keyboard.next();
               // Get date from user 
-              date = getDateInput("Enter date (Format MM-DD-YYYY or -1 for today):", 
+              date = getInput("Enter date (Format MM-DD-YYYY or -1 for today):", 
                                   keyboard,
-                                  "\\d{1,2}-\\d{1,2}-\\d{4}|-1");
+                                  "\\d{1,2}-\\d{1,2}-\\d{4}|-1",
+                                  "Input is not in the right format");
 
               if (date.contains("Error"))
               {
