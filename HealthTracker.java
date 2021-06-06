@@ -92,7 +92,7 @@ public class HealthTracker {
     int next = -1;
     String[] line_attr, date_attr;
     String toFile = "";
-    System.out.println(arr.size());
+
     if (arr.size() == 1)
       next = -1;
     else
