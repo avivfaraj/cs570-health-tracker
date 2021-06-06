@@ -1,10 +1,10 @@
-id,date,name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars
-1001,05-29-2021,Cheese,Cheese,CITRUS GINGER BELLAVITANO,50.0,196.5,12.5,16.05,0.0,0.0
+id,date,name,category,brandOwner,grams,calorie,protein,fat,carbs,sugars1001,05-29-2021,Cheese,Cheese,CITRUS GINGER BELLAVITANO,50.0,196.5,12.5,16.05,0.0,0.0
 1001,05-30-2021,Avocado,Salad Dressing & Mayonnaise,AVEYO,50.0,96.0,0.0,7.7,0.0,0.0
 1001,06-01-2021,Greek Yogurt,Yogurt,Fage,50.0,56.0,3.825,2.06,5.6,5.0
 1001,06-02-2021,CHOCOLATE CREAM CHEESE SPREAD,Cheese,PHILADELPHIA,50.0,143.0,2.855,7.15,15.7,12.85
+1001,06-02-2021,Beef ribeye steak,Other Meats,STONY FORK FARMS,50.0,62.5,9.4,2.23,0.895,0.445
 1001,06-02-2021,PART SKIM RICOTTA CHEESE,Cheese,Calabro Cheese Corp.,50.0,72.0,6.45,4.03,1.615,1.615
 1002,06-02-2021,Avocado,Salad Dressing & Mayonnaise,AVEYO,50.0,96.0,0.0,7.7,0.0,0.0
-1001,6-2-2021,BEEF RIBEYE STEAK,Other Meats,STONY FORK FARMS,100.0,125.0,18.8,4.46,1.79,0.89
-1001,6-3-2021,Tomato Ketchup,Ketchup,Heinz,54.0,63.72,0.0,0.0,15.876,12.69
-1001,6-3-2021,avocado,Salad Dressing & Mayonnaise,AVEYO,10.0,19.2,0.0,1.54,0.0,0.0
+1001,06-03-2021,Avocado,Salad Dressing & Mayonnaise,AVEYO,200.0,384.0,0.0,30.8,0.0,0.0
+1001,06-06-2021,Avocado,Salad Dressing & Mayonnaise,AVEYO,20.0,38.4,0.0,3.08,0.0,0.0
+1001,06-06-2021,Tomato ketchup,Ketchup,Heinz,50.0,59.0,0.0,0.0,14.7,11.75

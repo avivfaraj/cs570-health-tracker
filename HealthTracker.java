@@ -213,12 +213,22 @@ public class HealthTracker {
   public static String getDateInput(String msg, Scanner scn,String pattern)
   {
     String date = "";
+
     for (int count = 0; count < 3; count++)
     {
       System.out.print(msg);
       date = scn.next();
       if (date.matches(pattern))
       {
+        if (!date.equals("-1"))
+        {
+          String[] date_attr = date.split("-");
+          date = String.format("%02d-%02d-%4d", 
+                             Integer.parseInt(date_attr[0]),
+                             Integer.parseInt(date_attr[1]),
+                             Integer.parseInt(date_attr[2]));
+        }
+        
         return date;
       }
       else if(count < 2)
@@ -852,58 +862,60 @@ public class HealthTracker {
                 if (foodData.search(food_name))
                 {
 
-                  // food_name = food_name.toLowerCase();
-                  // food_name = food_name.substring(0,1).toUpperCase() + food_name.substring(1);
+                    // food_name = food_name.toLowerCase();
+                    // food_name = food_name.substring(0,1).toUpperCase() + food_name.substring(1);
 
-                  // Find the food in data set
-                  meal = foodData.getFood(food_name);
+                    // Find the food in data set
+                    meal = foodData.getFood(food_name);
 
-                  // Get its type
-                  food_type = meal.getCategory();
+                    // Get its type
+                    food_type = meal.getCategory();
 
-                  // Get brand 
-                  brand_owner = meal.getBrand();
+                    // Get brand 
+                    brand_owner = meal.getBrand();
 
-                  // Get food's nutrients in double
-                  nutrients = foodData.getNutrientsDouble(food_name);
+                    // Get food's nutrients in double
+                    nutrients = foodData.getNutrientsDouble(food_name);
 
-                  // Iterate over nutrients and change them according to 
-                  // the grams entered by user
-                  for (int iter = 0; iter < nutrients.length; iter ++)
-                  {
-                    nutrients[iter] = nutrients[iter] * food_grams / 100;
-                  }
+                    // Iterate over nutrients and change them according to 
+                    // the grams entered by user
+                    for (int iter = 0; iter < nutrients.length; iter ++)
+                    {
+                      nutrients[iter] = nutrients[iter] * food_grams / 100;
+                    }
 
-                  // Create a new Food instance.
-                  new_meal = new Food(food_name,
-                                      food_type,
-                                      brand_owner,
-                                      nutrients[0], // Grams
-                                      nutrients[1], // Calorie
-                                      nutrients[2], // Protein
-                                      nutrients[3], // Fat
-                                      nutrients[4], // Carbs
-                                      nutrients[5]);// Sugars
+                    // Create a new Food instance.
+                    new_meal = new Food(food_name,
+                                        food_type,
+                                        brand_owner,
+                                        nutrients[0], // Grams
+                                        nutrients[1], // Calorie
+                                        nutrients[2], // Protein
+                                        nutrients[3], // Fat
+                                        nutrients[4], // Carbs
+                                        nutrients[5]);// Sugars
 
-                  // Add the new meal to the user
-                  added = user.addFood(date,new_meal);
+                    // Add the new meal to the user
+                    added = user.addFood(date,new_meal);
+
+
+                    // Date not found
+                    if (!added)
+                    {
+                      // Create a new Daily Consumption instance for user.
+                      user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
+
+                      // Add new meal
+                      user.addFood(date,new_meal);
+                    }
+
+                    // Write new line to file and add to Array List
+                    insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
+                    System.out.println("\nSuccessfully Saved!\n");
+                    
                 }
-
-                // Date not found
-                if (!added)
-                {
-                  // Create a new Daily Consumption instance for user.
-                  user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
-
-                  // Add new meal
-                  user.addFood(date,new_meal);
-                }
-
-                // Write new line to file and add to Array List
-                insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
-                System.out.println("\nSuccessfully Saved!\n");
-                // }
-                
+                else
+                  System.out.println(food_name+ " does not exist in data set!");
               }
               else System.out.println(date);
               
