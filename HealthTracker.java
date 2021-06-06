@@ -1102,19 +1102,34 @@ public class HealthTracker {
               // Ensure there is data
               if (new_meal != null)
               {
+                boolean to_add = false;
+                if (foodData.search(new_meal.getName()))
+                {
+                  if (!new_meal.equals(foodData.getFood(new_meal.getName())))
+                    to_add = true;
+                  else
+                    System.out.println("Item already exist in dataset!");
 
-                // Write data to file
-                writeFile(fdFile,new_meal.toFile()+"\n", true);
+                }
+                else
+                  to_add = true;
 
-                // Add data to ArrayList
-                fdArrayList.add(new_meal.toFile()+"\n");
+                if (to_add)
+                {
+                  // Write data to file
+                    writeFile(fdFile,new_meal.toFile()+"\n", true);
 
-                // Add data to foodData
-                foodData.addFood(new_meal);
+                    // Add data to ArrayList
+                    fdArrayList.add(new_meal.toFile()+"\n");
 
-                // Print Message
-                System.out.println("Item Successfully saved: ");
-                System.out.println(new_meal.toString());
+                    // Add data to foodData
+                    foodData.addFood(new_meal);
+
+                    // Print Message
+                    System.out.println("Item Successfully saved: ");
+                    System.out.println(new_meal.toString());
+                }
+                
 
               }
               else

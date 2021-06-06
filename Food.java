@@ -83,4 +83,11 @@ public class Food {
 			    "\nCarbohydrate: "+this.getCarbs() +
 			    "\nSugars: "+this.getSugars());
 	}
+
+	public boolean equals(Food other){
+     return (this.name.equalsIgnoreCase(other.getName()) &&
+     		 this.category.equalsIgnoreCase(other.getCategory()) &&
+     		 this.brandOwner.equalsIgnoreCase(other.getBrand()));
+     
+   }
 }
