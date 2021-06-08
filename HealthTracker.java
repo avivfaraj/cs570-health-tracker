@@ -1135,8 +1135,6 @@ public class HealthTracker {
                     System.out.println(new_meal.toString());
                   }
 
-
-
                 }
                 else
                   to_add = true;
@@ -1160,21 +1158,15 @@ public class HealthTracker {
                   }
                   else
                     System.out.println("\n*** Warning *** Something went wrong");
-                    /* NOTE: Too many elements in the array
-                             if were saved in file it would have
-                             created an error in the future! 
+                    /* NOTE: Too many elements in the array. If were saved in file
+                             it would have created an error in the future! 
                              I made sure that FoodSearch delete 
-                             all commas (",") from strings, so it
+                             all commas (",") from Strings, so it
                              shouldn't be an issue. However, just to make
-                             sure that there will be index errors in 
+                             sure that there will not be index errors in 
                              the future I added this condition.
                     */
                 }
-                else
-                {
-                  
-                }
-                
 
               }
               else
