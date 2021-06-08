@@ -211,6 +211,7 @@ public class HealthTracker {
      // Close Scanner object
       scn.close();
       System.out.print("Closing program!");
+      System.out.print("\n");
 
       // Inform user 
       System.out.print("\n>------------------- Closed ---------------------<\n");
@@ -263,12 +264,14 @@ public class HealthTracker {
       // Print an error message if input is incorrect
       else if(count < 2)
       {
+        System.out.println();
         System.out.println(errorMSG);
+        System.out.println();
       }
     }
 
     // returns an error if 3 times failed.
-    return "Error: Input is not in the right format";
+    return "*** ERROR *** Input is not in the right format";
     
 
   }
@@ -311,6 +314,9 @@ public class HealthTracker {
     ArrayList<String> fdArrayList = new ArrayList<String>();
     ArrayList<String> dcArrayList = new ArrayList<String>();
 
+    // Welcome Message
+    System.out.print("\n>--------------- Health Tracker -----------------<\n");
+    
     // Define user as Male() with no attributes
     // This is only to avoid an error of no initialization
     Person user = new Male();
@@ -394,11 +400,12 @@ public class HealthTracker {
         }
 
         int user_id = -1;
-        // Ask for ID
-        msg = "Please enter your ID: ";
+
+        // Ask for 
+
+        msg = "\nPlease enter your ID (to make a new user enter 1).\nID: ";
         pattern = "\\d+";
-        // String pattern = "[2-9][0-9]+||-1";
-        errorMSG = "Error: Input must be an integer number greater than 0";
+        errorMSG = "*** ERROR *** Input must be an integer number greater than 0";
         input = getInput(msg,keyboard,pattern,errorMSG);
         if (!input.contains("Error"))
         {
@@ -447,8 +454,6 @@ public class HealthTracker {
         
     }
 
-    // Welcome Message
-    System.out.print("\n>--------------- Health Tracker -----------------<\n");
     
     // Ensure user is defined
     if (!inaugural_run && !new_user)
@@ -602,7 +607,7 @@ public class HealthTracker {
       // Initialize msg, pattern and error message
       msg = "Please enter you name: ";
       pattern = "[a-zA-Z]+( [a-zA-Z]*)?";
-      errorMSG = "Error: Name must only contain letters!";
+      errorMSG = "*** ERROR *** Name must only contain letters!";
 
       // Get input
       input = getInput(msg,keyboard,pattern,errorMSG);
@@ -628,7 +633,7 @@ public class HealthTracker {
       // Initialize msg, pattern and error message
       msg = "Please enter you Gender: ";
       pattern = "[M|m]ale|[F|f]emale";
-      errorMSG = "Error: Either Male or Female!";
+      errorMSG = "*** ERROR *** Either Male or Female!";
 
       // Get input
       input = getInput(msg,keyboard,pattern,errorMSG);
@@ -653,7 +658,7 @@ public class HealthTracker {
       // Initialize msg, pattern and error message
       msg = "Please enter your desired Calorie intake (Enter -1 for default): ";
       pattern = "[1-3]([0-9]{3})||[1-3]([0-9]{3})\\.[0-9]+||-1";
-      errorMSG = "Error: Must be either a positive number in the range 1000-4000 (exclusive) or -1 for default!";
+      errorMSG = "*** ERROR *** Must be either a positive number in the range 1000-4000 (exclusive) or -1 for default!";
 
       // Get input
       input = getInput(msg,keyboard,pattern,errorMSG);
@@ -678,7 +683,7 @@ public class HealthTracker {
       // Initialize msg, pattern and error message
       msg = "Please enter your weight (kg): ";
       pattern = "[1-4]([0-9]{1,2})||[1-4]([0-9]{1,2})\\.[0-9]+";
-      errorMSG = "Error: Must be a positive number in the range 10-500 (exclusive)!";
+      errorMSG = "*** ERROR *** Must be a positive number in the range 10-500 (exclusive)!";
 
       // Get input
       input = getInput(msg,keyboard,pattern,errorMSG);
@@ -703,7 +708,7 @@ public class HealthTracker {
       // Initialize msg, pattern and error message
       msg = "Please enter your Height (cm): ";
       pattern = "[1-2]([0-9]{2})||[1-2]([0-9]{2})\\.[0-9]+";
-      errorMSG = "Error: Must be a positive number in range 100-300 (exclusive)!";
+      errorMSG = "*** ERROR *** Must be a positive number in range 100-300 (exclusive)!";
 
       // Get input
       input = getInput(msg,keyboard,pattern,errorMSG);
@@ -811,11 +816,13 @@ public class HealthTracker {
                        "4. Workouts Done This Week \n"+
                        "5. Food Data Set \n"+
                        "6. Add Food to Data Set \n"+
-                       "7. Exit\n");
+                       "7. Exit\n\n");
 
       // Get choice from user
       System.out.print("Your Choice: ");
       choice = keyboard.next();
+
+      System.out.print("\n");
 
       // Switch case 
       switch(choice){
@@ -829,7 +836,7 @@ public class HealthTracker {
               new_meal = null;
               
               // // Get date from user
-              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","Input is not in the right format");
+              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","*** ERROR *** Input is not in the right format");
 
               // Ensure date is in the right format
               if (!date.contains("Error"))
@@ -845,7 +852,7 @@ public class HealthTracker {
                 // Initialize msg, pattern and error message
                 msg = "Enter Grams: ";
                 pattern = "[1-9][0-9][0-9]?||[1-9][0-9][0-9]?\\.[0-9]+";
-                errorMSG = "Error: Must be a positive number in range 10-1000 (exclusive)!";
+                errorMSG = "*** ERROR *** Must be a positive number in range 10-1000 (exclusive)!";
                 food_grams = 0.0;
 
                 // Get input
@@ -926,7 +933,7 @@ public class HealthTracker {
           case "2":
 
               // Get date from user 
-              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","Input is not in the right format");
+              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","*** ERROR *** Input is not in the right format");
 
               // Ensure date is in the right format
               if (!date.contains("Error"))
@@ -946,7 +953,7 @@ public class HealthTracker {
                 msg = "Enter duration in minutes: ";
 
                 pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?";
-                errorMSG = "Error: Must be a positive number in range 10-1000 (exclusive)!";
+                errorMSG = "*** ERROR *** Must be a positive number in range 10-1000 (exclusive)!";
 
                 // Get input
                 input = getInput(msg,keyboard,pattern,errorMSG);
@@ -971,7 +978,7 @@ public class HealthTracker {
                 // Initialize msg, pattern and error message
                 msg = "Enter calories burned: ";
                 pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?||[1-3][0-9][0-9][0-9]?(\\.[0-9]+)?";
-                errorMSG = "Error: Must be a positive number in range 10-4000 (exclusive)!";
+                errorMSG = "*** ERROR *** Must be a positive number in range 10-4000 (exclusive)!";
 
                 // Get input
                 input = getInput(msg,keyboard,pattern,errorMSG);
@@ -1009,7 +1016,7 @@ public class HealthTracker {
               date = getInput("Enter date (Format MM-DD-YYYY or -1 for today):", 
                                   keyboard,
                                   "\\d{1,2}-\\d{1,2}-\\d{4}|-1",
-                                  "Input is not in the right format");
+                                  "*** ERROR *** Input is not in the right format");
 
               if (date.contains("Error"))
               {
@@ -1123,7 +1130,12 @@ public class HealthTracker {
                   if (!new_meal.equals(foodData.getFood(new_meal.getName())))
                     to_add = true;
                   else
-                    System.out.println("Item already exist in dataset!");
+                  {
+                    System.out.println("\nItem already exists in dataset!\nItem Information: \n");
+                    System.out.println(new_meal.toString());
+                  }
+
+
 
                 }
                 else
@@ -1131,6 +1143,8 @@ public class HealthTracker {
 
                 if (to_add)
                 {
+                  if (new_meal.toFile().split(",").length == 9)
+                  {
                   // Write data to file
                     writeFile(fdFile,new_meal.toFile()+"\n", true);
 
@@ -1141,24 +1155,38 @@ public class HealthTracker {
                     foodData.addFood(new_meal);
 
                     // Print Message
-                    System.out.println("Item Successfully saved: ");
+                    System.out.println("\nItem Was Successfully saved: ");
                     System.out.println(new_meal.toString());
+                  }
+                  else
+                    System.out.println("\n*** Warning *** Something went wrong");
+                    /* NOTE: Too many elements in the array
+                             if were saved in file it would have
+                             created an error in the future! 
+                             I made sure that FoodSearch delete 
+                             all commas (",") from strings, so it
+                             shouldn't be an issue. However, just to make
+                             sure that there will be index errors in 
+                             the future I added this condition.
+                    */
+                }
+                else
+                {
+                  
                 }
                 
 
               }
               else
-              {
                 // Print error message
-                System.out.println("Couldn't find this item");
-              }
+                System.out.println("\n*** Warning *** Couldn't find this item");
+
 
               break;
 
           case "7":
 
               // Exit
-              System.out.print("\nClosing program... \n");
               run = false;
               break;
 
@@ -1171,10 +1199,6 @@ public class HealthTracker {
       
     }
     // Close Scanner object
-    keyboard.close();
-
-    // Inform user 
-    System.out.print("\n>------------------- Closed ---------------------<\n");
-
+    closeProgram(keyboard);
   }
 } 
