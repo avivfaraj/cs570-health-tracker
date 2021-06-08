@@ -29,18 +29,25 @@ public class HealthTracker {
   
   // ******************************* Useful Methods **********************************
   // Write to file method 
-  public static void writeFile(File file, String str, boolean append_line) throws IOException
+  public static void writeFile(File file, String str, boolean append_line)
   {
-    // FileWriter object to write to a file.
-    // If append_line is true the line will be added in the end
-    // Otherwise a new file will be written and override an existing one
-    FileWriter writer = new FileWriter(file,append_line);
 
-    // Write string to the file
-    writer.write(str);
+    try{
+      // FileWriter object to write to a file.
+      // If append_line is true the line will be added in the end
+      // Otherwise a new file will be written and override an existing one
+      FileWriter writer = new FileWriter(file,append_line);
+      
+      // Write string to the file
+      writer.write(str);
 
-    // Close FileWriter object
-    writer.close();
+      // Close writer
+      writer.close();
+
+    }catch(IOException exe){
+      System.out.println("Something went wrong writing to file.\nPlease try again later.");
+    }
+    
   }
 
   // Reads a file and return lines as ArrayList<String>
@@ -51,7 +58,7 @@ public class HealthTracker {
     String line = "";
 
     // Scanner object to read a file
-    Scanner reader = new Scanner(new File(file.getPath()));
+      Scanner reader = new Scanner(file);
 
     // Iterate over lines
     // Scanner is iterator which means
@@ -74,7 +81,7 @@ public class HealthTracker {
 
   }
 
-  public static boolean createNewFile(File file, String headers) throws IOException{
+  public static boolean createNewFile(File file, String headers) {
     if (!file.exists())
     {
       writeFile(file, headers, false);
@@ -84,7 +91,7 @@ public class HealthTracker {
     return false;
   }
 
-  public static void insertToFile(Calendar current_date, File file, String line_to_insert, ArrayList<String> arr) throws IOException{
+  public static void insertToFile(Calendar current_date, File file, String line_to_insert, ArrayList<String> arr){
     
     // Initialize variables
     int counter = 0;
@@ -185,13 +192,17 @@ public class HealthTracker {
 
   public static Calendar stringToDate(String date)
   {
+    // Split date to Month, day, year
     String[] date_attr = date.split("-");  // Month-Day-Year
+
+    // Define another_date according to date_attr
     Calendar another_date = Calendar.getInstance();
     another_date.clear();
     another_date.set(Integer.parseInt(date_attr[2]),
                        Integer.parseInt(date_attr[0])-1,
                        Integer.parseInt(date_attr[1]));
 
+    // Returns a copy of another_date.
     return (Calendar) another_date.clone();
   }
 
@@ -208,52 +219,66 @@ public class HealthTracker {
 
   public static String getInput(String msg,Scanner scn, String pattern, String errorMSG)
   {
+    // Initialize 
     String input = "";
+
+    // Check whether pattern string contains date format.
     boolean date = pattern.contains("\\d{1,2}-\\d{1,2}-\\d{4}");
 
+    // Iterate either 3 times or untill correct format entered
     for (int count = 0; count < 3; count++)
     {
+      // Print input message to user
       System.out.print(msg);
+
+      // Ensure pattern is date to decide 
+      // which scn method to use.
       if (date)
         input = scn.next();
       else
         input = scn.nextLine();
+
+      // Ensure input is in the right format
       if (!input.isEmpty() && input.matches(pattern))
       {
+        // Ensure date input
         if (date && !input.equals("-1"))
         {
+          // Split date to month, day,year
           String[] date_attr = input.split("-");
+
+          // Format input to MM-DD-YYYY
+          // If user entered 6-2-2021 -> it will be converted to 06-02-2021
           input = String.format("%02d-%02d-%4d", 
                              Integer.parseInt(date_attr[0]),
                              Integer.parseInt(date_attr[1]),
                              Integer.parseInt(date_attr[2]));
         
         }
+
+        // returns valid input
         return input;
       }
+
+      // Print an error message if input is incorrect
       else if(count < 2)
       {
         System.out.println(errorMSG);
       }
     }
 
+    // returns an error if 3 times failed.
     return "Error: Input is not in the right format";
     
 
   }
-
-  // public static int getIndex(ArrayList<Object> arrList, Calendar date)
-  // {
-
-  // }
-
 
   // *********************************************************************************
 
   
 
   // ************************************** Main Method ******************************
-  public static void main (String args[]) throws IOException{
+  public static void main (String args[]) {
 
     String msg = "",pattern = "",errorMSG = "", input = "" ;
     // Variables Declaration
