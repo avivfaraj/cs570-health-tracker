@@ -237,7 +237,17 @@ public class HealthTracker {
       if (date)
         input = scn.next();
       else
+      {
+       
+        // Get input from user
         input = scn.nextLine();
+
+        // String has an extra feature with scn.nextLine()
+        // To avoid this feature I wrote this if condition
+        if (pattern.equals("[a-zA-Z\\'\\- ]+") && count == 0) input += scn.nextLine();
+
+        
+      }
 
       // Ensure input is in the right format
       if (!input.isEmpty() && input.matches(pattern))
@@ -845,9 +855,21 @@ public class HealthTracker {
                 current_date = stringToDate(date);
 
                 // Get food from user
-                System.out.print("Enter Food: ");
-                food_name = keyboard.next(); 
-                if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
+                // Initialize msg, pattern and error message
+                msg = "Enter Food's Name: ";
+                pattern = "[a-zA-Z\\'\\- ]+";
+                errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
+
+                // Get input
+                food_name = getInput(msg,keyboard,pattern,errorMSG);
+
+                // System.out.print("Enter Food: ");
+                // food_name = keyboard.next(); 
+                // if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
+
+                // Remove commas to avoid errors reading file
+                food_name = food_name.replace(",", " ");
+                System.out.println(food_name);
 
                 // Initialize msg, pattern and error message
                 msg = "Enter Grams: ";
@@ -870,9 +892,6 @@ public class HealthTracker {
                 // Ensure food item exist in data set
                 if (foodData.search(food_name))
                 {
-
-                    // food_name = food_name.toLowerCase();
-                    // food_name = food_name.substring(0,1).toUpperCase() + food_name.substring(1);
 
                     // Find the food in data set
                     meal = foodData.getFood(food_name);
@@ -926,7 +945,7 @@ public class HealthTracker {
                 else
                   System.out.println(food_name+ " does not exist in data set!");
               }
-              else System.out.println(date);
+              else System.out.println(date); // Error with input
               
               break;
 
@@ -945,13 +964,14 @@ public class HealthTracker {
                 System.out.print("Enter workout type: ");
                 String type = keyboard.next();
                 if (keyboard.hasNextLine()) type += keyboard.nextLine();
+                type = type.replace(",", " ");
 
                 // Get duration in minutes from user
                 // System.out.print("Enter duration in minutes: ");
                 double durationMinutes = 0.0;
+                
                 // Initialize msg, pattern and error message
                 msg = "Enter duration in minutes: ";
-
                 pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?";
                 errorMSG = "*** ERROR *** Must be a positive number in range 10-1000 (exclusive)!";
 
@@ -970,7 +990,7 @@ public class HealthTracker {
                 System.out.print("Enter location: ");
                 String location = keyboard.next();
                 if (keyboard.hasNextLine()) location += keyboard.nextLine();
-                
+                location = location.replace(",", " ");
                 // // Get calories burned from user.
                 // System.out.print("Enter calories burned: ");
                 double calorie = 0.0;
