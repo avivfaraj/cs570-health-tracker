@@ -29,6 +29,7 @@ public class HealthTracker {
 
   private static String str_pattern = "[a-zA-Z\\'\\- ]+";
   private static String date_pattern = "\\d{1,2}\\-\\d{1,2}\\-\\d{4}";
+  private static Calendar today = Calendar.getInstance();;
 
   // ******************************* Useful Methods **********************************
   // Write to file method 
@@ -221,11 +222,15 @@ public class HealthTracker {
                        Integer.parseInt(date_attr[1]));
 
     // Ensure date exists
-    if (Integer.parseInt(date_attr[0])-1 == another_date.get(Calendar.MONTH))
+    if (Integer.parseInt(date_attr[0])-1 == another_date.get(Calendar.MONTH) && !another_date.after(today))
       // Returns a copy of another_date.
       return (Calendar) another_date.clone();
     else
+    {
+      if(another_date.after(today))
+        System.out.println("\n*** Warning *** The date you entered is someday in the future!" );
       return null;
+    }
   }
 
   public static void closeProgram(Scanner scn)
@@ -317,9 +322,9 @@ public class HealthTracker {
   // ************************************** Main Method ******************************
   public static void main (String args[]) {
 
-    String msg = "",pattern = "",errorMSG = "", input = "" ;
     // Variables Declaration
     // Primitive data types
+    String msg = "",pattern = "",errorMSG = "", input = "" ;
     double food_grams = 0.0; 
     int index = -1, max = -1, counter = 0, lines_num = -1;
     boolean run = true, added = false, inaugural_run = false, new_user = true;
