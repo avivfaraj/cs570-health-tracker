@@ -26,7 +26,10 @@ import java.io.FileWriter;
  ****************************************/
 
 public class HealthTracker {
-  
+
+  private static String str_pattern = "[a-zA-Z\\'\\- ]+";
+  private static String date_pattern = "\\d{1,2}-\\d{1,2}-\\d{4}";
+
   // ******************************* Useful Methods **********************************
   // Write to file method 
   public static void writeFile(File file, String str, boolean append_line)
@@ -218,13 +221,15 @@ public class HealthTracker {
 
   }
 
-  public static String getInput(String msg,Scanner scn, String pattern, String errorMSG)
+  public static String getInput(String msg,Scanner scn, String pattern, String errorMSG,boolean first_field)
   {
     // Initialize 
     String input = "";
 
     // Check whether pattern string contains date format.
-    boolean date = pattern.contains("\\d{1,2}-\\d{1,2}-\\d{4}");
+    boolean date = pattern.contains(date_pattern);
+
+    boolean string = pattern.contains(str_pattern);
 
     // Iterate either 3 times or untill correct format entered
     for (int count = 0; count < 3; count++)
@@ -232,22 +237,15 @@ public class HealthTracker {
       // Print input message to user
       System.out.print(msg);
 
-      // Ensure pattern is date to decide 
-      // which scn method to use.
-      if (date)
-        input = scn.next();
-      else
-      {
        
         // Get input from user
         input = scn.nextLine();
 
         // String has an extra feature with scn.nextLine()
         // To avoid this feature I wrote this if condition
-        if (pattern.equals("[a-zA-Z\\'\\- ]+") && count == 0) input += scn.nextLine();
+        if (first_field) input += scn.nextLine();
 
-        
-      }
+        // if ((string || date) && count == 0) input += scn.nextLine();
 
       // Ensure input is in the right format
       if (!input.isEmpty() && input.matches(pattern))
@@ -277,6 +275,7 @@ public class HealthTracker {
         System.out.println();
         System.out.println(errorMSG);
         System.out.println();
+        first_field = false;
       }
     }
 
@@ -416,8 +415,8 @@ public class HealthTracker {
         msg = "\nPlease enter your ID (to make a new user enter 1).\nID: ";
         pattern = "\\d+";
         errorMSG = "*** ERROR *** Input must be an integer number greater than 0";
-        input = getInput(msg,keyboard,pattern,errorMSG);
-        if (!input.contains("Error"))
+        input = getInput(msg,keyboard,pattern,errorMSG, false);
+        if (!input.contains("ERROR"))
         {
           user_id = Integer.parseInt(input);
         }
@@ -615,26 +614,44 @@ public class HealthTracker {
       String user_name = "";
 
       // Initialize msg, pattern and error message
-      msg = "Please enter you name: ";
-      pattern = "[a-zA-Z]+( [a-zA-Z]*)?";
-      errorMSG = "*** ERROR *** Name must only contain letters!";
+      // msg = "Please enter you name: ";
+      // pattern = "[a-zA-Z]+( [a-zA-Z]*)?";
+      // errorMSG = "*** ERROR *** Name must only contain letters!";
+
+      // // Get input
+      // input = getInput(msg,keyboard,pattern,errorMSG, true);
+
+      // // Ensure not error
+      // if (!input.contains("ERROR"))
+      // {
+      //   // Save input
+      //   user_name = input;
+      // }
+      // else
+      // {
+      //   // Close program
+      //   closeProgram(keyboard);
+
+      //   // Terminate Program
+      //   return;
+      // }
+
+      // Get name from user
+      // Initialize msg, pattern and error message
+      msg = "Enter Your Name: ";
+      pattern = str_pattern;
+      errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
 
       // Get input
-      input = getInput(msg,keyboard,pattern,errorMSG);
+      user_name = getInput(msg,keyboard,pattern,errorMSG,false);
 
       // Ensure not error
-      if (!input.contains("Error"))
+      if (user_name.contains("ERROR"))
       {
-        // Save input
-        user_name = input;
-      }
-      else
-      {
-        // Close program
-        closeProgram(keyboard);
-
-        // Terminate Program
-        return;
+        System.out.println();
+        System.out.println(user_name);
+        System.out.println();
+        return; // terminate program
       }
 
       // 
@@ -646,10 +663,10 @@ public class HealthTracker {
       errorMSG = "*** ERROR *** Either Male or Female!";
 
       // Get input
-      input = getInput(msg,keyboard,pattern,errorMSG);
+      input = getInput(msg,keyboard,pattern,errorMSG,false);
 
       // Ensure not error
-      if (!input.contains("Error"))
+      if (!input.contains("ERROR"))
       {
         // Save input
         user_gender = input;
@@ -671,10 +688,10 @@ public class HealthTracker {
       errorMSG = "*** ERROR *** Must be either a positive number in the range 1000-4000 (exclusive) or -1 for default!";
 
       // Get input
-      input = getInput(msg,keyboard,pattern,errorMSG);
+      input = getInput(msg,keyboard,pattern,errorMSG,false);
 
       // Ensure not error
-      if (!input.contains("Error"))
+      if (!input.contains("ERROR"))
       {
         // Convert input to double
         user_dci = Double.parseDouble(input);
@@ -696,10 +713,10 @@ public class HealthTracker {
       errorMSG = "*** ERROR *** Must be a positive number in the range 10-500 (exclusive)!";
 
       // Get input
-      input = getInput(msg,keyboard,pattern,errorMSG);
+      input = getInput(msg,keyboard,pattern,errorMSG,false);
 
       // Ensure not error
-      if (!input.contains("Error"))
+      if (!input.contains("ERROR"))
       {
         // Conver input to double
         user_weight = Double.parseDouble(input);
@@ -721,10 +738,10 @@ public class HealthTracker {
       errorMSG = "*** ERROR *** Must be a positive number in range 100-300 (exclusive)!";
 
       // Get input
-      input = getInput(msg,keyboard,pattern,errorMSG);
+      input = getInput(msg,keyboard,pattern,errorMSG,false);
 
       // Ensure not error
-      if (!input.contains("Error"))
+      if (!input.contains("ERROR"))
       {
         // Convert input to double
         user_height = Double.parseDouble(input);
@@ -831,7 +848,7 @@ public class HealthTracker {
       // Get choice from user
       System.out.print("Your Choice: ");
       choice = keyboard.next();
-
+    
       System.out.print("\n");
 
       // Switch case 
@@ -846,10 +863,10 @@ public class HealthTracker {
               new_meal = null;
               
               // // Get date from user
-              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","*** ERROR *** Input is not in the right format");
+              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","*** ERROR *** Input is not in the right format",true);
 
               // Ensure date is in the right format
-              if (!date.contains("Error"))
+              if (!date.contains("ERROR"))
               {
                 // Convert date from string to Calendar
                 current_date = stringToDate(date);
@@ -857,19 +874,20 @@ public class HealthTracker {
                 // Get food from user
                 // Initialize msg, pattern and error message
                 msg = "Enter Food's Name: ";
-                pattern = "[a-zA-Z\\'\\- ]+";
+                pattern = str_pattern;
                 errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
 
                 // Get input
-                food_name = getInput(msg,keyboard,pattern,errorMSG);
+                food_name = getInput(msg,keyboard,pattern,errorMSG,false);
 
-                // System.out.print("Enter Food: ");
-                // food_name = keyboard.next(); 
-                // if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
-
-                // Remove commas to avoid errors reading file
-                food_name = food_name.replace(",", " ");
-                System.out.println(food_name);
+                // Ensure not error
+                if (food_name.contains("ERROR"))
+                {
+                  System.out.println();
+                  System.out.println(food_name);
+                  System.out.println();
+                  break;
+                }
 
                 // Initialize msg, pattern and error message
                 msg = "Enter Grams: ";
@@ -878,10 +896,10 @@ public class HealthTracker {
                 food_grams = 0.0;
 
                 // Get input
-                input = getInput(msg,keyboard,pattern,errorMSG);
+                input = getInput(msg,keyboard,pattern,errorMSG,false);
 
                 // Ensure not error
-                if (input.contains("Error"))
+                if (input.contains("ERROR"))
                 {
                   System.out.println(input);
                   break;
@@ -952,78 +970,106 @@ public class HealthTracker {
           case "2":
 
               // Get date from user 
-              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","*** ERROR *** Input is not in the right format");
+              date = getInput("Enter date (Format MM-DD-YYYY):",keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","*** ERROR *** Input is not in the right format",true);
 
               // Ensure date is in the right format
-              if (!date.contains("Error"))
+              if (date.contains("ERROR"))
               {
-                // Convert date from string to Calendar
-                current_date = stringToDate(date);
-
-                // Get workout type from user
-                System.out.print("Enter workout type: ");
-                String type = keyboard.next();
-                if (keyboard.hasNextLine()) type += keyboard.nextLine();
-                type = type.replace(",", " ");
-
-                // Get duration in minutes from user
-                // System.out.print("Enter duration in minutes: ");
-                double durationMinutes = 0.0;
-                
-                // Initialize msg, pattern and error message
-                msg = "Enter duration in minutes: ";
-                pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?";
-                errorMSG = "*** ERROR *** Must be a positive number in range 10-1000 (exclusive)!";
-
-                // Get input
-                input = getInput(msg,keyboard,pattern,errorMSG);
-
-                // Ensure not error
-                if (!input.contains("Error"))
-                {
-                  // Convert input to double
-                  durationMinutes = Double.parseDouble(input);
-                }
-                else break;
-
-                // Get location from user
-                System.out.print("Enter location: ");
-                String location = keyboard.next();
-                if (keyboard.hasNextLine()) location += keyboard.nextLine();
-                location = location.replace(",", " ");
-                // // Get calories burned from user.
-                // System.out.print("Enter calories burned: ");
-                double calorie = 0.0;
-
-                // Initialize msg, pattern and error message
-                msg = "Enter calories burned: ";
-                pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?||[1-3][0-9][0-9][0-9]?(\\.[0-9]+)?";
-                errorMSG = "*** ERROR *** Must be a positive number in range 10-4000 (exclusive)!";
-
-                // Get input
-                input = getInput(msg,keyboard,pattern,errorMSG);
-
-                // Ensure not error
-                if (!input.contains("Error"))
-                {
-                  // Convert input to double
-                  calorie = Double.parseDouble(input);
-                }
-                else break;
-
-                // System.out.println(date + " " + type +" "+ location + " " + durationMinutes + " " + calorie);
-                // Create a new workout instance
-                Workout new_workout = new Workout((int)durationMinutes * 60, 
-                                                  location, type, calorie, current_date);
-
-                // Add the new instance to user.
-                user.addWorkouts(new_workout);
-
-                // Write new line to file and add to Array List
-                insertToFile(current_date,wFile,user.getID() +","+new_workout.toFile(), workoutsArrayList);
-                System.out.println("\nSuccessfully Saved!\n");
+                System.out.println();
+                System.out.println(date);
+                break;
               }
-              else System.out.println(date);
+              
+              // Convert date from string to Calendar
+              current_date = stringToDate(date);
+
+              // Get food from user
+              // Initialize msg, pattern and error message
+              msg = "Enter Workout's Type: ";
+              pattern = str_pattern;
+              errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
+
+              // Get input
+              String type = getInput(msg,keyboard,pattern,errorMSG,false);
+
+              // Ensure not error
+              if (type.contains("ERROR"))
+              {
+                System.out.println();
+                System.out.println(type);
+                break;
+              }
+
+              // Get duration in minutes from user
+              // System.out.print("Enter duration in minutes: ");
+              double durationMinutes = 0.0;
+              
+              // Initialize msg, pattern and error message
+              msg = "Enter duration in minutes: ";
+              pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?";
+              errorMSG = "*** ERROR *** Must be a positive number in range 10-1000 (exclusive)!";
+
+              // Get input
+              input = getInput(msg,keyboard,pattern,errorMSG,false);
+
+              // Ensure not error
+              if (!input.contains("ERROR"))
+              {
+                // Convert input to double
+                durationMinutes = Double.parseDouble(input);
+              }
+              else break;
+
+              // Get location from user
+              // Initialize msg, pattern and error message
+              msg = "Enter Location: ";
+              pattern = str_pattern;
+              errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
+
+              // Get input
+              String location = getInput(msg,keyboard,pattern,errorMSG,false);
+
+              // Ensure not error
+              if (location.contains("ERROR"))
+              {
+                System.out.println();
+                System.out.println(location);
+                break;
+              }
+
+
+              // // Get calories burned from user.
+              // System.out.print("Enter calories burned: ");
+              double calorie = 0.0;
+
+              // Initialize msg, pattern and error message
+              msg = "Enter calories burned: ";
+              pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?||[1-3][0-9][0-9][0-9]?(\\.[0-9]+)?";
+              errorMSG = "*** ERROR *** Must be a positive number in range 10-4000 (exclusive)!";
+
+              // Get input
+              input = getInput(msg,keyboard,pattern,errorMSG,false);
+
+              // Ensure not error
+              if (!input.contains("ERROR"))
+              {
+                // Convert input to double
+                calorie = Double.parseDouble(input);
+              }
+              else break;
+
+              // System.out.println(date + " " + type +" "+ location + " " + durationMinutes + " " + calorie);
+              // Create a new workout instance
+              Workout new_workout = new Workout((int)durationMinutes * 60, 
+                                                location, type, calorie, current_date);
+
+              // Add the new instance to user.
+              user.addWorkouts(new_workout);
+
+              // Write new line to file and add to Array List
+              insertToFile(current_date,wFile,user.getID() +","+new_workout.toFile(), workoutsArrayList);
+              System.out.println("\nSuccessfully Saved!\n");
+            
 
               break;
 
@@ -1036,9 +1082,9 @@ public class HealthTracker {
               date = getInput("Enter date (Format MM-DD-YYYY or -1 for today):", 
                                   keyboard,
                                   "\\d{1,2}-\\d{1,2}-\\d{4}|-1",
-                                  "*** ERROR *** Input is not in the right format");
+                                  "*** ERROR *** Input is not in the right format",true);
 
-              if (date.contains("Error"))
+              if (date.contains("ERROR"))
               {
                 // Print error
                 System.out.println(date);
@@ -1118,14 +1164,48 @@ public class HealthTracker {
 
           case "6":
               // Get food from user
-              System.out.print("Enter Food: ");
-              food_name = keyboard.next(); 
-              if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
+              // System.out.print("Enter Food: ");
+              // food_name = keyboard.next(); 
+              // if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
+
 
               // Get food from user
-              System.out.print("Enter Brand: ");
-              brand_owner = keyboard.next(); // NextLine has a bug
-              if (keyboard.hasNextLine()) brand_owner += keyboard.nextLine();
+              // Initialize msg, pattern and error message
+              msg = "Enter Location: ";
+              pattern = str_pattern;
+              errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
+
+              // Get input
+              food_name = getInput(msg,keyboard,pattern,errorMSG,false);
+
+              // Ensure not error
+              if (food_name.contains("ERROR"))
+              {
+                System.out.println();
+                System.out.println(food_name);
+                break;
+              }
+
+              // Get food's brand from user
+              // Initialize msg, pattern and error message
+              msg = "Enter Brand: ";
+              pattern = str_pattern;
+              errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
+
+              // Get input
+              brand_owner = getInput(msg,keyboard,pattern,errorMSG,false);
+
+              // Ensure not error
+              if (brand_owner.contains("ERROR"))
+              {
+                System.out.println();
+                System.out.println(brand_owner);
+                break;
+              }
+              // Get food from user
+              // System.out.print("Enter Brand: ");
+              // brand_owner = keyboard.next(); // NextLine has a bug
+              // if (keyboard.hasNextLine()) brand_owner += keyboard.nextLine();
 
               // Initialize new_meal to null to avoid compiling error
               new_meal = null;
