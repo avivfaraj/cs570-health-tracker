@@ -383,7 +383,6 @@ public class HealthTracker {
     }catch(FileNotFoundException exc)
     {
       // No users in memory - inaugural_run
-      System.out.println("Created new file called \"users.csv\"");
       inaugural_run  = true;
 
       // Creating required files
@@ -1082,10 +1081,10 @@ public class HealthTracker {
                 System.out.println(input); //Print error!
                 break;
               }
+              double durationSec = durationMinutes*60;
 
-              // System.out.println(date + " " + type +" "+ location + " " + durationMinutes + " " + calorie);
               // Create a new workout instance
-              Workout new_workout = new Workout((int)durationMinutes * 60, 
+              Workout new_workout = new Workout((int)durationSec, 
                                                 location, type, calorie, current_date);
 
               // Add the new instance to user.
@@ -1152,7 +1151,7 @@ public class HealthTracker {
 
               }
               // No records 
-              else System.out.print("No records for that date!\n");
+              else System.out.print("\n*** MSG *** No records for that date!\n");
 
               break;
               
