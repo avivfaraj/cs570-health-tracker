@@ -873,7 +873,7 @@ public class HealthTracker {
               new_meal = null;
               
               // // Get date from user
-              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","*** ERROR *** Input is not in the right format",true);
+              date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,date_pattern,"*** ERROR *** Input is not in the right format",true);
 
               // Ensure date is in the right format
               if (date.contains("ERROR"))
@@ -983,7 +983,7 @@ public class HealthTracker {
           case "2":
 
               // Get date from user 
-              date = getInput("Enter date (Format MM-DD-YYYY):",keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","*** ERROR *** Input is not in the right format",true);
+              date = getInput("Enter date (Format MM-DD-YYYY):",keyboard,date_pattern,"*** ERROR *** Input is not in the right format",true);
 
               // Ensure date is in the right format
               if (date.contains("ERROR"))
@@ -1060,7 +1060,7 @@ public class HealthTracker {
 
               // Initialize msg, pattern and error message
               msg = "Enter calories burned: ";
-              pattern = "[1-9][0-9]([0-9])?(\\.[0-9]+)?|[1-3][0-9][0-9]([0-9])(\\.[0-9]+)?";
+              pattern = "[1-9][0-9]{1,2}(\\.[0-9]+)?|[1-3][0-9]{3}(\\.[0-9]+)?";
               errorMSG = "*** ERROR *** Must be a positive number in range 10-4000 (exclusive)!";
 
               // Get input
