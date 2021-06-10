@@ -28,7 +28,7 @@ import java.io.FileWriter;
 public class HealthTracker {
 
   private static String str_pattern = "[a-zA-Z\\'\\- ]+";
-  private static String date_pattern = "\\d{1,2}-\\d{1,2}-\\d{4}";
+  private static String date_pattern = "\\d{1,2}\\-\\d{1,2}\\-\\d{4}";
 
   // ******************************* Useful Methods **********************************
   // Write to file method 
@@ -233,6 +233,10 @@ public class HealthTracker {
 
   public static String getInput(String msg,Scanner scn, String pattern, String errorMSG,boolean first_field)
   {
+    /*
+    String Pattern ----> str_pattern = "[a-zA-Z\\'\\- ]+";
+    Date Pattern   ----> date_pattern = "\\d{1,2}\\-\\d{1,2}\\-\\d{4}";
+    */
     // Initialize 
     String input = "";
 
