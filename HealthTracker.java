@@ -690,7 +690,7 @@ public class HealthTracker {
 
       // Initialize msg, pattern and error message
       msg = "Please enter your desired Calorie intake (Enter -1 for default): ";
-      pattern = "[1-3]([0-9]{3})||[1-3]([0-9]{3})\\.[0-9]+||-1";
+      pattern = "[1-3][0-9]{3}(\\.[0-9]+)?|-1";
       errorMSG = "*** ERROR *** Must be either a positive number in the range 1000-4000 (exclusive) or -1 for default!";
 
       // Get input
@@ -716,7 +716,7 @@ public class HealthTracker {
 
       // Initialize msg, pattern and error message
       msg = "Please enter your weight (kg): ";
-      pattern = "[1-4]([0-9]{1,2})||[1-4]([0-9]{1,2})\\.[0-9]+";
+      pattern = "[1-9][0-9](\\.[0-9]+)?|[1-4][0-9]{2}(\\.[0-9]+)?";
       errorMSG = "*** ERROR *** Must be a positive number in the range 10-500 (exclusive)!";
 
       // Get input
@@ -742,7 +742,7 @@ public class HealthTracker {
       double user_height = 0.0;
       // Initialize msg, pattern and error message
       msg = "Please enter your Height (cm): ";
-      pattern = "[1-2]([0-9]{2})||[1-2]([0-9]{2})\\.[0-9]+";
+      pattern = "[1-2][0-9]{2}(\\.[0-9]+)?";
       errorMSG = "*** ERROR *** Must be a positive number in range 100-300 (exclusive)!";
 
       // Get input
@@ -906,7 +906,7 @@ public class HealthTracker {
 
               // Initialize msg, pattern and error message
               msg = "Enter Grams: ";
-              pattern = "[1-9][0-9][0-9]?||[1-9][0-9][0-9]?\\.[0-9]+";
+              pattern = "[1-9][0-9]([0-9])?(\\.[0-9]+)?";
               errorMSG = "*** ERROR *** Must be a positive number in range 10-1000 (exclusive)!";
               food_grams = 0.0;
 
@@ -1020,7 +1020,7 @@ public class HealthTracker {
               
               // Initialize msg, pattern and error message
               msg = "Enter duration in minutes: ";
-              pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?";
+              pattern = "[1-9][0-9]([0-9])?(\\.[0-9]+)?";
               errorMSG = "*** ERROR *** Must be a positive number in range 10-1000 (exclusive)!";
 
               // Get input
@@ -1060,7 +1060,7 @@ public class HealthTracker {
 
               // Initialize msg, pattern and error message
               msg = "Enter calories burned: ";
-              pattern = "[1-9][0-9][0-9]?(\\.[0-9]+)?||[1-3][0-9][0-9][0-9]?(\\.[0-9]+)?";
+              pattern = "[1-9][0-9]([0-9])?(\\.[0-9]+)?|[1-3][0-9][0-9]([0-9])(\\.[0-9]+)?";
               errorMSG = "*** ERROR *** Must be a positive number in range 10-4000 (exclusive)!";
 
               // Get input
