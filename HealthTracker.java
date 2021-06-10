@@ -129,8 +129,9 @@ public class HealthTracker {
           // If item does not exist
           if (next == max || next == min) 
           {
+            Calendar temp =  stringToDate(line_attr[1]);
             // line_attr = arr.get(next).split(",");
-            if(!line_attr[1].equals("date") && stringToDate(line_attr[1]).before(current_date)) next += 1;
+            if(!line_attr[1].equals("date") && temp != null && temp.before(current_date)) next += 1;
               // Stop loop
               break;
           }
@@ -138,20 +139,24 @@ public class HealthTracker {
           else
           {
             another_date = stringToDate(line_attr[1]);
-            // Ensure element is greater than look_for
-            if (another_date.after(current_date))
-                // define new maximum index
-                max = next;
+            if (another_date != null)
+            {
+              // Ensure element is greater than look_for
+              if (another_date.after(current_date))
+                  // define new maximum index
+                  max = next;
 
-            // Ensure element is smaller than look_for 
-            else if (another_date.before(current_date))
-                // Define new minimum index
-                min = next;
+              // Ensure element is smaller than look_for 
+              else if (another_date.before(current_date))
+                  // Define new minimum index
+                  min = next;
 
-            // Ensure element is equal to look_for
-            else
-                // Stop iteration
-                found = true;
+              // Ensure element is equal to look_for
+              else
+                  // Stop iteration
+                  found = true;
+            }
+            
           }
       }
     }
@@ -205,8 +210,11 @@ public class HealthTracker {
                        Integer.parseInt(date_attr[0])-1,
                        Integer.parseInt(date_attr[1]));
 
-    // Returns a copy of another_date.
-    return (Calendar) another_date.clone();
+    if (Integer.parseInt(date_attr[0])-1 == another_date.get(Calendar.MONTH))
+      // Returns a copy of another_date.
+      return (Calendar) another_date.clone();
+    else
+      return null;
   }
 
   public static void closeProgram(Scanner scn)
@@ -229,6 +237,7 @@ public class HealthTracker {
     // Check whether pattern string contains date format.
     boolean date = pattern.contains(date_pattern);
 
+    // Check whether pattern string contains string format.
     boolean string = pattern.contains(str_pattern);
 
     // Iterate either 3 times or untill correct format entered
@@ -241,11 +250,10 @@ public class HealthTracker {
         // Get input from user
         input = scn.nextLine();
 
-        // String has an extra feature with scn.nextLine()
-        // To avoid this feature I wrote this if condition
+        /* String has an extra feature with scn.nextLine()
+           To avoid this feature I wrote this if condition
+        */
         if (first_field) input += scn.nextLine();
-
-        // if ((string || date) && count == 0) input += scn.nextLine();
 
       // Ensure input is in the right format
       if (!input.isEmpty() && input.matches(pattern))
@@ -256,8 +264,9 @@ public class HealthTracker {
           // Split date to month, day,year
           String[] date_attr = input.split("-");
 
-          // Format input to MM-DD-YYYY
-          // If user entered 6-2-2021 -> it will be converted to 06-02-2021
+          /* Format input to MM-DD-YYYY
+             If user entered 6-2-2021 -> it will be converted to 06-02-2021
+          */
           input = String.format("%02d-%02d-%4d", 
                              Integer.parseInt(date_attr[0]),
                              Integer.parseInt(date_attr[1]),
@@ -410,8 +419,7 @@ public class HealthTracker {
 
         int user_id = -1;
 
-        // Ask for 
-
+        // Ask for ID
         msg = "\nPlease enter your ID (to make a new user enter 1).\nID: ";
         pattern = "\\d+";
         errorMSG = "*** ERROR *** Input must be an integer number greater than 0";
@@ -469,13 +477,18 @@ public class HealthTracker {
     {
       // Welcome message
       System.out.printf("\nWelcome Back %s!\n", user.getName());
+
+      // Declaration of required variables
       ArrayList<DailyConsumption> dc_temp = new ArrayList<DailyConsumption>();
       ArrayList<Workout> w_temp = new ArrayList<Workout>();
-      current_date = Calendar.getInstance();
-      another_date = Calendar.getInstance();
       boolean first_line = true;
       Food food_from_file;
       int id;
+
+      // Initialize dates
+      current_date = Calendar.getInstance();
+      another_date = Calendar.getInstance();
+      
       // Get workouts and daily consumption data for a specific user
       if (dcArrayList.size() > 1) // First line is headers
       {
@@ -558,6 +571,7 @@ public class HealthTracker {
         food_from_file = null;
       }
 
+
       // Ensure ther are workouts in ArrayList
       // Avoid headers (> 1)
       if (workoutsArrayList.size() > 1) 
@@ -565,7 +579,7 @@ public class HealthTracker {
         // Initialize variables
         current_date = Calendar.getInstance();
         counter = 0;
-
+        
         // Iterate over lines in ArrayList
         for (String line : workoutsArrayList)
         {
@@ -590,6 +604,7 @@ public class HealthTracker {
                                      line_attr[2],                    // Type String
                                      Double.parseDouble(line_attr[5]),// Calories double
                                     current_date));                   // Date Calendar
+
             }
           }
 
@@ -607,34 +622,11 @@ public class HealthTracker {
     // New user must be created.
     else  
     {
-
+      System.out.print("\n>------------------ New User --------------------<\n");
       int unique_id = max + 1;
 
       // Ask for details
       String user_name = "";
-
-      // Initialize msg, pattern and error message
-      // msg = "Please enter you name: ";
-      // pattern = "[a-zA-Z]+( [a-zA-Z]*)?";
-      // errorMSG = "*** ERROR *** Name must only contain letters!";
-
-      // // Get input
-      // input = getInput(msg,keyboard,pattern,errorMSG, true);
-
-      // // Ensure not error
-      // if (!input.contains("ERROR"))
-      // {
-      //   // Save input
-      //   user_name = input;
-      // }
-      // else
-      // {
-      //   // Close program
-      //   closeProgram(keyboard);
-
-      //   // Terminate Program
-      //   return;
-      // }
 
       // Get name from user
       // Initialize msg, pattern and error message
@@ -651,6 +643,7 @@ public class HealthTracker {
         System.out.println();
         System.out.println(user_name);
         System.out.println();
+        closeProgram(keyboard);
         return; // terminate program
       }
 
@@ -866,106 +859,113 @@ public class HealthTracker {
               date = getInput("Enter date (Format MM-DD-YYYY):", keyboard,"\\d{1,2}-\\d{1,2}-\\d{4}","*** ERROR *** Input is not in the right format",true);
 
               // Ensure date is in the right format
-              if (!date.contains("ERROR"))
+              if (date.contains("ERROR"))
               {
-                // Convert date from string to Calendar
-                current_date = stringToDate(date);
-
-                // Get food from user
-                // Initialize msg, pattern and error message
-                msg = "Enter Food's Name: ";
-                pattern = str_pattern;
-                errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
-
-                // Get input
-                food_name = getInput(msg,keyboard,pattern,errorMSG,false);
-
-                // Ensure not error
-                if (food_name.contains("ERROR"))
-                {
-                  System.out.println();
-                  System.out.println(food_name);
-                  System.out.println();
-                  break;
-                }
-
-                // Initialize msg, pattern and error message
-                msg = "Enter Grams: ";
-                pattern = "[1-9][0-9][0-9]?||[1-9][0-9][0-9]?\\.[0-9]+";
-                errorMSG = "*** ERROR *** Must be a positive number in range 10-1000 (exclusive)!";
-                food_grams = 0.0;
-
-                // Get input
-                input = getInput(msg,keyboard,pattern,errorMSG,false);
-
-                // Ensure not error
-                if (input.contains("ERROR"))
-                {
-                  System.out.println(input);
-                  break;
-                }
-                // Convert input to double
-                food_grams = Double.parseDouble(input);
-
-                // Ensure food item exist in data set
-                if (foodData.search(food_name))
-                {
-
-                    // Find the food in data set
-                    meal = foodData.getFood(food_name);
-
-                    // Get its type
-                    food_type = meal.getCategory();
-
-                    // Get brand 
-                    brand_owner = meal.getBrand();
-
-                    // Get food's nutrients in double
-                    nutrients = foodData.getNutrientsDouble(food_name);
-
-                    // Iterate over nutrients and change them according to 
-                    // the grams entered by user
-                    for (int iter = 0; iter < nutrients.length; iter ++)
-                    {
-                      nutrients[iter] = nutrients[iter] * food_grams / 100;
-                    }
-
-                    // Create a new Food instance.
-                    new_meal = new Food(food_name,
-                                        food_type,
-                                        brand_owner,
-                                        nutrients[0], // Grams
-                                        nutrients[1], // Calorie
-                                        nutrients[2], // Protein
-                                        nutrients[3], // Fat
-                                        nutrients[4], // Carbs
-                                        nutrients[5]);// Sugars
-
-                    // Add the new meal to the user
-                    added = user.addFood(date,new_meal);
-
-
-                    // Date not found
-                    if (!added)
-                    {
-                      // Create a new Daily Consumption instance for user.
-                      user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
-
-                      // Add new meal
-                      user.addFood(date,new_meal);
-                    }
-
-                    // Write new line to file and add to Array List
-                    insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
-                    System.out.println("\nSuccessfully Saved!\n");
-                    
-                }
-                else
-                  System.out.println(food_name+ " does not exist in data set!");
+                System.out.println();
+                System.out.println(date);
+                System.out.println();
+                break;
               }
-              else System.out.println(date); // Error with input
-              
-              break;
+              // Convert date from string to Calendar
+              current_date = stringToDate(date);
+              if (current_date == null) 
+              {
+                System.out.println("\n*** ERROR *** Date does not exist!\n");
+                break;
+              }
+              // Get food from user
+              // Initialize msg, pattern and error message
+              msg = "Enter Food's Name: ";
+              pattern = str_pattern;
+              errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
+
+              // Get input
+              food_name = getInput(msg,keyboard,pattern,errorMSG,false);
+
+              // Ensure not error
+              if (food_name.contains("ERROR"))
+              {
+                System.out.println();
+                System.out.println(food_name);
+                System.out.println();
+                break;
+              }
+
+              // Initialize msg, pattern and error message
+              msg = "Enter Grams: ";
+              pattern = "[1-9][0-9][0-9]?||[1-9][0-9][0-9]?\\.[0-9]+";
+              errorMSG = "*** ERROR *** Must be a positive number in range 10-1000 (exclusive)!";
+              food_grams = 0.0;
+
+              // Get input
+              input = getInput(msg,keyboard,pattern,errorMSG,false);
+
+              // Ensure not error
+              if (input.contains("ERROR"))
+              {
+                System.out.println(input);
+                break;
+              }
+              // Convert input to double
+              food_grams = Double.parseDouble(input);
+
+              // Ensure food item exist in data set
+              if (foodData.search(food_name))
+              {
+
+                  // Find the food in data set
+                  meal = foodData.getFood(food_name);
+
+                  // Get its type
+                  food_type = meal.getCategory();
+
+                  // Get brand 
+                  brand_owner = meal.getBrand();
+
+                  // Get food's nutrients in double
+                  nutrients = foodData.getNutrientsDouble(food_name);
+
+                  // Iterate over nutrients and change them according to 
+                  // the grams entered by user
+                  for (int iter = 0; iter < nutrients.length; iter ++)
+                  {
+                    nutrients[iter] = nutrients[iter] * food_grams / 100;
+                  }
+
+                  // Create a new Food instance.
+                  new_meal = new Food(food_name,
+                                      food_type,
+                                      brand_owner,
+                                      nutrients[0], // Grams
+                                      nutrients[1], // Calorie
+                                      nutrients[2], // Protein
+                                      nutrients[3], // Fat
+                                      nutrients[4], // Carbs
+                                      nutrients[5]);// Sugars
+
+                  // Add the new meal to the user
+                  added = user.addFood(date,new_meal);
+
+
+                  // Date not found
+                  if (!added)
+                  {
+                    // Create a new Daily Consumption instance for user.
+                    user.addDailyConsumption(new DailyConsumption(current_date, new ArrayList<Food>()));
+
+                    // Add new meal
+                    user.addFood(date,new_meal);
+                  }
+
+                  // Write new line to file and add to Array List
+                  insertToFile(current_date,dcFile,user.getID() + "," + date +","+ new_meal.toFile(), dcArrayList);
+                  System.out.println("\nSuccessfully Saved!\n");
+                  
+              }
+              else
+                System.out.println(food_name+ " does not exist in data set!");
+            
+            break;
 
           case "2":
 
@@ -982,7 +982,11 @@ public class HealthTracker {
               
               // Convert date from string to Calendar
               current_date = stringToDate(date);
-
+              if (current_date == null) 
+              {
+                System.out.println("\n*** ERROR *** Date does not exist!\n");
+                break;
+              }
               // Get food from user
               // Initialize msg, pattern and error message
               msg = "Enter Workout's Type: ";
@@ -1102,6 +1106,11 @@ public class HealthTracker {
               else
               {
                 current_date = stringToDate(date);
+                if (current_date == null) 
+                {
+                  System.out.println("\n*** ERROR *** Date does not exist!\n");
+                  break;
+                }
               }
 
              // Convert month to string 
