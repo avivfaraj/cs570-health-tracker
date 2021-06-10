@@ -5,7 +5,7 @@ import java.lang.IndexOutOfBoundsException;
  * FoodDataset.java
  * Hold Food instances as dataset 
  * @author Aviv Farag
- * @version 3.0 - 05.29.21
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 public class FoodDataset implements ManageFood {
@@ -33,23 +33,37 @@ public class FoodDataset implements ManageFood {
 	}
 
 	public boolean search(String name){
+
+		// iterate over food items
 		for (Food item : foods){
+
+			// Ensure name equals ignoring case
 			if (item.getName().equalsIgnoreCase(name))
 			{
+				// Return true if equals
 				return true;
 			}
 		}
 
+		// Name not found
 		return false;
 	}
 
 	public int getIndex(String name){
+
+		// Initialize counter
 		int counter = 0;
+
+		// Iterate over food items
 		for (Food item : foods){
+
+			// Ensure name equals ignoring case
 			if (item.getName().equalsIgnoreCase(name))
 			{
+				// return counter
 				return counter;
 			}
+			// increment counter
 			counter++;
 		}
 
@@ -105,30 +119,47 @@ public class FoodDataset implements ManageFood {
 	}
 	
 	public boolean addFood(Food f){
+
+		// Add food item
 		boolean added = foods.add(f);
+
+		// Increment count if added
 		if (added) count++;
+
+		// Return boolean value added
 		return added;
 	}
 
 	public boolean deleteFood(String name){
+
+		// Initialize to false
 		boolean removed = false;
+
+		// Ensure item exists in dataset
 		if (search(name))
 		{
+			// Try remove food
 			try{
 				removed = foods.remove(foods.get(getIndex(name)));
 			}
 			catch(IndexOutOfBoundsException exce)
 			{
+				// Exception occured -- item was not removed!
 				return false;
 			}
 
+			// Ensure item removed
 			if (removed)
 			{
+				// Decrement count
 				count--;
+
+				// Return true - item removed!
 				return true;
 			}
 		}
 
+		// Item was not removed - return false;
 		return false;
 	}
 

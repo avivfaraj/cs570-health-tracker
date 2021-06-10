@@ -9,7 +9,6 @@ import java.io.File;
 // Exceptions packages
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.InputMismatchException;
 
 // File writer package
 import java.io.FileWriter;
@@ -20,9 +19,10 @@ import java.io.FileWriter;
  * HealthTracker.java
  * Tracks the food you eat everyday
  * Tracks workouts done everyday 
- * 
+ * Connects to USDA API in order to
+ * get food nutrients
  * @author Aviv Farag
- * @version 4.0 - 05.30.21
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 public class HealthTracker {
@@ -87,12 +87,15 @@ public class HealthTracker {
   }
 
   public static boolean createNewFile(File file, String headers) {
+    // Check wether file exists
     if (!file.exists())
     {
+      // Write new file
       writeFile(file, headers, false);
       return true;
     }
 
+    // File already exists
     return false;
   }
 
@@ -141,23 +144,22 @@ public class HealthTracker {
           else
           {
             another_date = stringToDate(line_attr[1]);
-            if (another_date != null)
-            {
-              // Ensure element is greater than look_for
-              if (another_date.after(current_date))
-                  // define new maximum index
-                  max = next;
+            
+            // Ensure element is greater than look_for
+            if (another_date.after(current_date))
+                // define new maximum index
+                max = next;
 
-              // Ensure element is smaller than look_for 
-              else if (another_date.before(current_date))
-                  // Define new minimum index
-                  min = next;
+            // Ensure element is smaller than look_for 
+            else if (another_date.before(current_date))
+                // Define new minimum index
+                min = next;
 
-              // Ensure element is equal to look_for
-              else
-                  // Stop iteration
-                  found = true;
-            }
+            // Ensure element is equal to look_for
+            else
+                // Stop iteration
+                found = true;
+            
             
           }
       }
@@ -200,6 +202,12 @@ public class HealthTracker {
     }
   }
 
+  /* Convert date from String to Calendar
+     Returns null in case the date does not exist:
+     e.g. 05-32-2021 ---> will be converted to 06-1-2021
+     Automatically by Calendar instance. There is a difference
+     in the month. In that case returns null.
+  */
   public static Calendar stringToDate(String date)
   {
     // Split date to Month, day, year
@@ -212,6 +220,7 @@ public class HealthTracker {
                        Integer.parseInt(date_attr[0])-1,
                        Integer.parseInt(date_attr[1]));
 
+    // Ensure date exists
     if (Integer.parseInt(date_attr[0])-1 == another_date.get(Calendar.MONTH))
       // Returns a copy of another_date.
       return (Calendar) another_date.clone();
@@ -231,6 +240,7 @@ public class HealthTracker {
 
   }
 
+  // Get input from user and check it is in the correct pattern.
   public static String getInput(String msg,Scanner scn, String pattern, String errorMSG,boolean first_field)
   {
     /*
@@ -341,9 +351,8 @@ public class HealthTracker {
     // Welcome Message
     System.out.print("\n>--------------- Health Tracker -----------------<\n");
     
-    // Define user as Male() with no attributes
-    // This is only to avoid an error of no initialization
-    Person user = new Male();
+    // Define user to null to avoid an error of no initialization
+    Person user = null;
 
     // "Files" directory
     File filesDir = new File('.' + File.separator +"Files");
@@ -1271,12 +1280,17 @@ public class HealthTracker {
               if (new_meal != null)
               {
                 boolean to_add = false;
+
+                // Ennsure name exists in data set
                 if (foodData.search(new_meal.getName()))
                 {
+                  // Check wether new meal equals the item found in data
+                  // It might have a similar name, but different brandOwner
                   if (!new_meal.equals(foodData.getFood(new_meal.getName())))
                     to_add = true;
                   else
                   {
+                    // Inform user and print item details
                     System.out.println("\nItem already exists in dataset!\nItem Information: \n");
                     System.out.println(new_meal.toString());
                   }
@@ -1285,6 +1299,7 @@ public class HealthTracker {
                 else
                   to_add = true;
 
+                // Add new food to data set
                 if (to_add)
                 {
                   if (new_meal.toFile().split(",").length == 9)

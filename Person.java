@@ -6,7 +6,7 @@ import java.util.Calendar;
  * with weight, height, name, id, gender,
  * and desired calorie intake
  * @author Aviv Farag
- * @version 3.0 - 05.29.21
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 public abstract class Person {
@@ -81,10 +81,7 @@ public abstract class Person {
 		return gender;
 	}
 	public final String getWorkouts(){
-
-		/**** NOTE: Consider printing workouts 
-			        for a specific date!
-		**/
+		// Returns a string with all workouts!
 		String final_string = "";
 		for(Workout workout : workouts)
 		{
@@ -96,11 +93,7 @@ public abstract class Person {
 	}
 
 	public final String getWorkouts(Calendar date){
-
-		/**** NOTE: Consider printing workouts 
-			        for a specific date!
-		**/
-
+		// Returns a string with all after a specific date
 		String final_string = "";
 		for(Workout workout : workouts)
 		{
@@ -117,13 +110,9 @@ public abstract class Person {
 
 
 	public final String getDailyConsumption(String date){
-
-		/**** NOTE: Deal with MM/DD/YYYY and M/D/YYYY
-		**/
+		// Returns a string of Daily Consumption of a specific date
 		for(DailyConsumption dc : dailyc)
 		{
-			// System.out.println(dc.getDate()+"  "+ date);
-
 
 			if (date.equals(dc.getDate()))
 			{
@@ -136,6 +125,7 @@ public abstract class Person {
 	}
 
 	public final boolean addFood(String date, Food f){
+		// Add food to a daily consumption in a specific date
 		for (DailyConsumption dc : dailyc)
 		{
 			if (date.equals(dc.getDate()))
@@ -148,6 +138,7 @@ public abstract class Person {
 	}
 
 	public final boolean deleteFood(String date, String name){
+		// Delete food from daily consumption in a specific date
 		for (DailyConsumption dc : dailyc)
 		{
 			if (date.equals(dc.getDate()))
@@ -175,8 +166,6 @@ public abstract class Person {
 	// toString method
 	public String toString(){
 
-		/**** NOTE: Add Workouts and DailyCOnsumptions to toString
-		**/
 		String final_string = ("ID: " + this.getID() +
 							   "\nName: "+ this.getName() +
 							   "\nGender: "+this.getGender()+ 

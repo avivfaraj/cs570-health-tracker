@@ -7,7 +7,7 @@ import java.util.Calendar;
  * Represents consumption for a specific date
  * Counts calorie, protein, carbs, sugars and fat.
  * @author Aviv Farag
- * @version 3.0 - 05.29.21
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 public class DailyConsumption implements ManageFood {
@@ -117,9 +117,13 @@ public class DailyConsumption implements ManageFood {
 
 	public boolean addFood(Food f)
 	{
+		// Add food to daily consumption
 		boolean added = foodConsumed.add(f);
+
+		// Ensure food added
 		if (added)
 		{
+			// Add nutrients values
 			calorieIntake += f.getCalorie();
 			totalProtein += f.getProtein();
 			totalFat += f.getFat();
@@ -135,6 +139,8 @@ public class DailyConsumption implements ManageFood {
 	public boolean deleteFood(String n)
 	{ 
 		int index = -1, counter = 0;
+
+		// Find index of a food item
 		for (Food item : foodConsumed)
 		{
 			if (item.getName().equalsIgnoreCase(n))
@@ -144,8 +150,10 @@ public class DailyConsumption implements ManageFood {
 			counter++;
 		}
 
+		// Ensure item exist
 		if (index != -1)
 		{
+			// Remove item and reduce nutrients from total
 			Food removed = foodConsumed.remove(index);
 			calorieIntake -= removed.getCalorie();
 			totalProtein -= removed.getProtein();

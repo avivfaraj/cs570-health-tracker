@@ -3,7 +3,7 @@
  * Interface for adding and 
  * deleting food.
  * @author Aviv Farag
- * @version 05242021
+ * @version 6.0 - 06.10.21
  ***************************/
 public interface ManageFood {
   public boolean addFood(Food f);

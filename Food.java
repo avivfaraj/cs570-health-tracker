@@ -2,7 +2,7 @@
  * Food.java
  * Represents a Food item with nutrients
  * @author Aviv Farag
- * @version 3.0 - 05.29.21
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 public class Food {

@@ -2,3 +2,4 @@ id,name,gender,height,weight,color
 1001,Aviv,Male,2000.0,100.0,170.0
 1002,Shlomo,Male,1750.0,80.0,178.0
 1003,Mara,Female,1500.0,67.0,173.0
+1004,Eli cohen,Male,2000.0,180.0,200.0
