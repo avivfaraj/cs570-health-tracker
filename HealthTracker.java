@@ -291,7 +291,7 @@ public class HealthTracker {
     }
 
     // returns an error if 3 times failed.
-    return "*** ERROR *** Input is not in the right format";
+    return "\n*** ERROR *** Input is not in the right format\n";
     
 
   }
@@ -472,8 +472,7 @@ public class HealthTracker {
         }
         
     }
-
-    
+  
     // Ensure user is defined
     if (!inaugural_run && !new_user)
     {
@@ -642,9 +641,7 @@ public class HealthTracker {
       // Ensure not error
       if (user_name.contains("ERROR"))
       {
-        System.out.println();
         System.out.println(user_name);
-        System.out.println();
         closeProgram(keyboard);
         return; // terminate program
       }
@@ -668,6 +665,7 @@ public class HealthTracker {
       }
       else
       {
+        System.out.println(input);
         // Close program
         closeProgram(keyboard);
 
@@ -693,6 +691,7 @@ public class HealthTracker {
       }
       else
       {
+        System.out.println(input);
         // Close program
         closeProgram(keyboard);
 
@@ -718,6 +717,7 @@ public class HealthTracker {
       }
       else
       {
+        System.out.println(input);
 
         // Close program
         closeProgram(keyboard);
@@ -743,6 +743,7 @@ public class HealthTracker {
       }
       else
       {
+        System.out.println(input);
 
         // Close program
         closeProgram(keyboard);
@@ -836,9 +837,10 @@ public class HealthTracker {
                        "2. Add New Workout \n"+
                        "3. Daily Consumption \n"+ 
                        "4. Workouts Done This Week \n"+
-                       "5. Food Data Set \n"+
-                       "6. Add Food to Data Set \n"+
-                       "7. Exit\n\n");
+                       "5. Search Food in Data Set \n" + 
+                       "6. Print All Food in Data Set \n"+
+                       "7. Add Food to Data Set \n"+
+                       "8. Exit\n\n");
 
       // Get choice from user
       System.out.print("Your Choice: ");
@@ -863,9 +865,7 @@ public class HealthTracker {
               // Ensure date is in the right format
               if (date.contains("ERROR"))
               {
-                System.out.println();
                 System.out.println(date);
-                System.out.println();
                 break;
               }
               // Convert date from string to Calendar
@@ -887,9 +887,7 @@ public class HealthTracker {
               // Ensure not error
               if (food_name.contains("ERROR"))
               {
-                System.out.println();
                 System.out.println(food_name);
-                System.out.println();
                 break;
               }
 
@@ -977,9 +975,7 @@ public class HealthTracker {
               // Ensure date is in the right format
               if (date.contains("ERROR"))
               {
-                System.out.println();
                 System.out.println(date);
-                System.out.println();
                 break;
               }
               
@@ -1002,9 +998,7 @@ public class HealthTracker {
               // Ensure not error
               if (type.contains("ERROR"))
               {
-                System.out.println();
                 System.out.println(type);
-                System.out.println();
                 break;
               }
 
@@ -1027,9 +1021,7 @@ public class HealthTracker {
               }
               else
               {
-                System.out.println();
                 System.out.println(input); //Print error!
-                System.out.println();
                 break;
               }
 
@@ -1045,9 +1037,7 @@ public class HealthTracker {
               // Ensure not error
               if (location.contains("ERROR"))
               {
-                System.out.println();
                 System.out.println(location);
-                System.out.println();
                 break;
               }
 
@@ -1071,9 +1061,7 @@ public class HealthTracker {
               }
               else
               {
-                System.out.println();
                 System.out.println(input); //Print error!
-                System.out.println();
                 break;
               }
 
@@ -1176,6 +1164,58 @@ public class HealthTracker {
 
           case "5":
 
+              // Get location from user
+              // Initialize msg, pattern and error message
+              msg = "Enter Food's Name: ";
+              pattern = str_pattern;
+              errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
+
+              // Get input
+              food_name = getInput(msg,keyboard,pattern,errorMSG,true);
+
+              // Ensure not error
+              if (food_name.contains("ERROR"))
+              {
+                System.out.println(food_name);
+                break;
+              }
+
+              if (foodData.search(food_name))
+              {
+                System.out.print("\n*********** Food Item Found ***********\n\n");
+                System.out.println(foodData.getFood(food_name).toString());
+              }
+              else
+              {
+                food_name = food_name.substring(0,1).toUpperCase() + food_name.substring(1).toLowerCase();
+                // A temporary copy of the data
+                ArrayList<Food> temp = new ArrayList<Food>(foodData.getData());
+                boolean similar = false;
+                String suggestions = "";
+                for (Food food : temp)
+                {
+                  if (food.getName().contains(food_name))
+                  {
+                    similar = true;
+                    suggestions += food.toString() +"\n\n";
+                  }
+                    
+                }
+                if (similar)
+                {
+                  System.out.print("\n*********** Food Suggestions ***********\n\n");
+                  System.out.println(suggestions);
+                }
+                else
+                  System.out.println("*** MSG *** Nothing Found!");
+
+                temp.clear();
+              }
+              break;
+
+
+          case "6":
+
               // Print Food Data Set to user
               System.out.print("\n*********** Food Data Set ***********\n\n");
               System.out.print(foodData.toString());
@@ -1183,23 +1223,21 @@ public class HealthTracker {
 
               break;
 
-          case "6":
+          case "7":
             
               // Get food from user
               // Initialize msg, pattern and error message
-              msg = "Enter Location: ";
+              msg = "Enter Food's Name: ";
               pattern = str_pattern;
               errorMSG = "*** ERROR *** Only letters, whitespaces, Apostrophes and dashes are allowed!";
 
               // Get input
-              food_name = getInput(msg,keyboard,pattern,errorMSG,false);
+              food_name = getInput(msg,keyboard,pattern,errorMSG,true);
 
               // Ensure not error
               if (food_name.contains("ERROR"))
               {
-                System.out.println();
                 System.out.println(food_name);
-                System.out.println();
                 break;
               }
 
@@ -1215,9 +1253,7 @@ public class HealthTracker {
               // Ensure not error
               if (brand_owner.contains("ERROR"))
               {
-                System.out.println();
                 System.out.println(brand_owner);
-                System.out.println();
                 break;
               }
              
@@ -1282,7 +1318,7 @@ public class HealthTracker {
 
               break;
 
-          case "7":
+          case "8":
 
               // Exit
               run = false;
