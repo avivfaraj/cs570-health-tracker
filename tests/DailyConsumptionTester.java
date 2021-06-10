@@ -4,7 +4,7 @@ import java.util.Calendar;
  * DailyConsumptionTester.java
  * White box for DailyConsumptionTester.java file
  * @author Aviv Farag
- * @version 05242021
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 class DailyConsumptionTester {
@@ -13,13 +13,13 @@ class DailyConsumptionTester {
 
       Calendar date = Calendar.getInstance();
       date.set(2020, 5, 20);
-   	Food f1 = new Food("Butter","Dairy",100,714.0,0.0,78.6,0.0,7.14);
-   	Food f2 = new Food("FONTINA CHEESE","Dairy",100,393.0,21.4,32.1,3.57,0.0);
-      Food f3 = new Food("BURRATA CHEESE","Dairy",100,214.0,17.9,17.9,0.0,0.0);
+   	Food f1 = new Food("Butter","Dairy","Cheese Factory",100,714.0,0.0,78.6,0.0,7.14);
+   	Food f2 = new Food("FONTINA CHEESE","Dairy","Number One Factory",100,393.0,21.4,32.1,3.57,0.0);
+      Food f3 = new Food("BURRATA CHEESE","Dairy","Cheese Factory",100,214.0,17.9,17.9,0.0,0.0);
 
       ArrayList<Food> arrList =new ArrayList<Food>();
-      arrList.add(new Food("YOGURT","Dairy",100,73.0,2.67,2.67,8.67,5.33));
-      arrList.add(new Food("DARK CHOCOLATE","Dairy",100,581.0,6.98,37.2,51.2,30.2));
+      arrList.add(new Food("YOGURT","Dairy","Cheese Factory",100,73.0,2.67,2.67,8.67,5.33));
+      arrList.add(new Food("DARK CHOCOLATE","Dairy","Number One Factory",100,581.0,6.98,37.2,51.2,30.2));
 
 
       // Constructor #1
@@ -27,6 +27,9 @@ class DailyConsumptionTester {
 
       //Constructor #2
       DailyConsumption dc_2 = new DailyConsumption(date, arrList);
+
+      // Constructor #3
+      DailyConsumption dc_3 = new DailyConsumption(dc_2);
 
       System.out.println("dc_1:\n"+dc_1.toString());
       System.out.println();
@@ -46,5 +49,17 @@ class DailyConsumptionTester {
 
       System.out.println();
       System.out.println("dc_2:\n"+ dc_2.toFile());
+
+      System.out.println();
+      System.out.println("dc_2:\n"+ dc_2.getFoodConsumed());
+
+
+      // Check difference between dc_2 and dc_3:
+      System.out.println("dc_2:");
+      System.out.println(dc_2.toString());
+
+      System.out.println("dc_3:");
+      System.out.println(dc_3.toString());
+
 }
 }

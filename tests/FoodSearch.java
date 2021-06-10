@@ -12,13 +12,12 @@ import java.io.InputStreamReader;
 
 // Exceptions packages
 import java.io.IOException;
-
 import java.lang.StringIndexOutOfBoundsException;
 /***************************************
  * FoodSearch.java
  * Represents a Food item with nutrients
  * @author Aviv Farag
- * @version 3.0 - 05.29.21
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 public class FoodSearch {
@@ -30,11 +29,14 @@ public class FoodSearch {
 	private double[] nutrient_value;
 
 	public FoodSearch(){
+		// Initialize variables
 		setKey();
 		query = "";
 		response = "";
 		api_url = "";
 		brand_owner = "";
+
+		// Initialize nutrient value to: {100,0,0,0,0,0}
 		nutrient_value = new double[6];
 		for (int index = 0 ; index < nutrient_value.length ; index++)
 		{
@@ -44,22 +46,27 @@ public class FoodSearch {
 	}
 
 
-	// getters
+	// Setters
 	public void setKey()
 	{
 		api_key = "g6jZti35lOsp8A6Jg0gSfeAWvbtdfyEh9Cfp0Cht";
 	}
 	public void setQuery(String query, String brand_owner){
-		this.query = query;
-		this.brand_owner = brand_owner;
-		api_url = "https://api.nal.usda.gov/fdc/v1/foods/search?query="+this.query+"&brandOwner="+this.brand_owner+"&api_key="+api_key;
-	}
-	public String getQuery(){
+
+		// Set nutrient values to default {100, 0,0,0,0,0}
 		for (int index = 0 ; index < nutrient_value.length; index++)
 		{
 			if (index == 0) nutrient_value[index] = 100;
 			if (index > 0) nutrient_value[index] = 0;
 		}
+		this.query = query;
+		this.brand_owner = brand_owner;
+		api_url = "https://api.nal.usda.gov/fdc/v1/foods/search?query="+this.query+"&brandOwner="+this.brand_owner+"&api_key="+api_key;
+	}
+
+	// Getters
+	public String getQuery(){
+		
 		return query+","+brand_owner;
 	}
 
@@ -134,10 +141,17 @@ public class FoodSearch {
 		
 	}
 
-	public Food searchFood(String query, String brand_owner) throws IOException
+	public Food searchFood(String query, String brand_owner) 
 	{
 		setQuery(query, brand_owner);
-		String response = getRequest();
+		try{
+			String response = getRequest();
+		}catch(IOException exe)
+		{
+			System.out.println("Something went wrong. Please try again later!");
+			return null;
+		}
+		
 
 		// System.out.println(response);
 		if (!response.isEmpty() && !response.contains("Error"))

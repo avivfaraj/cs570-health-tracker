@@ -1,10 +1,12 @@
 // package Helper;
-
-// import java.io.BufferedReader;
-import java.io.IOException;
-// import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.ArrayList;
+/***************************************
+ * FoodSearchTester.java
+ * Whitebox for FoodSearch.java
+ * @author Aviv Farag
+ * @version 6.0 - 06.10.21
+ ****************************************/
 
 public class FoodSearchTester {
 
@@ -13,43 +15,17 @@ public static void main(String args[]) {
 
 	FoodSearch food = new FoodSearch();
 	// food.setQuery("cheese","CITRUS GINGER BELLAVITANO");
-	// try{
-	// 	System.out.print(food.searchFood("cheese","CITRUS GINGER BELLAVITANO").toString());
-	// }catch(IOException ioe)
-	// {
-	// 	System.out.print("IOException\n");
-	// }
+	System.out.println(food.searchFood("cheese","CITRUS GINGER BELLAVITANO").toString());
+	System.out.println();
+	System.out.println(food.getQuery());
 
-	Food new_food = null;
+	System.out.println();
+	Food new_food = food.searchFood("Greek Yogurt","Fage");
+	System.out.println(new_food.toString());
 
-
-	try{
-		new_food = food.searchFood("Greek Yogurt","Fage");
-	}catch(IOException ioe)
-	{
-		System.out.print("IOException\n");
-	}
-	if(new_food != null)  System.out.println(new_food.toString());
-	if (new_food == null) System.out.println("Nothing Found");
-
-	try{
-		new_food = food.searchFood("Olive Oil","Pompeian");
-	}catch(IOException ioe)
-	{
-		System.out.print("IOException\n");
-	}
-
-	if(new_food != null)  System.out.println(new_food.toString());
-	if (new_food == null) System.out.println("Nothing Found");
-
-
-	try{
-		new_food = food.searchFood("Avocado","AVEYO");
-	}catch(IOException ioe)
-	{
-		System.out.print("IOException\n");
-	}
-
-	if(new_food != null)  System.out.println(new_food.toString());
+	System.out.println();
+	new_food = food.searchFood("Avocado","AVEYO");
+	System.out.println(new_food.toString());
+	
 }
 }

@@ -1,8 +1,8 @@
 /***************************************
  * Male.java
- * 
+ * Represents Male user.
  * @author Aviv Farag
- * @version 05242021
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 public class Male extends Person {
@@ -11,14 +11,14 @@ public class Male extends Person {
 
 	// Constructor #1
 	public Male(int id,String name,double weight,
-				double height, int dCI){
-		setPerson(id, name, "male", dCI, weight, height);
+				double height, double dCI){
+		setPerson(id, name, "Male", dCI, weight, height);
 	}
 
 	// Constructor #2
 	public Male(int id,String name,double weight,
 				double height){
 
-		setPerson(id, name, "male", 2000, weight, height);
+		setPerson(id, name, "Male", 2000, weight, height);
 	}
 }

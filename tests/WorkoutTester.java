@@ -1,9 +1,9 @@
 import java.util.Calendar;
 /***************************************
  * WorkoutTester.java
- * 
+ * White box for Workout.java
  * @author Aviv Farag
- * @version 05242021
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 class WorkoutTester {

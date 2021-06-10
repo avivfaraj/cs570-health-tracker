@@ -2,7 +2,7 @@
  * Food.java
  * Represents a Food item with nutrients
  * @author Aviv Farag
- * @version 3.0 - 05.29.21
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 public class Food {
@@ -15,7 +15,7 @@ public class Food {
 				double p,double f, double carbs,
 				double s){
 		name = n.substring(0,1).toUpperCase() +  n.substring(1).toLowerCase();
-		this.category = category.substring(0,1).toUpperCase() + category.substring(1).toLowerCase();
+		this.category =  category.substring(0,1).toUpperCase() +  category.substring(1).toLowerCase();
 		this.brandOwner = brandOwner;
 		calorie = c;
 		protein = p;
@@ -83,4 +83,11 @@ public class Food {
 			    "\nCarbohydrate: "+this.getCarbs() +
 			    "\nSugars: "+this.getSugars());
 	}
+
+	public boolean equals(Food other){
+     return (this.name.equalsIgnoreCase(other.getName()) &&
+     		 this.category.equalsIgnoreCase(other.getCategory()) &&
+     		 this.brandOwner.equalsIgnoreCase(other.getBrand()));
+     
+   }
 }

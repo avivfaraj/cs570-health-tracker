@@ -4,7 +4,7 @@ import java.util.Calendar;
  * Represents a workout of specific type,
  * location and duration.
  * @author Aviv Farag
- * @version 3.0 - 05.29.21
+ * @version 6.0 - 06.10.21
  ****************************************/
 
 public class Workout {
@@ -52,19 +52,11 @@ public class Workout {
 		return durationSec;
 	}
 	public double getDurationMinutes(){
-
-		// Temporary String in order to get 2 digits after decimal point
 		String temp = String.format("%.02f",durationSec / 60.0);
-
-		// Return double coversion of that string
 		return Double.parseDouble(temp);
 	}
 	public double getDurationHours(){
-
-		// Temporary String in order to get 2 digits after decimal point
-		String temp = String.format("%.02f",durationSec / 3600.0);
-
-		// Return double coversion of that string
+		String temp = String.format("%.02f",durationSec / 60.0);
 		return Double.parseDouble(temp);
 	}
 

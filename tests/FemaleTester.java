@@ -1,21 +1,21 @@
 import java.util.Calendar;
 import java.util.ArrayList;
 /***************************************
- * MaleTester.java
- * White box for Male.java (+Person.java)
+ * FemaleTester.java
+ * White box for Female.java (+Person.java)
  * @author Aviv Farag
  * @version 6.0 - 06.10.21
  ****************************************/
 
-class MaleTester {
+class FemaleTester {
 
    public static void main(String[] args){
 
    // Constructor #1
-   Person sean = new Male(1001, "Sean", 100, 178, 1750);
+   Person sean = new Female(1001, "Sean", 100, 178, 1750);
 
    // Constructor #2
-   Person michael = new Male(1002, "Micheal", 90, 190);
+   Person michael = new Female(1002, "Micheal", 90, 190);
 
 
    System.out.println(sean.toString());

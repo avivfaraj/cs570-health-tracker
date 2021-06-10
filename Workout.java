@@ -52,10 +52,12 @@ public class Workout {
 		return durationSec;
 	}
 	public double getDurationMinutes(){
-		return durationSec / 60.0;
+		String temp = String.format("%.02f",durationSec / 60.0);
+		return Double.parseDouble(temp);
 	}
 	public double getDurationHours(){
-		return durationSec / 3600.0;
+		String temp = String.format("%.02f",durationSec / 60.0);
+		return Double.parseDouble(temp);
 	}
 
 	public String getLocation(){
