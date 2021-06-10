@@ -36,9 +36,10 @@ public class HealthTracker {
   {
 
     try{
-      // FileWriter object to write to a file.
-      // If append_line is true the line will be added in the end
-      // Otherwise a new file will be written and override an existing one
+      /* FileWriter object to write to a file.
+         If append_line is true the line will be added in the end
+         Otherwise a new file will be written and override an existing one
+      */
       FileWriter writer = new FileWriter(file,append_line);
       
       // Write string to the file
@@ -63,10 +64,11 @@ public class HealthTracker {
     // Scanner object to read a file
       Scanner reader = new Scanner(file);
 
-    // Iterate over lines
-    // Scanner is iterator which means
-    // It has a method hasNextLine() that will
-    // return the sentinal value for that loop
+    /* Iterate over lines
+       Scanner is iterator which means
+       It has a method hasNextLine() that will
+       return the sentinal value for that loop
+    */
     while(reader.hasNextLine())
     {
        // Reading line
@@ -977,6 +979,7 @@ public class HealthTracker {
               {
                 System.out.println();
                 System.out.println(date);
+                System.out.println();
                 break;
               }
               
@@ -1001,11 +1004,11 @@ public class HealthTracker {
               {
                 System.out.println();
                 System.out.println(type);
+                System.out.println();
                 break;
               }
 
               // Get duration in minutes from user
-              // System.out.print("Enter duration in minutes: ");
               double durationMinutes = 0.0;
               
               // Initialize msg, pattern and error message
@@ -1022,7 +1025,13 @@ public class HealthTracker {
                 // Convert input to double
                 durationMinutes = Double.parseDouble(input);
               }
-              else break;
+              else
+              {
+                System.out.println();
+                System.out.println(input); //Print error!
+                System.out.println();
+                break;
+              }
 
               // Get location from user
               // Initialize msg, pattern and error message
@@ -1038,9 +1047,9 @@ public class HealthTracker {
               {
                 System.out.println();
                 System.out.println(location);
+                System.out.println();
                 break;
               }
-
 
               // // Get calories burned from user.
               // System.out.print("Enter calories burned: ");
@@ -1060,7 +1069,13 @@ public class HealthTracker {
                 // Convert input to double
                 calorie = Double.parseDouble(input);
               }
-              else break;
+              else
+              {
+                System.out.println();
+                System.out.println(input); //Print error!
+                System.out.println();
+                break;
+              }
 
               // System.out.println(date + " " + type +" "+ location + " " + durationMinutes + " " + calorie);
               // Create a new workout instance
@@ -1079,9 +1094,6 @@ public class HealthTracker {
 
           case "3":
 
-              // Get date from user
-              // System.out.print("Enter date (enter -1 for today): ");
-              // date = keyboard.next();
               // Get date from user 
               date = getInput("Enter date (Format MM-DD-YYYY or -1 for today):", 
                                   keyboard,
@@ -1172,12 +1184,7 @@ public class HealthTracker {
               break;
 
           case "6":
-              // Get food from user
-              // System.out.print("Enter Food: ");
-              // food_name = keyboard.next(); 
-              // if (keyboard.hasNextLine()) food_name += keyboard.nextLine();
-
-
+            
               // Get food from user
               // Initialize msg, pattern and error message
               msg = "Enter Location: ";
@@ -1192,6 +1199,7 @@ public class HealthTracker {
               {
                 System.out.println();
                 System.out.println(food_name);
+                System.out.println();
                 break;
               }
 
@@ -1209,26 +1217,15 @@ public class HealthTracker {
               {
                 System.out.println();
                 System.out.println(brand_owner);
+                System.out.println();
                 break;
               }
-              // Get food from user
-              // System.out.print("Enter Brand: ");
-              // brand_owner = keyboard.next(); // NextLine has a bug
-              // if (keyboard.hasNextLine()) brand_owner += keyboard.nextLine();
-
+             
               // Initialize new_meal to null to avoid compiling error
               new_meal = null;
 
               // Try search for food
-              try{
-
-                 new_meal = fs.searchFood(food_name,brand_owner);
-
-              }catch(IOException ioe)
-              {
-                // Exception occured
-                System.out.print("IOException\n");
-              }
+             new_meal = fs.searchFood(food_name,brand_owner);
 
               // Ensure there is data
               if (new_meal != null)

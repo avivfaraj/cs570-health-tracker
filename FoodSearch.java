@@ -134,10 +134,17 @@ public class FoodSearch {
 		
 	}
 
-	public Food searchFood(String query, String brand_owner) throws IOException
+	public Food searchFood(String query, String brand_owner) 
 	{
 		setQuery(query, brand_owner);
-		String response = getRequest();
+		try{
+			String response = getRequest();
+		}catch(IOException exe)
+		{
+			System.out.println("Something went wrong. Please try again later!");
+			return null;
+		}
+		
 
 		// System.out.println(response);
 		if (!response.isEmpty() && !response.contains("Error"))
