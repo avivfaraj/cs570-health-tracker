@@ -386,7 +386,7 @@ public class HealthTracker {
       inaugural_run  = true;
 
       // Creating required files
-      headers = "id,name,gender,height,weight\n";
+      headers = "id,name,gender,dci,weight,height\n";
       createNewFile(uFile, headers);
       usersArrayList.add(headers);
 
