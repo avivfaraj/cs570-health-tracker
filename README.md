@@ -12,7 +12,7 @@ This way, the user does not need to enter the nutritions of each product. Instea
     echo 'export food_api={your API key}' >>~/.bash_profile
     source ~/.bash_profile
     ```
-    ** NOTE: Replace {your API key} with your key. for example: food_api="6ofddpdsf"
+    **NOTE:** Replace {your API key} with your key. for example: food_api="6ofddpdsf"
 3. Compile all files by running the following command on terminal (make sure you are in the project's directory):
     ```
     javac *.java
