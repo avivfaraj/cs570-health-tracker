@@ -49,7 +49,7 @@ public class FoodSearch {
 	// Setters
 	public void setKey()
 	{
-		api_key = "g6jZti35lOsp8A6Jg0gSfeAWvbtdfyEh9Cfp0Cht";
+		api_key = System.getenv("food_api");
 	}
 	public void setQuery(String query, String brand_owner){
 
