@@ -5,7 +5,7 @@ This program helps the user keep track of calories consumed everyday by storing 
 In order to make it easier on the user, the program is also connected to [FoodData Central database (USDA)](https://fdc.nal.usda.gov/index.html) by using their API.
 This way, the user does not need to enter the nutritions of each product. Instead, there is an option of searching for a specific product and this will send a query to the API.
 
-# Setup
+## Setup
 1. First an API KEY is required. Go to [FoodData Central database (USDA)](https://fdc.nal.usda.gov/index.html) and create a new key
 2. On terminal run the following:
     ```
@@ -22,5 +22,5 @@ This way, the user does not need to enter the nutritions of each product. Instea
     java HealthTracker
     ```
 
-# Running Instructions
+## Running Instructions
 At first, it will ask for your id (press any number to create a new user). Then a menu will be shown. Follow the menu to add food, workouts etc.
